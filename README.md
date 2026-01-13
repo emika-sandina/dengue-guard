@@ -1,2 +1,51 @@
 # Dengue-Guard
+
 DengueGuard is a web-based dengue prevention and prediction prototype for Sri Lanka. It allows citizens to report mosquito breeding sites while enabling Medical Officers of Health (MOH) to manage, verify, and resolve reports. The system focuses on usability, data collection, and public health awareness using React, Node.js, Express, and MySQL.
+
+**Technology Stack**
+
+**Frontend**: React.js (Vite) for building a fast, component-based user interface
+
+**Backend**: Node.js with Express.js for handling RESTful APIs and application logic
+
+**Database**: MySQL for structured storage of dengue reports and related data
+
+**Routing**: React Router for multi-page navigation
+
+**Icons & UI**: Font Awesome for icons and basic UI element
+
+# Running the Application
+
+**Prerequisites**
+
+Node.js (LTS version)
+MySQL Server
+npm
+
+# Database Setup
+
+Create a MySQL database named dengueguard
+
+Run the SQL script located in the database/schema.sql file to create the required tables
+
+CREATE DATABASE dengueguard;
+
+# Backend Setup
+
+cd backend
+npm install
+npm run dev
+
+The backend server will start on:
+
+http://localhost:5000
+
+# Frontend Setup
+
+cd frontend
+npm install
+npm run dev
+
+The frontend application will run on:
+
+http://localhost:5173
