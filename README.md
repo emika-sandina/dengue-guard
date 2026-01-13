@@ -24,17 +24,21 @@ npm
 
 # Database Setup
 
-Create a MySQL database named dengueguard
+Create a MySQL database named `dengueguard`.
 
-Run the SQL script located in the database/schema.sql file to create the required tables
+Run the SQL script located in the `database/schema.sql` file to create the required tables:
 
+```sql
 CREATE DATABASE dengueguard;
+```
 
 # Backend Setup
 
+```bash
 cd backend
 npm install
 npm run dev
+```
 
 The backend server will start on:
 
@@ -42,9 +46,11 @@ http://localhost:5000
 
 # Frontend Setup
 
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
 The frontend application will run on:
 
