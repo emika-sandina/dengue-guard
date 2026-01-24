@@ -1,3 +1,83 @@
+import chatbotIcon from "../../../assets/chatbot.svg";
+
+ 
+        <Route path="/citizen/Chatbot" element={<Chatbot />} />
+ 
+import Chatbot from "./components/citizen/Chatbot/Chatbot";
+ 
+  .chatbot-icon {
+    border-radius: 90px;
+    width: 54px;
+    height: 24px;
+    object-fit: contain;
+  }
+  
+ 
+54px
+ 
+right
+ 
+button-class{
+    position:fixed;
+    bottom:40px;
+    border: radius 90%;
+    border:none;
+    font-size:38px;
+    cursor:pointer;
+    background-color: linear-gradient(135deg, #00c6ff, #0072ff);
+    color:#DDE0DA ;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    left:50px;
+  }
+ 
+  .button-class{
+    position:fixed;
+    bottom:40px;
+    border: radius 90%;
+    border:none;
+    font-size:38px;
+    cursor:pointer;
+    background-color: linear-gradient(135deg, #00c6ff, #0072ff);
+    color:#DDE0DA ;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    left:50px;
+  }
+
+  .chatbot-icon {
+    border-radius: 90px;
+    width: 54px;
+    height: 24px;
+    object-fit: contain;
+  }
+ 
+🤖
+ 
+white
+ 
+80
+ 
+/citizen
+ 
+components
+ 
+import Chatbot from "./Chatbot/Chatbot.jsx"
+ 
+Chatbot.jsx
+ 
+import Chatbot from './components/citizen/Chatbot/Chatbot.jsx'
+ 
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
+ 
+
+import { useState } from 'react'
+ 
+import axios from "axios"
+ 
+FloatingChatbot
+ 
       })
         
     };

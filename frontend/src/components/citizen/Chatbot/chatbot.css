@@ -5,18 +5,20 @@
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   }
   
-  .button-class{
-    position:fixed;
+  .button-class {
+    position: fixed;
+    left:50px;
     bottom:40px;
-    border: radius 50%;
-    border:none;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     font-size:28px;
-    cursor:pointer;
-    background-color: linear-gradient(135deg, #00c6ff, #0072ff);
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s ease;
+    background: #e3e5e8;
+    border: none;
+    cursor: pointer;
+    
   }
+
   
   .Main-Background {
     position: fixed;

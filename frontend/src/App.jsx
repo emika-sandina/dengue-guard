@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import CitizenHome from "./components/citizen/Home Page/CitizenHome";
 
+
 function App() {
   return (
     <Router>
