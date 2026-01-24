@@ -1,0 +1,68 @@
+      })
+        
+    };
+ 
+    const [isOpen, setIsOpen] = useState(false);
+    let[data,setData]=useState("")
+    const [messages, setMessages] = useState([
+    { sender: "bot", text: "Hi! I'm your Dengue Assistant. How can I help you today?" },
+    ]);
+    const [input, setInput] = useState("");
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+
+        const userMessage={sender:"user",text:input}
+        setMessages((prevMessages)=>[...prevMessages,userMessage]);
+        setInput("")
+        axios.post('http://localhost:5000/ask',{input})
+        .then((res)=>res.data)
+        .then((finalRes)=>{
+            console.log(finalRes);
+
+            if (finalRes._status){
+                setData=(finalRes.finalData)
+
+                const botMessage={sender:"bot",text:finalRes.finalData};
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            } else {
+                const botMessage= {sender:"bot",text:"Sorry I encounterd an error.Please try again."}
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            }
+ 
+
+import { useState } from 'react'
+ 
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
+ 
+    const [isOpen, setIsOpen] = useState(false);
+    let[data,setData]=useState("")
+    const [messages, setMessages] = useState([
+    { sender: "bot", text: "Hi! I'm your Dengue Assistant. How can I help you today?" },
+    ]);
+    const [input, setInput] = useState("");
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+
+        const userMessage={sender:"user",text:input}
+        setMessages((prevMessages)=>[...prevMessages,userMessage]);
+        setInput("")
+        axios.post('http://localhost:5000/ask',{input})
+        .then((res)=>res.data)
+        .then((finalRes)=>{
+            console.log(finalRes);
+
+            if (finalRes._status){
+                setData=(finalRes.finalData)
+
+                const botMessage={sender:"bot",text:finalRes.finalData};
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            } else {
+                const botMessage= {sender:"bot",text:"Sorry I encounterd an error.Please try again."}
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            }
+        })
+        
+ 
