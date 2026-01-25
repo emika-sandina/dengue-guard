@@ -1,3 +1,14 @@
+/ import the app from app.js
+ 
+// backend/src/server.js
+ 
+// Other routes can go here
+// app.use('/users', usersRoute);
+ 
+// import chatbot route
+ 
+// allow frontend
+ 
 import chatbotIcon from "../../../assets/chatbot.svg";
 
  
