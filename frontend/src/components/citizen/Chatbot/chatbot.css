@@ -34,7 +34,7 @@
   }
   
   .chatHeader {
-    background: linear-gradient(135deg, #0072ff, #00c6ff);
+    background: #2563EB;
     color: white;
     padding: 12px;
     display: flex;
@@ -130,7 +130,7 @@
     border-radius: 20px;
     border: none;
     cursor: pointer;
-    background: #0072ff;
+    background:#2563EB;
     color: white;
     font-size: 14px;
   }

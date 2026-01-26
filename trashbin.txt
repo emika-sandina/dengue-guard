@@ -1,3 +1,61 @@
+ #0072ff
+ 
+inear-gradient(135deg, #0072ff, #00c6ff)
+ 
+st app = require('./app'); 
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+ 
+const express = require('express');
+const cors = require('cors');
+const chatbotRoute = require('./chatbot'); 
+
+const app = express();
+
+app.use(cors({ origin: 'http://localhost:5174' }));
+app.use(express.json());
+
+// Register chatbot route
+app.use('/chatbot', chatbotRoute);
+
+module.exports = app;
+ 
+del = require('../services/gemini.service');
+
+exports.askChatbot = async (req, res) => {
+  try {
+    const { input } = req.body;
+
+    if (!input) {
+      return res.status(400).json({
+        _status: false,
+        _message: 'Input is required'
+      });
+    }
+
+    const result = await model.generateContent(input);
+    const finalData = result.response.text();
+
+    res.json({
+      _status: true,
+      _message: 'Content Found',
+      finalData
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      _status: false,
+      _message: 'Something went wrong'
+    });
+  }
+};
+
+ 
 
 
  

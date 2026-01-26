@@ -1,13 +1,19 @@
+//import necessary libraries
 const express = require('express');
 const cors = require('cors');
-const chatbotRoute = require('./chatbot'); 
+
+//import chatbot route
+const chatbotRoutes = require('./routes/chatbot.routes');
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:5174' }));
+//enables fronntend to talk to backend
+app.use(cors());
 app.use(express.json());
 
-// Register chatbot route
-app.use('/chatbot', chatbotRoute);
+//register chatbot route
+app.use('/chatbot', chatbotRoutes);
 
+//export app to server.js
 module.exports = app;
+

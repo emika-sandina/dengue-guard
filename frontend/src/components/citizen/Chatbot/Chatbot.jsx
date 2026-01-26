@@ -18,7 +18,7 @@ function Chatbot() {
         const userMessage={sender:"user",text:input}
         setMessages((prevMessages)=>[...prevMessages,userMessage]);
         setInput("")
-        axios.post('http://localhost:5000/ask',{input})
+        axios.post('http://localhost:5000/chatbot/ask',{input})
         .then((res)=>res.data)
         .then((finalRes)=>{
             console.log(finalRes);
