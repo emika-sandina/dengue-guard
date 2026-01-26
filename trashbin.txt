@@ -1,0 +1,252 @@
+ #0072ff
+ 
+inear-gradient(135deg, #0072ff, #00c6ff)
+ 
+st app = require('./app'); 
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+ 
+const express = require('express');
+const cors = require('cors');
+const chatbotRoute = require('./chatbot'); 
+
+const app = express();
+
+app.use(cors({ origin: 'http://localhost:5174' }));
+app.use(express.json());
+
+// Register chatbot route
+app.use('/chatbot', chatbotRoute);
+
+module.exports = app;
+ 
+del = require('../services/gemini.service');
+
+exports.askChatbot = async (req, res) => {
+  try {
+    const { input } = req.body;
+
+    if (!input) {
+      return res.status(400).json({
+        _status: false,
+        _message: 'Input is required'
+      });
+    }
+
+    const result = await model.generateContent(input);
+    const finalData = result.response.text();
+
+    res.json({
+      _status: true,
+      _message: 'Content Found',
+      finalData
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      _status: false,
+      _message: 'Something went wrong'
+    });
+  }
+};
+
+ 
+
+
+ 
+
+
+const PORT = process.env.PORT;
+app.listen(PORT,()=>{
+    console.log(`Server Start on port ${PORT}`);
+})
+ 
+ Frontend Routing
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+ 
+const path=require('path');
+
+ 
+require('dotenv').config({path: path.resolve(__dirname, '.env') })
+
+ 
+/app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});/ Frontend Routing
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+
+
+const PORT = process.env.PORT;
+app.listen(PORT,()=>{
+    console.log(`Server Start on port ${PORT}`);
+})
+ 
+/ import the app from app.js
+ 
+// backend/src/server.js
+ 
+// Other routes can go here
+// app.use('/users', usersRoute);
+ 
+// import chatbot route
+ 
+// allow frontend
+ 
+import chatbotIcon from "../../../assets/chatbot.svg";
+
+ 
+        <Route path="/citizen/Chatbot" element={<Chatbot />} />
+ 
+import Chatbot from "./components/citizen/Chatbot/Chatbot";
+ 
+  .chatbot-icon {
+    border-radius: 90px;
+    width: 54px;
+    height: 24px;
+    object-fit: contain;
+  }
+  
+ 
+54px
+ 
+right
+ 
+button-class{
+    position:fixed;
+    bottom:40px;
+    border: radius 90%;
+    border:none;
+    font-size:38px;
+    cursor:pointer;
+    background-color: linear-gradient(135deg, #00c6ff, #0072ff);
+    color:#DDE0DA ;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    left:50px;
+  }
+ 
+  .button-class{
+    position:fixed;
+    bottom:40px;
+    border: radius 90%;
+    border:none;
+    font-size:38px;
+    cursor:pointer;
+    background-color: linear-gradient(135deg, #00c6ff, #0072ff);
+    color:#DDE0DA ;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+    left:50px;
+  }
+
+  .chatbot-icon {
+    border-radius: 90px;
+    width: 54px;
+    height: 24px;
+    object-fit: contain;
+  }
+ 
+🤖
+ 
+white
+ 
+80
+ 
+/citizen
+ 
+components
+ 
+import Chatbot from "./Chatbot/Chatbot.jsx"
+ 
+Chatbot.jsx
+ 
+import Chatbot from './components/citizen/Chatbot/Chatbot.jsx'
+ 
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
+ 
+
+import { useState } from 'react'
+ 
+import axios from "axios"
+ 
+FloatingChatbot
+ 
+      })
+        
+    };
+ 
+    const [isOpen, setIsOpen] = useState(false);
+    let[data,setData]=useState("")
+    const [messages, setMessages] = useState([
+    { sender: "bot", text: "Hi! I'm your Dengue Assistant. How can I help you today?" },
+    ]);
+    const [input, setInput] = useState("");
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+
+        const userMessage={sender:"user",text:input}
+        setMessages((prevMessages)=>[...prevMessages,userMessage]);
+        setInput("")
+        axios.post('http://localhost:5000/ask',{input})
+        .then((res)=>res.data)
+        .then((finalRes)=>{
+            console.log(finalRes);
+
+            if (finalRes._status){
+                setData=(finalRes.finalData)
+
+                const botMessage={sender:"bot",text:finalRes.finalData};
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            } else {
+                const botMessage= {sender:"bot",text:"Sorry I encounterd an error.Please try again."}
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            }
+ 
+
+import { useState } from 'react'
+ 
+import axios from "axios";
+import ReactMarkdown from "react-markdown";
+ 
+    const [isOpen, setIsOpen] = useState(false);
+    let[data,setData]=useState("")
+    const [messages, setMessages] = useState([
+    { sender: "bot", text: "Hi! I'm your Dengue Assistant. How can I help you today?" },
+    ]);
+    const [input, setInput] = useState("");
+
+    const handleSend = () => {
+        if (!input.trim()) return;
+
+        const userMessage={sender:"user",text:input}
+        setMessages((prevMessages)=>[...prevMessages,userMessage]);
+        setInput("")
+        axios.post('http://localhost:5000/ask',{input})
+        .then((res)=>res.data)
+        .then((finalRes)=>{
+            console.log(finalRes);
+
+            if (finalRes._status){
+                setData=(finalRes.finalData)
+
+                const botMessage={sender:"bot",text:finalRes.finalData};
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            } else {
+                const botMessage= {sender:"bot",text:"Sorry I encounterd an error.Please try again."}
+                setMessages((prevMessages=>[...prevMessages,botMessage]))
+            }
+        })
+        
+ 

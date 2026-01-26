@@ -1,10 +1,11 @@
 import "./citizenhome.css";
 import NavBar from "../../common/Navbar/NavBar";
+import Chatbot from "../Chatbot/Chatbot";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
 import educationIcon from "../../../assets/education.svg";
-import chatbotIcon from "../../../assets/chatbot.svg";
+
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useState } from "react";
 
@@ -37,6 +38,7 @@ function CitizenHome() {
 
   return (
     <>
+    <Chatbot></Chatbot>
     <div className="citizen-layout">
       <NavBar role="Citizen" />
       <br></br>
