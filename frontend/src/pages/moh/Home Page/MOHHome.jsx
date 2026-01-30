@@ -1,52 +1,47 @@
-import "./citizenhome.css";
-import NavBar from "../../common/Navbar/NavBar";
-import Chatbot from "../Chatbot/Chatbot";
+import "./mohHome.css";
+import NavBar from "../../../components/common/Navbar/NavBar";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
-import educationIcon from "../../../assets/education.svg";
-
 import announcementPlaceholder from "../../../assets/announcements.svg";
-import { useState } from "react";
 
-function CitizenHome() {
+function MOHHome() {
   const menu = [
     {
       icon: siteReportIcon,
-      name: "Report Breeding Sites",
+      name: "Site Reports",
       description:
-        "Identify and report breeding sites to help prevent mosquito breeding in your area.",
+        "View Reports on Breeding Sites",
     },
     {
       icon: symptomIcon,
-      name: "Report Dengue Cases",
+      name: "Symptom Reports",
       description:
-        "Notify health authorities about potential dengue symptoms for immediate action.",
+        "View Reports on Dengue Symptoms",
     },
     {
       icon: announcementPlaceholder,
-      name: "MOH Announcements",
-      description: "View special announcements sent out by MOH",
+      name: "Communication",
+      description: "Send Alerts and Messages",
     },
     {
       icon: heatmapIcon,
-      name: "Risk Heat Map",
+      name: "Risk Areas",
       description:
-        "Assess the risk level of specific areas through the risk heat map.",
+        "View Heatmap",
     },
   ];
 
   return (
     <>
-    <Chatbot></Chatbot>
-    <div className="citizen-layout">
-      <NavBar role="Citizen" />
+    <div className="moh-layout">
+      <NavBar role="MOH" />
       <br></br>
       <br></br>
       <br></br>
       <br></br>
       <main className="main-content">
-        <p className="greeting">Hey Citizen</p>
+        <p className="greeting">Hey Medical Officer of Health</p>
         <h1>Welcome to DengueGuard</h1>
 
         <div className="card-grid">
@@ -90,4 +85,4 @@ function CitizenHome() {
   );
 }
 
-export default CitizenHome;
+export default MOHHome;
