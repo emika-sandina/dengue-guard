@@ -13,7 +13,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/citizen/home" />} />
+        <Route path="/" element={<Navigate to="/moh/home" />} />
         <Route path="/citizen/home" element={<CitizenHome />} />
         <Route path="/moh/home" element={<MOHHome />}/>
         <Route path="/citizen/report-site" element={<ReportSites/>}/>
