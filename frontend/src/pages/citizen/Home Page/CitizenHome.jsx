@@ -5,34 +5,42 @@ import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
 import educationIcon from "../../../assets/education.svg";
+import { useNavigate } from "react-router-dom";
+
 
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useState } from "react";
 
 function CitizenHome() {
+  
+  const navigate=useNavigate();
   const menu = [
     {
       icon: siteReportIcon,
       name: "Report Breeding Sites",
       description:
         "Identify and report breeding sites to help prevent mosquito breeding in your area.",
+        route: "/citizen/report-sites",
     },
     {
       icon: symptomIcon,
       name: "Report Dengue Cases",
       description:
         "Notify health authorities about potential dengue symptoms for immediate action.",
+        route: "/citizen/report-cases",
     },
     {
       icon: announcementPlaceholder,
       name: "MOH Announcements",
       description: "View special announcements sent out by MOH",
+      route: "/citizen/announcement",
     },
     {
       icon: heatmapIcon,
       name: "Risk Heat Map",
       description:
         "Assess the risk level of specific areas through the risk heat map.",
+        route: "/citizen/risk-map",
     },
   ];
 
@@ -44,14 +52,17 @@ function CitizenHome() {
         <br></br>
         <br></br>
         <br></br>
-        <br></br>
         <main className="main-content">
           <p className="greeting">Hey Citizen</p>
           <h1>Welcome to DengueGuard</h1>
 
           <div className="card-grid">
             {menu.map((menuOption, index) => (
-              <div className="card">
+              
+              <div className="card"
+                    key={index}
+                    onClick={() => navigate(menuOption.route)}>
+                
                 <div className="menu-icon">
                   <img src={menuOption.icon} alt="" />
                 </div>
