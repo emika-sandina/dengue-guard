@@ -1,6 +1,5 @@
 import Select from "react-select";
-import { mohAreas } from "../../../services/mohAreas";
-
+import mohAreas from "./mohAreas.json";
 
 function Dropdown({ value, onChange }) {
 

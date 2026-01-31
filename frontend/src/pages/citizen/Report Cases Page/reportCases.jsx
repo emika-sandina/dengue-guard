@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Dropdown from "./Dropdown";
 import "./reportCases.css"
+import NavBar from "../../../components/common/Navbar/NavBar";
 
 function ReportCases() {
   const [mohArea, setmohArea] = useState(null);
@@ -65,114 +66,114 @@ function ReportCases() {
   };
 
   return (
+    <>
+    <NavBar></NavBar>
     <div className="report-container">
+    <br/>
+    <br/>
+    <br/>
+
       <h1>Reporting Dengue Cases</h1>
+      <form onSubmit={handleSubmit} className="report-form">
+        <div className="form-left">
+            <div className="form-group">
+            <label>Reporting For</label><br />
+            <input type="text" placeholder="Myself, Family, Friend" />
+            </div>
 
-      <form onSubmit={handleSubmit}>
 
-        <div className="form-group">
-          <label>Reporting For</label><br />
-          <input type="text" placeholder="Myself, Family, Friend" />
+            <div className="form-group">
+            <label>When did symptoms start:</label><br />
+            <input type="date" />
+            </div>
+
+            <label>Symptoms (Check all that apply)</label><br />
+
+            <div className="form-group checkbox-group">
+
+            {[
+                "High Fever",
+                "Headache",
+                "Muscle/Joint Pain",
+                "Nausea/Vomiting",
+                "Skin Rash",
+                "Pain Behind Eyes"
+            ].map((symptom) => (
+                <label key={symptom}>
+                <input
+                    type="checkbox"
+                    value={symptom}
+                    onChange={handleCheckboxChange}
+                />
+                {symptom}
+                <br />
+                </label>
+            ))}
+            </div>
         </div>
 
-        <br />
+        <div className="form-right">
+            <div className="form-group">
+            <label>Location / Address of the Patient</label><br />
+            <input
+                type="text"
+                placeholder="Enter current location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+            />
 
-        <div className="form-group">
-          <label>When did symptoms start:</label><br />
-          <input type="date" />
+                <span className="location-link" onClick={getCurrentLocation}>
+                Get Current Location
+                </span>
+            </div>
+            <label>Have you / patient seen a doctor?</label><br />
+
+            <div className="form-group radio-group">
+
+            {["Yes", "No", "Planning"].map((option) => (
+                <label key={option}>
+                <input
+                    type="radio"
+                    name="doctorStatus"
+                    value={option}
+                    onChange={(e) => setDoctorStatus(e.target.value)}
+                />
+                {option}
+                <br />
+                </label>
+            ))}
+            </div>
+
+            <label>If yes, is the patient diagnosed with Dengue?</label><br />
+
+            <div className="form-group radio-group">
+
+            {["Yes", "No"].map((option) => (
+                <label key={option}>
+                <input
+                    type="radio"
+                    name="doctorStatus"
+                    value={option}
+                    onChange={(e) => setDoctorStatus(e.target.value)}
+                />
+                {option}
+                <br />
+                </label>
+            ))}
+            </div>
+
+            <div className="form-group dropdown">
+            <label>Select MOH Area</label><br />
+            <Dropdown value={mohArea} onChange={setmohArea} />
+            </div>
         </div>
 
-        <br />
 
-        <div className="form-group checkbox-group">
-          <label>Symptoms (Check all that apply)</label><br />
-
-          {[
-            "High Fever",
-            "Headache",
-            "Muscle/Joint Pain",
-            "Nausea/Vomiting",
-            "Skin Rash",
-            "Pain Behind Eyes"
-          ].map((symptom) => (
-            <label key={symptom}>
-              <input
-                type="checkbox"
-                value={symptom}
-                onChange={handleCheckboxChange}
-              />
-              {symptom}
-              <br />
-            </label>
-          ))}
-        </div>
-
-        <br />
-
-        <div className="form-group">
-          <label>Location / Address of the Patient</label><br />
-          <input
-            type="text"
-            placeholder="Enter current location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-
-            <span className="location-link" onClick={getCurrentLocation}>
-            Get Current Location
-            </span>
-        </div>
-
-        <br />
-
-        <div className="form-group radio-group">
-          <label>Have you / patient seen a doctor?</label><br />
-
-          {["Yes", "No", "Planning"].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                name="doctorStatus"
-                value={option}
-                onChange={(e) => setDoctorStatus(e.target.value)}
-              />
-              {option}
-              <br />
-            </label>
-          ))}
-        </div>
-
-        <br />
-
-        <div className="form-group radio-group">
-          <label>If yes, is the patient diagnosed with Dengue?</label><br />
-
-          {["Yes", "No"].map((option) => (
-            <label key={option}>
-              <input
-                type="radio"
-                name="doctorStatus"
-                value={option}
-                onChange={(e) => setDoctorStatus(e.target.value)}
-              />
-              {option}
-              <br />
-            </label>
-          ))}
-        </div>
-
-        <br />
-
-        <div className="form-group dropdown">
-          <label>Select MOH Area</label><br />
-          <Dropdown value={mohArea} onChange={setmohArea} />
-        </div>
-
-        <br />
-
-        <button type="submit">Report Case</button>
       </form>
+      
+        <button type="submit">Report Case</button>
     </div>
+    </>
   );
 }
 

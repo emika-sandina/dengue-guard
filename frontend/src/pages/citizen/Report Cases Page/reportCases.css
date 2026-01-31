@@ -1,88 +1,125 @@
-
-.report-container {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 20px;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    font-family: Arial, sans-serif;
+/* Page background */
+body {
+    background-color: #f6f8fa;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
   
+  /* Main container */
+  .report-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 5px;
+  }
+  
+  /* Page title */
   .report-container h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #1f2937;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 20px 0;
+    color: #111;
   }
   
+  /* Form card */
+  form {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Form group spacing */
   .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 22px;
   }
   
-  .form-group label {
+  /* Labels */
+  label {
     font-weight: 600;
-    color: #111827;
+    font-size: 18px;
+    color: #333;
   }
-  
-  .form-group input[type="text"],
-  .form-group input[type="date"] {
+
+  /* Inputs */
+  input[type="text"],
+  input[type="date"] {
     width: 100%;
-    background-color:white ;
-    padding: 10px 12px;
-    margin-top: 6px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    outline: none;
+    margin-top: 8px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: none;
+    background-color: #ececec;
     font-size: 14px;
+    outline: none;
   }
-  
-  .form-group input[type="text"]:focus,
-  .form-group input[type="date"]:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-  }
-  
+  /* Checkbox & radio groups */
   .checkbox-group label,
   .radio-group label {
-    display: block;
-    margin-top: 8px;
+    margin-top: 0px;;
+    font-size: 16px;
+    font-weight: 500;
+    color: #444;
     cursor: pointer;
   }
   
   .checkbox-group input,
   .radio-group input {
-    margin-right: 10px;
+    margin-right: 8px;
+    accent-color: #22c55e;
   }
   
-  .button-group {
-    display: flex;
-    gap: 10px;
-  }
-  
-  button[type="submit"] {
-    width: 100%;
-    padding: 12px 16px;
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
+  /* Location link */
+  .location-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #2563eb;
     cursor: pointer;
-    transition: background 0.2s ease;
+    font-weight: 500;
+  }
+  
+  .location-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Dropdown wrapper */
+  .dropdown {
+    max-width: 550px;
+  }
+  
+  /* Submit button */
+  button[type="submit"] {
+    margin:0;
+    background: #007bff;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    margin: 12px auto;
+    transition: transform 0.2s ease-in-out;
   }
   
   button[type="submit"]:hover {
-    background: #1d4ed8;
+    transform: translateY(-5px);
+
+  }
+  .report-form {
+    display: grid;
+    grid-template-columns: 3fr 3fr;
+    gap: 180px;
   }
   
-  .dropdown {
-    margin-top: 8px;
+  .form-left,
+  .form-right {
+    display: flex;
+    flex-direction: column;
   }
-
-  .location-link{
-    color:blue;
-    text-decoration: underline;
-    cursor: pointer;
-
+  
+  button[type="submit"] {
+    grid-column: span 2;
   }
+  
