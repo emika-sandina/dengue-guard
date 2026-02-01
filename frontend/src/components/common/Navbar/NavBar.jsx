@@ -15,8 +15,8 @@ function NavBar({ role = "Citizen" }) {
           {role === "Citizen" ? (
             <>
               <NavLink to="/citizen/home">Home</NavLink>
-              <NavLink to="/citizen/report-site">Report Site</NavLink>
-              <NavLink to="/citizen/report-symptoms">Report Symptoms</NavLink>
+              <NavLink to="/citizen/report-sites">Report Site</NavLink>
+              <NavLink to="/citizen/report-cases">Report Symptoms</NavLink>
               <NavLink to="/citizen/risk-map">Risk Map</NavLink>
               <NavLink to="/citizen/prevention">Prevention Tips</NavLink>
               <NavLink to="/citizen/my-reports">My Reports</NavLink>
