@@ -122,4 +122,76 @@ body {
   button[type="submit"] {
     grid-column: span 2;
   }
-  
+/* ========================= */
+/* Responsive Design */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .report-container {
+    padding: 10px;
+  }
+
+  form {
+    padding: 25px 25px;
+  }
+
+  .report-form {
+    grid-template-columns: 1fr 1fr; /* still 2 columns */
+    gap: 60px; /* reduce big gap */
+  }
+
+  label {
+    font-size: 16px;
+  }
+
+  input[type="text"],
+  input[type="date"] {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .report-container h1 {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  form {
+    padding: 20px 18px;
+    border-radius: 14px;
+  }
+
+  .report-form {
+    grid-template-columns: 1fr; /* single column */
+    gap: 25px;
+  }
+
+  .form-left,
+  .form-right {
+    width: 100%;
+  }
+
+  label {
+    font-size: 15px;
+  }
+
+  .checkbox-group label,
+  .radio-group label {
+    font-size: 14px;
+  }
+
+  .dropdown {
+    max-width: 100%;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
