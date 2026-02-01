@@ -27,11 +27,48 @@ function ReportSites() {
     setPhoto(e.target.files[0]);
   };
 
+  const getCurrentLocation = () => {
+    //checks whether the current browser supports geolocation
+    if (!navigator.geolocation) {
+      //if not supported, it displays an error to the user
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      //if the user allows access to his/her current location this block of code runs
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        reverseGeocode(latitude, longitude);
+      },
+      //this code block runs if the user denies permission
+      (error) => {
+        alert("Unable to retrieve your location");
+        console.error(error);
+      },
+    );
+  };
+  //converts co-ordinates into a human readable address
+  const reverseGeocode = async (lat, lon) => {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+
+    try {
+      //sends an http req to openstreetmap and the response is converted to a JS Object from JSON
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log(data);
+      const address = data.display_name;
+      setLocation(address);
+      //if the api/network is down
+    } catch (error) {
+      console.error("Error reverse geocoding:", error);
+    }
+  };
   //handling submit events
   const handleSubmit = (e) => {
-    const formData = {location, description,issueType, urgency, mohArea};
-    console.log(formData) //for testing purposes only!
-  }
+    const formData = { location, description, issueType, urgency, mohArea };
+    console.log(formData); //for testing purposes only!
+  };
 
   return (
     <div className="sitereport-layout">
@@ -50,6 +87,9 @@ function ReportSites() {
               value={location}
               onChange={(e) => setLocation(e.target.value)}
             />
+            <span className="location-link" onClick={getCurrentLocation}>
+              Get Current Location
+            </span>
 
             <label>Description</label>
             <textarea
@@ -100,7 +140,9 @@ function ReportSites() {
           </div>
         </div>
 
-        <button className="submit-btn" onClick={handleSubmit}>Submit Report</button>
+        <button className="submit-btn" onClick={handleSubmit}>
+          Submit Report
+        </button>
       </main>
     </div>
   );
