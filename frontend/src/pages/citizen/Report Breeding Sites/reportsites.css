@@ -113,3 +113,16 @@ textarea {
 .submit-btn:hover {
     transform: translateY(-5px);
 }
+
+.location-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #2563eb;
+    cursor: pointer;
+    font-weight: 500;
+}
+  
+.location-link:hover {
+    text-decoration: underline;
+}
