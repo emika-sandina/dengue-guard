@@ -4,21 +4,27 @@ import "./reportCases.css"
 import NavBar from "../../../components/common/Navbar/NavBar";
 
 function ReportCases() {
+
+  //State Variables
   const [mohArea, setmohArea] = useState(null);
   const [symptoms, setSymptoms] = useState([]);
-  const [doctorStatus, setDoctorStatus] = useState("");
+  const [doctorStatus, setdoctorStatus] = useState("");
+  const [dengueDiagnosis, setdengueDiagnosis] = useState("");
   const [location, setLocation] = useState("");
 
 
+  //Handles checkbox selection
   const handleCheckboxChange = (e) => {
     const value = e.target.value;
     setSymptoms((prev) =>
       prev.includes(value)
+    //Add symptoms if not selected removes if already selected
         ? prev.filter((s) => s !== value)
         : [...prev, value]
     );
   };
 
+  //Get users current GPS Location from the browser
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
@@ -28,6 +34,7 @@ function ReportCases() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        //Converts coordinates into readable address
         reverseGeocode(latitude, longitude);
       },
       (error) => {
@@ -37,6 +44,7 @@ function ReportCases() {
     );
   };
 
+  // Converts latitude & longitude into a readable address
   const reverseGeocode = async (lat, lon) => {
     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
   
@@ -51,18 +59,58 @@ function ReportCases() {
     }
   };
   
-  
-
-  const handleSubmit = (e) => {
+  //Handles the form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    //Build data object to send to backend
     const data = {
-      district,
+      reportingFor: e.target[0].value,
       symptoms,
-      doctorStatus
+      doctorStatus,
+      dengueDiagnosis,
+      mohArea,
+      location,
+      symptomsStartDate: e.target[1].value,
     };
 
-    console.log("Form Data:", data);
+    try {
+      //send a post request to backend api
+      const response = await fetch("http://localhost:5000/api/report-case", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      //read raw response text
+      const text = await response.text();
+      let result = {};
+
+      //parse only if response has a body
+      if (text) {
+        try {
+          result = JSON.parse(text);
+        } catch (err) {
+          console.error("Failed to parse JSON response:", err);
+          throw new Error("Invalid response from server");
+        }
+      }
+
+      //sends an alert if backend results a error message
+      if (!response.ok) {
+        alert(result.error || "Failed to submit report");
+        return;
+      }
+
+      //success case
+      alert(result.message || "Report submitted successfully");
+      console.log(result);
+
+    // catch any errors
+    } catch (error) {
+      console.error("Submit error:", error);
+      alert("Failed to submit the report: " + error.message);
+    }
   };
 
   return (
@@ -136,7 +184,7 @@ function ReportCases() {
                     type="radio"
                     name="doctorStatus"
                     value={option}
-                    onChange={(e) => setDoctorStatus(e.target.value)}
+                    onChange={(e) => setdoctorStatus(e.target.value)}
                 />
                 {option}
                 <br />
@@ -152,9 +200,9 @@ function ReportCases() {
                 <label key={option}>
                 <input
                     type="radio"
-                    name="doctorStatus"
+                    name="dengueDiagnosis"
                     value={option}
-                    onChange={(e) => setDoctorStatus(e.target.value)}
+                    onChange={(e) => setdengueDiagnosis(e.target.value)}
                 />
                 {option}
                 <br />
@@ -168,10 +216,8 @@ function ReportCases() {
             </div>
         </div>
 
-
-      </form>
-      
         <button type="submit">Report Case</button>
+      </form>
     </div>
     </>
   );
