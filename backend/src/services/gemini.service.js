@@ -1,5 +1,5 @@
 // Import Google Gemini SDK
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 //create gemini client
 const genAI = new GoogleGenerativeAI(process.env.GEMINIKEY);
@@ -10,4 +10,4 @@ const model = genAI.getGenerativeModel({
 });
 
 //Exports the model to be used in controllers
-module.exports = model;
+export default model;

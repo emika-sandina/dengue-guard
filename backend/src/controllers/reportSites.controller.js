@@ -1,5 +1,5 @@
 // backend/src/controllers/breedingSites.controller.js
-import * as breedingService from '../services/reportSites.service';
+import * as breedingService from '../services/reportSites.service.js';
 
 export const submitSiteReports = async (req, res) => {
   try {

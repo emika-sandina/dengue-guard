@@ -1,16 +1,10 @@
-const { createClient } = require("@supabase/supabase-js");
-const dotenv = require("dotenv");
+import { supabase } from '../supabase.js';
+import dotenv from 'dotenv';
 //Load Variables
 dotenv.config();
 
-//Intialize database using variables
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_ANON_KEY
-);
-
 //function to insert data into the tabl
-const insertReportCases = async (data) => {
+export const insertReportCases = async (data) => {
 
   //Map frontend data to column names
   const payload = {
@@ -21,7 +15,6 @@ const insertReportCases = async (data) => {
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
     moh_area: data.mohArea,
-
   };
 
   //Inser the data to table
@@ -34,5 +27,5 @@ const insertReportCases = async (data) => {
   return insertedData;
 };
 
-module.exports = { insertReportCases };
+
 
