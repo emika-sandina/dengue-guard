@@ -9,7 +9,7 @@ export const submitSiteReports = async (req, res) => {
     //If successful,send a 201 (Created) status and the data back to React
 
     res.status(201).json({ 
-      message: "Breeding site report saved successfully", 
+      message: "Breeding site report uploaded successfully!", 
       data 
     });
   } 

@@ -65,9 +65,54 @@ function ReportSites() {
     }
   };
   //handling submit events
-  const handleSubmit = (e) => {
-    const formData = { location, description, issueType, urgency, mohArea };
-    console.log(formData); //for testing purposes only!
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    //Basic Validation from the frontend
+    if (!location || !issueType || !mohArea) {
+      alert("Please fill in the required fields!");
+      return;
+    }
+
+    //Prepare the data for the backend
+    const formData = { 
+      location, 
+      description, 
+      issueType, 
+      urgency, 
+      mohArea,
+      photoUrl: "" 
+    };
+
+    try {
+      //POST request to the express server
+      const response = await fetch("http://localhost:5000/api/report-sites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Success: " + result.message);
+        //Reset form on success
+        setLocation("");
+        setDescription("");
+        setPhoto(null);
+        setIssueType(issueTypes[0]);
+        setUrgency("Low");
+        setMohArea(mohAreas[0]);
+      } 
+      
+      else {
+        alert("Error: " + result.error);
+      }
+    }
+
+    catch (error) {
+      alert("Could not connect to the backend server!, Check if your backend is running or not!");
+    }
+
   };
 
   return (
