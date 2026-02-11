@@ -8,7 +8,8 @@ import {
 import CitizenHome from "./pages/citizen/Home Page/CitizenHome";
 import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
-import ReportCases from "./pages/citizen/Report Cases Page/reportCases"
+import ReportCases from "./pages/citizen/Report Cases Page/reportCases";
+import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements";
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/citizen/home" />} />
         <Route path="/citizen/home" element={<CitizenHome />} />
-        <Route path="/moh/home" element={<MOHHome />}/>
-        <Route path="/citizen/report-sites" element={<ReportSites/>}/>
-        <Route path="/citizen/report-cases" element={<ReportCases/>}/>        
+        <Route path="/moh/home" element={<MOHHome />} />
+        <Route path="/citizen/report-sites" element={<ReportSites />} />
+        <Route path="/citizen/report-cases" element={<ReportCases />} />
+        <Route path="/moh/send-announcements" element={<SendAnnouncements />} />
       </Routes>
     </Router>
   );
