@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express'
 const router = express.Router();
 
 // import controller
-const { submitReportCases } = require("../controllers/reportCases.controller");
+import { submitReportCases } from "../controllers/reportCases.controller.js";
 
 // Health-check 
 router.get("/report-case", (req, res) => {
@@ -13,4 +13,4 @@ router.get("/report-case", (req, res) => {
 router.post("/report-case", submitReportCases);
 
 // export router to app.js
-module.exports = router;
+export default router;

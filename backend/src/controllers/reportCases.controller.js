@@ -1,7 +1,7 @@
-const { insertReportCases } = require("../services/reportCases.service");
+import { insertReportCases } from "../services/reportCases.service.js";
 
 // Controller function to handle submission of dengue report cases
-const submitReportCases = async (req, res) => {
+export const submitReportCases = async (req, res) => {
   try {
     // Get form data sent from frontend
     const reportData = req.body;
@@ -34,4 +34,4 @@ const submitReportCases = async (req, res) => {
 };
 
 // Export the controller function to use in route
-module.exports = { submitReportCases };
+
