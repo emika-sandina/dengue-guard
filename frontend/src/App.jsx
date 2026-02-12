@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import AuthPage from "./pages/Auth/AuthPage";
 import CitizenHome from "./pages/citizen/Home Page/CitizenHome";
 import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
@@ -15,7 +16,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/citizen/home" />} />
+        <Route path="/login" element={<AuthPage />} /> 
+        <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/citizen/home" element={<CitizenHome />} />
         <Route path="/moh/home" element={<MOHHome />} />
         <Route path="/citizen/report-sites" element={<ReportSites />} />
