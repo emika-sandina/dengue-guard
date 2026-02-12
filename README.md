@@ -8,9 +8,7 @@ DengueGuard is a web-based dengue prevention and prediction prototype for Sri La
 
 **Backend**: Node.js with Express.js for handling RESTful APIs and application logic
 
-**Database**: MySQL for structured storage of dengue reports and related data
-
-**Routing**: React Router for multi-page navigation
+**Database**: Supabase for structured storage of dengue reports and related data
 
 **Icons & UI**: Font Awesome for icons and basic UI element
 
@@ -18,19 +16,8 @@ DengueGuard is a web-based dengue prevention and prediction prototype for Sri La
 
 **Prerequisites**
 
-Node.js (LTS version)
-MySQL Server
+Node.js (Latest version)
 npm
-
-# Database Setup
-
-Create a MySQL database named `dengueguard`.
-
-Run the SQL script located in the `database/schema.sql` file to create the required tables:
-
-```sql
-CREATE DATABASE dengueguard;
-```
 
 # Backend Setup
 
