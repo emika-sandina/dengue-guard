@@ -11,18 +11,49 @@ import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
 import ReportCases from "./pages/citizen/Report Cases Page/reportCases";
 import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements";
+import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<AuthPage />} /> 
+        {/* The Login Page*/}
+        <Route path="/login" element={<AuthPage />} />
+
+        {/* Protected Citizen Routes */}
+        <Route path="/citizen/home" element={
+          <ProtectedRoute allowedRole="citizen">
+            <CitizenHome />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/citizen/report-sites" element={
+          <ProtectedRoute allowedRole="citizen">
+            <ReportSites />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/citizen/report-cases" element={
+          <ProtectedRoute allowedRole="citizen">
+            <ReportCases />
+          </ProtectedRoute>
+        } />
+
+        {/* Protected MOH Routes */}
+        <Route path="/moh/home" element={
+          <ProtectedRoute allowedRole="moh">
+            <MOHHome />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/moh/send-announcements" element={
+          <ProtectedRoute allowedRole="moh">
+            <SendAnnouncements />
+          </ProtectedRoute>
+        } />
+
+        {/* Default Redirect: Send unauthenticated users to login */}
         <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/citizen/home" element={<CitizenHome />} />
-        <Route path="/moh/home" element={<MOHHome />} />
-        <Route path="/citizen/report-sites" element={<ReportSites />} />
-        <Route path="/citizen/report-cases" element={<ReportCases />} />
-        <Route path="/moh/send-announcements" element={<SendAnnouncements />} />
       </Routes>
     </Router>
   );
