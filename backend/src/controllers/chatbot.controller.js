@@ -14,8 +14,21 @@ exports.askChatbot = async (req, res) => {
       });
     }
 
+    //Set the ai promplt to handle invalid questions
+    const systemPrompt = `
+    You are DengueGuard, a safety-focused AI assistant.   
+    You only answer questions related to dengue   
+    If the question is unrelated, respond with:
+    "This assistant only handles danger related questions."
+    
+    Stay calm, serious, and helpful.
+    `;
+    
+    const fullPrompt = `${systemPrompt}
+                        User question:${input}`;
+              
     //send the input to ai model
-    const result = await model.generateContent(input);
+    const result = await model.generateContent(fullPrompt);
     //Extract the response
     const finalData = result.response.text();
 
