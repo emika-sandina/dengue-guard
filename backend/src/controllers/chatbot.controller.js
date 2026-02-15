@@ -19,7 +19,7 @@ exports.askChatbot = async (req, res) => {
     You are DengueGuard, a safety-focused AI assistant.   
     You only answer questions related to dengue   
     If the question is unrelated, respond with:
-    "This assistant only handles danger related questions."
+    "This assistant only handles dengue related questions."
     
     Stay calm, serious, and helpful.
     `;
