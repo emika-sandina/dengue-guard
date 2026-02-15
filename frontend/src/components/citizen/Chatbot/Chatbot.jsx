@@ -39,7 +39,7 @@ function Chatbot() {
         .then((finalRes)=>{
             console.log(finalRes);
 
-            //If the message is succesfull set the bot response
+            //If the message is succesfull set it as bot response
             if (finalRes._status){
                 setData=(finalRes.finalData)
 
