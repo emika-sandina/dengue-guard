@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  background-color: #e7e9e7;
+  padding: 40px;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  color: #0b2d39;
+  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.announcementform {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 20px;
+}
+
+.row .group {
+  flex: 1;
+}
+
+label {
+  font-size: 14px;
+  color: #0b2d39;
+  font-weight: 600;
+}
+
+input,
+textarea {
+  background-color: #dcdedc;
+  border: 1px solid #cfd1cf;
+  border-radius: 20px;
+  padding: 12px 20px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+textarea {
+  border-radius: 15px;
+  resize: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ea19e;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #adb0ad;
+}

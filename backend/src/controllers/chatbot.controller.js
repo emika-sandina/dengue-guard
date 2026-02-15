@@ -1,8 +1,8 @@
 //import gemini model from services
-const model = require('../services/gemini.service');
+import model from "../services/gemini.service.js";
 
 //controller function for chatbot
-exports.askChatbot = async (req, res) => {
+export const askChatbot = async (req, res) => {
   try {
     const { input } = req.body;
 
@@ -10,7 +10,7 @@ exports.askChatbot = async (req, res) => {
     if (!input) {
       return res.status(400).json({
         _status: false,
-        _message: 'Input is required'
+        _message: "Input is required",
       });
     }
 
@@ -35,14 +35,14 @@ exports.askChatbot = async (req, res) => {
     //Send response to frontend
     res.json({
       _status: true,
-      _message: 'Content Found',
-      finalData
+      _message: "Content Found",
+      finalData,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       _status: false,
-      _message: 'Something went wrong'
+      _message: "Something went wrong",
     });
   }
 };
