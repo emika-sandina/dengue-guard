@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "./mohHome.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
 import siteReportIcon from "../../../assets/sitereport.svg";
@@ -6,29 +7,32 @@ import heatmapIcon from "../../../assets/heatmap.svg";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 
 function MOHHome() {
+  const navigate = useNavigate();
+
   const menu = [
     {
       icon: siteReportIcon,
       name: "Site Reports",
-      description:
-        "View Reports on Breeding Sites",
+      description: "View Reports on Breeding Sites",
+      route: "/moh/site-reports",
     },
     {
       icon: symptomIcon,
       name: "Symptom Reports",
-      description:
-        "View Reports on Dengue Symptoms",
+      description: "View Reports on Dengue Symptoms",
+      route: "/moh/manage-cases",
     },
     {
       icon: announcementPlaceholder,
       name: "Communication",
       description: "Send Alerts and Messages",
+      route: "/moh/send-announcements",
     },
     {
       icon: heatmapIcon,
       name: "Risk Areas",
-      description:
-        "View Heatmap",
+      description: "View Heatmap",
+      route: "/moh/statistics",
     },
   ];
 
@@ -46,11 +50,14 @@ function MOHHome() {
 
         <div className="card-grid">
           {menu.map((menuOption, index) => (
-            <div className="card">
+            <div
+              className="card"
+              key={index}
+              onClick={() => navigate(menuOption.route)}
+            >
               <div className="menu-icon">
                 <img src={menuOption.icon} alt="" />
               </div>
-
               <h3>{menuOption.name}</h3>
               <p>{menuOption.description}</p>
             </div>

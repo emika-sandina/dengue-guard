@@ -11,6 +11,7 @@ import MOHHome from "./pages/moh/HomePage/MOHHome";
 import ReportSites from "./pages/citizen/ReportBreedingSites/ReportSites";
 import ReportCases from "./pages/citizen/ReportCasesPage/reportCases";
 import SendAnnouncements from "./pages/moh/SendAnnouncements/SendAnnouncements";
+import ManageDengueCases from "./pages/moh/ManageDengueCases/ManageDengueCases";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 
 function App() {
@@ -49,6 +50,12 @@ function App() {
         <Route path="/moh/send-announcements" element={
           <ProtectedRoute allowedRole="moh">
             <SendAnnouncements />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/moh/manage-cases" element={
+          <ProtectedRoute allowedRole="moh">
+            <ManageDengueCases />
           </ProtectedRoute>
         } />
 
