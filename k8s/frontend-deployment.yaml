@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengueguard-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengueguard-frontend
+  template:
+    metadata:
+      labels:
+        app: dengueguard-frontend
+    spec:
+      containers:
+        - name: dengue-backend
+          image: thimansa/dengueguard-frontend:latest
+          ports:
+            - containerPort: 80
