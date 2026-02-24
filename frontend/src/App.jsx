@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import AuthPage from "./pages/Auth/AuthPage";
+import AuthPage from "./pages/auth/AuthPage";
 import CitizenHome from "./pages/citizen/Home Page/CitizenHome";
 import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
