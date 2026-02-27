@@ -39,5 +39,18 @@ export const getAllDengueCases = async () => {
   return data;
 };
 
+// Step 4: Update status of a dengue case (e.g. Verify or Resolve)
+export const updateCaseStatus = async (id, status) => {
+  const { data, error } = await supabase
+    .from("dengue_cases")
+    .update({ status })
+    .eq("id", id)
+    .select();
+
+  if (error) throw error;
+
+  return data;
+};
+
 
 
