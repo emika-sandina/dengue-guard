@@ -48,3 +48,23 @@ export const getDengueCases = async (req, res) => {
     return res.status(500).json({ error: "Failed to fetch dengue cases" });
   }
 };
+
+// Step 5: Controller to update dengue case status (e.g. Verify or Resolve)
+export const updateStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status || !["verified", "resolved"].includes(status)) {
+      return res.status(400).json({ error: "Invalid status provided. Must be 'verified' or 'resolved'." });
+    }
+
+    const { updateCaseStatus } = await import("../services/reportCases.service.js");
+    const result = await updateCaseStatus(id, status);
+    
+    return res.status(200).json({ message: "Case status updated successfully", result });
+  } catch (error) {
+    console.error("Error updating dengue case status:", error);
+    return res.status(500).json({ error: "Failed to update dengue case status" });
+  }
+};
