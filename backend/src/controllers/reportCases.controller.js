@@ -88,3 +88,23 @@ export const assignPHI = async (req, res) => {
     return res.status(500).json({ error: "Failed to assign PHI to dengue case" });
   }
 };
+
+// Step 10: Controller to delete/remove a dengue case
+export const deleteCase = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { removeCase } = await import("../services/reportCases.service.js");
+    const result = await removeCase(id);
+    
+    // Supabase returns an empty array if no rows were deleted (e.g., ID not found)
+    if (!result || result.length === 0) {
+      return res.status(404).json({ error: "Case not found or already deleted" });
+    }
+
+    return res.status(200).json({ message: "Dengue case deleted successfully", result });
+  } catch (error) {
+    console.error("Error deleting dengue case:", error);
+    return res.status(500).json({ error: "Failed to delete dengue case" });
+  }
+};

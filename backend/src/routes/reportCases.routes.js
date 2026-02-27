@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router();
 
 // import controller
-import { submitReportCases, getDengueCases, updateStatus, assignPHI } from "../controllers/reportCases.controller.js";
+import { submitReportCases, getDengueCases, updateStatus, assignPHI, deleteCase } from "../controllers/reportCases.controller.js";
 
 // Health-check 
 router.get("/report-case", (req, res) => {
@@ -17,6 +17,9 @@ router.patch("/report-cases/:id/status", updateStatus);
 
 // Step 9: Define route for assigning PHI to a report
 router.patch("/report-cases/:id/assign", assignPHI);
+
+// Step 10: Define route for deleting a report
+router.delete("/report-cases/:id", deleteCase);
 
 // Define route for creating a report
 router.post("/report-case", submitReportCases);

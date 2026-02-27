@@ -65,5 +65,18 @@ export const assignPHIToCase = async (id, assignee) => {
   return data;
 };
 
+// Step 10: Remove/Delete a dengue case
+export const removeCase = async (id) => {
+  const { data, error } = await supabase
+    .from("dengue_cases")
+    .delete()
+    .eq("id", id)
+    .select();
+
+  if (error) throw error;
+
+  return data;
+};
+
 
 
