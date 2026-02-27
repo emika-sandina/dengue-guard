@@ -35,3 +35,16 @@ export const submitReportCases = async (req, res) => {
 
 // Export the controller function to use in route
 
+// Step 2: Controller to fetch all dengue cases
+export const getDengueCases = async (req, res) => {
+  try {
+    // We import this directly into the function to avoid circular dependencies if any crop up
+    const { getAllDengueCases } = await import("../services/reportCases.service.js");
+    
+    const cases = await getAllDengueCases();
+    return res.status(200).json({ cases });
+  } catch (error) {
+    console.error("Error fetching dengue cases:", error);
+    return res.status(500).json({ error: "Failed to fetch dengue cases" });
+  }
+};

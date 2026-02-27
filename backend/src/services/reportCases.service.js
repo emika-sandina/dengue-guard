@@ -27,5 +27,17 @@ export const insertReportCases = async (data) => {
   return insertedData;
 };
 
+// Step 1: Fetch all dengue cases from the database
+export const getAllDengueCases = async () => {
+  const { data, error } = await supabase
+    .from("dengue_cases")
+    .select("*")
+    .order("created_at", { ascending: false }); // Show newest cases first
+
+  if (error) throw error;
+
+  return data;
+};
+
 
 
