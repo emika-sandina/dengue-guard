@@ -153,87 +153,89 @@ function ManageDengueCases() {
           </div>
 
           {/* Report Cards Grid */}
-          <div className="mdc-cards-grid">
-            {filtered.length === 0 && (
-              <p className="mdc-empty">No reports found.</p>
-            )}
-            {filtered.map((report) => (
-              <div key={report.id} className={`mdc-card mdc-card--${report.status}`}>
-                {/* Status badge */}
-                {report.status === "resolved" && (
-                  <span className="mdc-badge mdc-badge--resolved">Resolved</span>
-                )}
-                {report.status === "verified" && (
-                  <span className="mdc-badge mdc-badge--verified">Verified</span>
-                )}
-
-                {/* Address */}
-                <div className="mdc-card-address">
-                  <span className="mdc-pin">📍</span>
-                  <span>{report.address}</span>
-                </div>
-
-                {/* Time & Date */}
-                <div className="mdc-card-meta">
-                  <span>Reported {report.time}</span>
-                  <span>{report.date}</span>
-                </div>
-
-                {/* Symptom Tags */}
-                <div className="mdc-tags">
-                  {report.symptoms.map((sym) => (
-                    <span key={sym} className="mdc-tag">
-                      {sym}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="mdc-card-actions">
-                  {report.status === "resolved" ? (
-                    <>
-                      <button
-                        className="mdc-btn mdc-btn--resolve"
-                        onClick={() => handleResolve(report.id)}
-                        disabled
-                      >
-                        Resolve
-                      </button>
-                      <button
-                        className="mdc-btn mdc-btn--remove"
-                        onClick={() => handleRemove(report.id)}
-                      >
-                        Remove
-                      </button>
-                      <button className="mdc-btn mdc-btn--assignee" disabled>
-                        {report.assignee}
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="mdc-btn mdc-btn--verify"
-                        onClick={() => handleVerify(report.id)}
-                      >
-                        Verify
-                      </button>
-                      <button
-                        className="mdc-btn mdc-btn--remove"
-                        onClick={() => handleRemove(report.id)}
-                      >
-                        Remove
-                      </button>
-                      <button
-                        className={`mdc-btn mdc-btn--assign ${report.assignee ? "assigned" : ""}`}
-                        onClick={() => handleAssignPHI(report.id)}
-                      >
-                        {report.assignee ? report.assignee : "Assign PHI"}
-                      </button>
-                    </>
+          <div className="mdc-cards-container">
+            <div className="mdc-cards-grid">
+              {filtered.length === 0 && (
+                <p className="mdc-empty">No reports found.</p>
+              )}
+              {filtered.map((report) => (
+                <div key={report.id} className={`mdc-card mdc-card--${report.status}`}>
+                  {/* Status badge */}
+                  {report.status === "resolved" && (
+                    <span className="mdc-badge mdc-badge--resolved">Resolved</span>
                   )}
+                  {report.status === "verified" && (
+                    <span className="mdc-badge mdc-badge--verified">Verified</span>
+                  )}
+
+                  {/* Address */}
+                  <div className="mdc-card-address">
+                    <span className="mdc-pin">📍</span>
+                    <span>{report.address}</span>
+                  </div>
+
+                  {/* Time & Date */}
+                  <div className="mdc-card-meta">
+                    <span>Reported {report.time}</span>
+                    <span>{report.date}</span>
+                  </div>
+
+                  {/* Symptom Tags */}
+                  <div className="mdc-tags">
+                    {report.symptoms.map((sym) => (
+                      <span key={sym} className="mdc-tag">
+                        {sym}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="mdc-card-actions">
+                    {report.status === "resolved" ? (
+                      <>
+                        <button
+                          className="mdc-btn mdc-btn--resolve"
+                          onClick={() => handleResolve(report.id)}
+                          disabled
+                        >
+                          Resolve
+                        </button>
+                        <button
+                          className="mdc-btn mdc-btn--remove"
+                          onClick={() => handleRemove(report.id)}
+                        >
+                          Remove
+                        </button>
+                        <button className="mdc-btn mdc-btn--assignee" disabled>
+                          {report.assignee}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="mdc-btn mdc-btn--verify"
+                          onClick={() => handleVerify(report.id)}
+                        >
+                          Verify
+                        </button>
+                        <button
+                          className="mdc-btn mdc-btn--remove"
+                          onClick={() => handleRemove(report.id)}
+                        >
+                          Remove
+                        </button>
+                        <button
+                          className={`mdc-btn mdc-btn--assign ${report.assignee ? "assigned" : ""}`}
+                          onClick={() => handleAssignPHI(report.id)}
+                        >
+                          {report.assignee ? report.assignee : "Assign PHI"}
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </main>  
       </div>
