@@ -52,5 +52,18 @@ export const updateCaseStatus = async (id, status) => {
   return data;
 };
 
+// Step 7: Assign PHI to a dengue case
+export const assignPHIToCase = async (id, assignee) => {
+  const { data, error } = await supabase
+    .from("dengue_cases")
+    .update({ assignee })
+    .eq("id", id)
+    .select();
+
+  if (error) throw error;
+
+  return data;
+};
+
 
 
