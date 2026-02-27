@@ -68,3 +68,23 @@ export const updateStatus = async (req, res) => {
     return res.status(500).json({ error: "Failed to update dengue case status" });
   }
 };
+
+// Step 8: Controller to assign PHI to a dengue case
+export const assignPHI = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { assignee } = req.body;
+
+    if (!assignee) {
+      return res.status(400).json({ error: "Assignee name is required." });
+    }
+
+    const { assignPHIToCase } = await import("../services/reportCases.service.js");
+    const result = await assignPHIToCase(id, assignee);
+    
+    return res.status(200).json({ message: "PHI assigned successfully", result });
+  } catch (error) {
+    console.error("Error assigning PHI to dengue case:", error);
+    return res.status(500).json({ error: "Failed to assign PHI to dengue case" });
+  }
+};
