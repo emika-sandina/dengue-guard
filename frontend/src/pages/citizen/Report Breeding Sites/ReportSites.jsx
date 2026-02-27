@@ -145,7 +145,7 @@ function ReportSites() {
             ></textarea>
 
             <label>Upload Photo</label>
-            <input type="file" value={photo} onChange={handlePhotoUpload} />
+            <input type="file" accept="image/*" onChange={handlePhotoUpload} />
           </div>
 
           {/* RIGHT SIDE */}
