@@ -252,7 +252,7 @@
 .risk-boxcm {
   background: var(--risk-orange);
   border-radius: 20px;
-  padding: 25px 40px;
+  padding: 10px 40px;
   display: flex;
   align-items: center;
   gap: 25px;
@@ -293,7 +293,7 @@
 
 .stat-cardcm {
   background: #ffffff;
-  padding: 25px;
+  padding: 15px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   border-left: 5px solid var(--primary-teal);

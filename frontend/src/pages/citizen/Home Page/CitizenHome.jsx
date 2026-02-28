@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import heroImg2 from "../../../../src/heroimg2.jpg";
 import { useState } from "react";
+import HeatMap from "./Heatmap.jsx";
 
 function CitizenHome() {
   const navigate = useNavigate();
@@ -87,13 +88,50 @@ function CitizenHome() {
             <h1>⚠️</h1>
             <div>
               <h3>Risk Level</h3>
-              <p>
-                <h2>Current MOH Location</h2>
-              </p>
+              <h2>Current MOH Location</h2>
               <small>Based on reports and weather data</small>
             </div>
           </div>
 
+          <section
+            style={{
+              background: "#fff",
+              padding: "15px",
+              borderRadius: "16px",
+              border: "1px solid #eee",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
+                fontSize: "14px",
+              }}
+            >
+              <span>
+                <strong>Risk Level:</strong>
+              </span>
+              <span>
+                <span style={{ color: "blue" }}>●</span> Low &nbsp;
+                <span style={{ color: "lime" }}>●</span> Moderate &nbsp;
+                <span style={{ color: "red" }}>●</span> High Risk
+              </span>
+            </div>
+
+            <HeatMap />
+          </section>
+
+          <footer
+            style={{
+              marginTop: "20px",
+              marginBottom: "20px",
+              fontSize: "12px",
+              color: "#888",
+            }}
+          >
+            Data simulated based on Epidemiological Unit reports.
+          </footer>
           <div className="statscm">
             <div className="stat-cardcm">
               <h2>Community Report Count</h2>
