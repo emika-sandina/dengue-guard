@@ -1,4 +1,4 @@
-.navbar {
+/* .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -38,4 +38,117 @@
     font-weight: bold;
 }
 
+ */
 
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 75px;
+  padding: 0 48px;
+
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+
+  font-family: "DM Sans", sans-serif;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f2d20;
+  letter-spacing: -0.4px;
+  margin: 0;
+  user-select: none;
+
+  background: linear-gradient(135deg, #1a9e6a, #0f2d20);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.navbar-links a {
+  position: relative;
+  display: inline-block;
+
+  padding: 8px 15px;
+  border-radius: 50px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #557066;
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.navbar-links a:hover {
+  color: #0f2d20;
+  background: rgba(45, 201, 138, 0.1);
+}
+
+.navbar-links a.active {
+  color: #0f2d20;
+  font-weight: 600;
+  background: #ffffff;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0 28px;
+  }
+
+  .navbar-links a {
+    font-size: 0.85rem;
+    padding: 7px 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 14px 20px 10px;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .navbar-links a {
+    font-size: 0.82rem;
+    padding: 6px 12px;
+  }
+}
