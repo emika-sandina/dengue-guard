@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { submitSiteReports } from "../controllers/breedingSites.controller.js";
+import {submitSiteReports} from "../controllers/reportSites.controller.js"
 
 const router = express.Router();
 

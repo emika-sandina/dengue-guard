@@ -1,26 +1,61 @@
 import { supabase } from "../supabase.js";
-import dotenv from 'dotenv';
-//Load Variables
-dotenv.config();
 
-export const insertSiteReports = async (reportData) => {
-  //Match frontend data to the column names in the table
-  const payload = {
-    location: reportData.location,
-    description: reportData.description,
-    issue_type: reportData.issueType,
-    urgency: reportData.urgency,
-    moh_area: reportData.mohArea,
-    photo_url: reportData.photoUrl,
-  };
+export const insertSiteReports = async (reportData, file) => {
+  let photoUrl = ""; //Storing the photourl
 
-  //Uses the supabase client to access the breeding_sites table
-  const { data: insertedData, error } = await supabase
+  //This is executed only if user uploaded an image
+  if (file && file.buffer) {
+    //Get the uploaded file type
+    const fileExtension = file.mimetype.split("/")[1];
+
+    //Creating a unique file name using the current date and using random numbers
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
+
+    // Upload the image to Supabase Storage
+    const uploadResponse = await supabase.storage
+      .from("breedingsite-images") // select the bucket
+      .upload(
+        fileName, // name of the file inside the bucket
+        file.buffer, // actual image data stored in memory
+        {
+          contentType: file.mimetype, // set correct image type (jpeg, png, etc.)
+        },
+      );
+
+    //Check if there was an error during upload
+    if (uploadResponse.error) {
+      console.log(uploadResponse.error);
+      throw new Error("Image upload failed");
+    }
+
+    // Generate public URL for the uploaded file
+    const publicUrlResponse = supabase.storage
+      .from("breedingsite-images")
+      .getPublicUrl(fileName); // generate public link
+
+    //Store the generated URL to access for the manage breeding sites for MOH
+    photoUrl = publicUrlResponse.data.publicUrl;
+  }
+
+  // Insert report data into database table
+  const data = await supabase
     .from("breeding_sites")
-    .insert([payload]);
-  //returns an error to the controller if any error occurs
-  if (error) throw error;
-  //returns the newly created data back to the controller
-  return insertedData;
-};
+    .insert([
+      {
+        location: reportData.location,
+        description: reportData.description,
+        issue_type: reportData.issueType,
+        urgency: reportData.urgency,
+        moh_area: reportData.mohArea,
+        photo_url: photoUrl,
+      },
+    ])
+    .select();
 
+  if (data.error) {
+    console.log(data.error);
+    throw new Error("Report Upload Failed!");
+  }
+
+  return data;
+};

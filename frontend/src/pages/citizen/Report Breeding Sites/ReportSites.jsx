@@ -67,52 +67,52 @@ function ReportSites() {
   //handling submit events
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //Basic Validation from the frontend
+
+    // Basic validation
     if (!location || !issueType || !mohArea) {
       alert("Please fill in the required fields!");
       return;
     }
 
-    //Prepare the data for the backend
-    const formData = { 
-      location, 
-      description, 
-      issueType, 
-      urgency, 
-      mohArea,
-      photoUrl: "" 
-    };
+    //Create FormData object (important for file uploads)
+    const formData = new FormData();
+
+    //Append text fields
+    formData.append("location", location);
+    formData.append("description", description);
+    formData.append("issueType", issueType);
+    formData.append("urgency", urgency);
+    formData.append("mohArea", mohArea);
+
+    // Append image file (if selected)
+    if (photo) {
+      formData.append("photo", photo);
+    }
 
     try {
-      //POST request to the express server
       const response = await fetch("http://localhost:5000/api/report-sites", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: formData,
       });
 
       const result = await response.json();
 
       if (response.ok) {
         alert("Success: " + result.message);
-        //Reset form on success
+
+        // Reset form upon succesful upload
         setLocation("");
         setDescription("");
         setPhoto(null);
         setIssueType(issueTypes[0]);
         setUrgency("Low");
         setMohArea(mohAreas[0]);
-      } 
-      
-      else {
+      } else {
         alert("Error: " + result.error);
       }
+    } catch (error) {
+      alert("Could not connect to backend server!");
     }
-
-    catch (error) {
-      alert("Could not connect to the backend server!, Check if your backend is running or not!");
-    }
-
   };
 
   return (
