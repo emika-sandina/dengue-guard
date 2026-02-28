@@ -75,6 +75,7 @@ function ReportCases() {
     };
 
     try {
+      console.log("Submitting report with data:", data);
       //send a post request to backend api
       const response = await fetch("http://localhost:5000/api/report-case", {
         method: "POST",
@@ -82,14 +83,17 @@ function ReportCases() {
         body: JSON.stringify(data),
       });
 
+      console.log("Response status:", response.status);
       //read raw response text
       const text = await response.text();
+      console.log("Raw response text:", text);
       let result = {};
 
       //parse only if response has a body
       if (text) {
         try {
           result = JSON.parse(text);
+          console.log("Parsed response result:", result);
         } catch (err) {
           console.error("Failed to parse JSON response:", err);
           throw new Error("Invalid response from server");
@@ -104,7 +108,7 @@ function ReportCases() {
 
       //success case
       alert(result.message || "Report submitted successfully");
-      console.log(result);
+      console.log("SUCCESS: Report submitted");
 
     // catch any errors
     } catch (error) {

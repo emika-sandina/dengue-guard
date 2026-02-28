@@ -1,0 +1,4 @@
+Log Start
+Success! Row count: 0
+Columns in first row: N/A
+Data: []

@@ -1,47 +1,7 @@
-import { useState } from "react";//to store changing data to update the UI
+import { useState, useEffect } from "react";//to store changing data to update the UI
 import {Navigate} from "react-router-dom";// helps to create navigation links
 import NavBar from "../../../components/common/Navbar/NavBar";// imports the navbar component
 import "./ManageDengueCases.css";// imports the css file for styling
-
-//initial reports(fake database) for starting data
-const initialReports = [
-  {
-    id: 1,
-    address: "42/22, Walawwa Road, Homagama",
-    time: "08:25 AM",
-    date: "20/10/2025",
-    symptoms: ["High Fever"],
-    status: "resolved",
-    assignee: "Mr.Rohan Perera",
-  },
-  {
-    id: 2,
-    address: "No.51, Horana Road, Kottawa",
-    time: "09:35 AM",
-    date: "18/10/2025",
-    symptoms: ["High Pain"],
-    status: "pending",
-    assignee: null,
-  },
-  {
-    id: 3,
-    address: "No.65, Padukka Road, Meegoda",
-    time: "10:45 AM",
-    date: "16/10/2025",
-    symptoms: ["Headache", "Body Ache"],
-    status: "pending",
-    assignee: null,
-  },
-  {
-    id: 4,
-    address: "No.12, Galle Road, Moratuwa",
-    time: "11:00 AM",
-    date: "15/10/2025",
-    symptoms: ["High Fever", "Rash"],
-    status: "pending",
-    assignee: null,
-  },
-];
 
 //sort option, a list of sorting options for the dropdown
 const SORT_OPTIONS = [
@@ -54,40 +14,110 @@ const SORT_OPTIONS = [
 function ManageDengueCases() {
 
   // state of all the reports
-  const [reports, setReports] = useState(initialReports);
+  const [reports, setReports] = useState([]);
   // state of the search bar
   const [search, setSearch] = useState("");
   // state of the sort option
   const [sortBy, setSortBy] = useState("datetime");
   // state of the sort dropdown
   const [sortOpen, setSortOpen] = useState(false);
+  
+  // Fetch cases on mount
+  useEffect(() => {
+    fetchCases();
+  }, []);
+
+  const fetchCases = async () => {
+    try {
+      console.log("Fetching cases from backend...");
+      const res = await fetch("http://localhost:5000/api/report-cases");
+      if (!res.ok) {
+        const errData = await res.json();
+        console.error("Backend returned error:", errData);
+        alert("Backend Error: " + (errData.error || "Failed to fetch"));
+        return;
+      }
+      const data = await res.json();
+      console.log("Data received from backend:", data);
+      
+      if (data.cases) {
+        const formattedCases = data.cases.map((c) => ({
+          id: c.id,
+          address: c.location || "Unknown Location",
+          time: c.created_at ? new Date(c.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Unknown Time",
+          date: c.created_at ? new Date(c.created_at).toLocaleDateString() : "Unknown Date",
+          symptoms: Array.isArray(c.symptoms) ? c.symptoms : JSON.parse(c.symptoms || "[]"),
+          status: c.status || "pending",
+          assignee: c.assignee || null,
+        }));
+        console.log("Formatted cases for UI:", formattedCases);
+        setReports(formattedCases);
+      }
+    } catch (error) {
+      console.error("Failed to load reports:", error);
+      alert("Network Error: Could not connect to backend at http://localhost:5000. Please ensure the backend is running.");
+    }
+  };
 
   //function to handle the resolve action
-  const handleResolve = (id) => {
-    setReports((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status: "resolved" } : r))
-    );
+  const handleResolve = async (id) => {
+    try {
+      await fetch(`http://localhost:5000/api/report-cases/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "resolved" }),
+      });
+      setReports((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status: "resolved" } : r))
+      );
+    } catch (error) {
+      console.error("Error resolving case:", error);
+    }
   };
 
   //function to handle the remove action
-  const handleRemove = (id) => {
-    setReports((prev) => prev.filter((r) => r.id !== id));
+  const handleRemove = async (id) => {
+    try {
+      if (!window.confirm("Are you sure you want to remove this case?")) return;
+      await fetch(`http://localhost:5000/api/report-cases/${id}`, { method: "DELETE" });
+      setReports((prev) => prev.filter((r) => r.id !== id));
+    } catch (error) {
+      console.error("Error removing case:", error);
+    }
   };
 
   //function to handle the verify action
-  const handleVerify = (id) => {
-    setReports((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status: "verified" } : r))
-    );
+  const handleVerify = async (id) => {
+    try {
+      await fetch(`http://localhost:5000/api/report-cases/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "verified" }),
+      });
+      setReports((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, status: "verified" } : r))
+      );
+    } catch (error) {
+      console.error("Error verifying case:", error);
+    }
   };
 
   //function to handle the assign action
-  const handleAssignPHI = (id) => {
+  const handleAssignPHI = async (id) => {
     const name = prompt("Enter PHI Officer Name:");
     if (name) {
-      setReports((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, assignee: name } : r))
-      );
+      try {
+        await fetch(`http://localhost:5000/api/report-cases/${id}/assign`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ assignee: name }),
+        });
+        setReports((prev) =>
+          prev.map((r) => (r.id === id ? { ...r, assignee: name } : r))
+        );
+      } catch (error) {
+        console.error("Error assigning PHI:", error);
+      }
     }
   };
 

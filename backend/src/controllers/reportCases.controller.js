@@ -24,12 +24,16 @@ export const submitReportCases = async (req, res) => {
     }
     // Call the service layer function to insert data into Supabase
     const result = await insertReportCases(reportData);
+    console.log("SUCCESS: Case inserted into Supabase:", result);
     return res
       .status(200)
       .json({ message: "Report submitted successfully", result });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to submit report" });
+    console.error("Error in submitReportCases:", error);
+    return res.status(500).json({ 
+      error: "Failed to submit report", 
+      details: error.message || error 
+    });
   }
 };
 
@@ -42,6 +46,7 @@ export const getDengueCases = async (req, res) => {
     const { getAllDengueCases } = await import("../services/reportCases.service.js");
     
     const cases = await getAllDengueCases();
+    console.log(`FETCH SUCCESS: Found ${cases?.length || 0} cases in Supabase.`);
     return res.status(200).json({ cases });
   } catch (error) {
     console.error("Error fetching dengue cases:", error);

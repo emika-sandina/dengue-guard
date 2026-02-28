@@ -1,0 +1,9 @@
+--- VERIFY START ---
+1. Checking connection...
+FETCH SUCCESS. Found 0 rows.
+2. Attempting manual insert...
+INSERT ERROR: {"code":"PGRST204","details":null,"hint":null,"message":"Could not find the 'status' column of 'dengue_cases' in the schema cache"}
+3. Fetching again...
+FETCH 2 SUCCESS. Total rows: 0
+Rows: []
+--- VERIFY END ---
