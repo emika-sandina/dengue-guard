@@ -6,6 +6,6 @@ import { displaySites } from '../controllers/manageSites.controller.js';
 
 //Defining a post method to create a new report
 
-router.post('/site-reports', displaySites);
+router.get('/site-reports', displaySites);
 
 export default router;
