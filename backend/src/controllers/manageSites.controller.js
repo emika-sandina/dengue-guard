@@ -1,3 +1,4 @@
+// Created a safety net for in case there are no breeding sites reported, successfully displayed and error
 import {fetchReportSites} from "../services/manageSites.service.js";
 
 export const displaySites = async (req, res) => {
