@@ -52,84 +52,116 @@
   color: #6a6a6a;
 }
 
-/* Risk section */
-.risk-box {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: #dde0da;
-  border-radius: 18px;
-  padding: 22px;
-  margin-bottom: 28px;
-}
-
-.risk-box h3 {
-  margin: 0;
-  color: #c47b00;
-}
-
-.risk-box p {
-  margin: 4px 0;
-  font-weight: 600;
-}
-
-.risk-box small {
-  color: #5f5f5f;
-}
-
-/* Statistics */
-.stats {
-  display: flex;
-  gap: 22px;
-  justify-content: center;
-}
-
-.stat-card {
-  background: #dde0da;
-  border-radius: 18px;
-  padding: 28px;
-  width: 220px;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-}
-
-.stat-card h2 {
-  margin: 0;
-  font-size: 28px;
-  color: #0b3c3d;
-}
-
-.stat-card p {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #6a6a6a;
-}
-
 .menu-icon img {
     width: 80px;
 }
 
-/* Responsive */
-@media (max-width: 1100px) {
-  .card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* Display list of breeding sites */
+/*table*/
+.manage-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
 }
 
+.manage-table thead th {
+  text-align: left;
+  padding: 8px 16px;
+  color: #444;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.manage-table tbody tr {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+
+.manage-table tbody td {
+  padding: 26px;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+.location-column{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+
+.priority-level{
+  display: inline;
+  padding: 5px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: center;
+}
+
+.priority-high {
+  background-color: #ffe5e5;
+  color: #e03c3c;
+  border: 1.5px solid #f5a5a5;
+}
+
+.priority-medium {
+  background-color: #fff3e0;
+  color: #e07b00;
+  border: 1.5px solid #ffc87a;
+}
+
+.priority-low {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1.5px solid #a5d6a7;
+}
+
+/*Image*/
+.site-image{
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.button{
+  display: flex;
+  gap: 8px;
+}
+
+.btn-action{
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid #ccc;
+  background: #f9f9f9;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-action:hover {
+  background: #e8e8e8;
+  border-color: #aaa;
+}
+
+.btn-delete:hover {
+  background: #ffe5e5;
+  border-color: #f5a5a5;
+  color: #c0392b;
+}
+
+.btn-resolve:hover{
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border-color:#a5d6a7;
+}
+
+/* Responsive */
 @media (max-width: 600px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .stats {
-    flex-direction: column;
-  }
-
   .main-content {
     padding: 20px;
   }
