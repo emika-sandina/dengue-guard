@@ -7,7 +7,7 @@ dotenv.config();
 
 // Function to GET data from the table
 export const fetchReportSites = async () => {
-    const {error, data} = await supabase.from("breeding_sites").select("issue_type,location,urgency").order("created_at",{ascending:true});
+    const {error, data} = await supabase.from("breeding_sites").select("*").order("created_at",{ascending:true});
 
     if (error){
         console.error("Error reading report sites: ", error.message);
