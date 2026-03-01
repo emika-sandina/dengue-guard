@@ -11,7 +11,7 @@ export const fetchReportSites = async () => {
 
     if (error){
         console.error("Error reading report sites: ", error.message);
-        return;
+        throw new Error(error.message);
     }
     return data;
 }
