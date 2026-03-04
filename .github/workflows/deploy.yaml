@@ -2,7 +2,9 @@ name: Deploy DengueGuard to GKE
 
 on:
   push:
-    branches: ["main"]
+      branches:
+        - main
+        - dev
   workflow_dispatch:
 
 jobs:
