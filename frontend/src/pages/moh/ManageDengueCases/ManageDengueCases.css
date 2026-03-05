@@ -29,6 +29,19 @@
   margin: 0 0 24px 0;
 }
 
+/* Division badge shown inline in the page title */
+.mdc-division-badge {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0b6b6e;
+  background: #d4f0f0;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-left: 12px;
+  vertical-align: middle;
+  letter-spacing: 0.01em;
+}
+
 /* ─── Controls: search + sort ──────────────────── */
 .mdc-controls {
   display: flex;

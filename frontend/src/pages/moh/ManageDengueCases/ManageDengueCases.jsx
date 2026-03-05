@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";//to store changing data to update the UI
-import {Navigate} from "react-router-dom";// helps to create navigation links
-import NavBar from "../../../components/common/Navbar/NavBar";// imports the navbar component
-import "./ManageDengueCases.css";// imports the css file for styling
+import { useState, useEffect } from "react"; // to store changing data to update the UI
+import { Navigate } from "react-router-dom"; // helps to create navigation links
+import NavBar from "../../../components/common/Navbar/NavBar"; // imports the navbar component
+import { supabase } from "../../../lib/supabaseClient"; // Supabase client to read current user session
+import "./ManageDengueCases.css"; // imports the css file for styling
 
 //sort option, a list of sorting options for the dropdown
 const SORT_OPTIONS = [
@@ -21,16 +22,39 @@ function ManageDengueCases() {
   const [sortBy, setSortBy] = useState("datetime");
   // state of the sort dropdown
   const [sortOpen, setSortOpen] = useState(false);
-  
-  // Fetch cases on mount
+  // MOH division of the currently logged-in officer
+  const [mohDivision, setMohDivision] = useState(null);
+
+  // On mount: read the logged-in MOH officer's moh_area from Supabase,
+  // then fetch only the cases that belong to that division.
   useEffect(() => {
-    fetchCases();
+    const initPage = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error || !user) {
+          console.error("Could not get current user:", error);
+          return;
+        }
+        // moh_area is stored in user_metadata at signup
+        const area = user.user_metadata?.moh_area || null;
+        setMohDivision(area);
+        fetchCases(area);
+      } catch (err) {
+        console.error("Error reading user session:", err);
+      }
+    };
+    initPage();
   }, []);
 
-  const fetchCases = async () => {
+  const fetchCases = async (mohArea) => {
     try {
-      console.log("Fetching cases from backend...");
-      const res = await fetch("http://localhost:5000/api/report-cases");
+      // Build the URL – pass the officer's MOH area as a query param so the
+      // backend returns only that division's cases.
+      const url = mohArea
+        ? `http://localhost:5000/api/report-cases?mohArea=${encodeURIComponent(mohArea)}`
+        : "http://localhost:5000/api/report-cases";
+      console.log("Fetching cases from backend with URL:", url);
+      const res = await fetch(url);
       if (!res.ok) {
         const errData = await res.json();
         console.error("Backend returned error:", errData);
@@ -143,7 +167,12 @@ function ManageDengueCases() {
       <div className="manage-dengue-cases-body">
         {/* ── Main Content ── */}
         <main className="mdc-main">
-          <h1 className="mdc-title">Reports on Symptoms</h1>
+          <h1 className="mdc-title">
+            Reports on Symptoms
+            {mohDivision && (
+              <span className="mdc-division-badge"> — {mohDivision} Division</span>
+            )}
+          </h1>
           
           {/* Search & Sort row */}
           <div className="mdc-controls">

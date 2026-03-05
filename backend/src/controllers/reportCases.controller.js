@@ -39,14 +39,19 @@ export const submitReportCases = async (req, res) => {
 
 // Export the controller function to use in route
 
-// Step 2: Controller to fetch all dengue cases
+// Step 2: Controller to fetch dengue cases, optionally filtered by MOH area
 export const getDengueCases = async (req, res) => {
   try {
     // We import this directly into the function to avoid circular dependencies if any crop up
     const { getAllDengueCases } = await import("../services/reportCases.service.js");
-    
-    const cases = await getAllDengueCases();
-    console.log(`FETCH SUCCESS: Found ${cases?.length || 0} cases in Supabase.`);
+
+    // Read the optional mohArea query param (e.g. GET /api/report-cases?mohArea=Colombo)
+    const mohArea = req.query.mohArea || null;
+
+    const cases = await getAllDengueCases(mohArea);
+    console.log(
+      `FETCH SUCCESS: Found ${cases?.length || 0} cases${mohArea ? ` for MOH area "${mohArea}"` : " (all areas)"} in Supabase.`
+    );
     return res.status(200).json({ cases });
   } catch (error) {
     console.error("Error fetching dengue cases:", error);

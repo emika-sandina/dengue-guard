@@ -14,7 +14,7 @@ export const insertReportCases = async (data) => {
     location: data.location,
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
-    moh_area: data.mohArea,
+    moh_area: typeof data.mohArea === 'object' && data.mohArea !== null ? data.mohArea.value : data.mohArea,
   };
 
   // Insert the data to table
@@ -31,12 +31,19 @@ export const insertReportCases = async (data) => {
   return insertedData;
 };
 
-// Step 1: Fetch all dengue cases from the database
-export const getAllDengueCases = async () => {
-  const { data, error } = await supabase
+// Step 1: Fetch dengue cases from the database, optionally filtered by MOH area
+export const getAllDengueCases = async (mohArea = null) => {
+  let query = supabase
     .from("dengue_cases")
     .select("*")
     .order("created_at", { ascending: false }); // Show newest cases first
+
+  // If a specific MOH area is provided, filter to only that division's cases
+  if (mohArea) {
+    query = query.eq("moh_area", mohArea);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error("Supabase Fetch Error:", error);

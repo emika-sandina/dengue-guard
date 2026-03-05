@@ -69,7 +69,7 @@ function ReportCases() {
       symptoms,
       doctorStatus,
       dengueDiagnosis,
-      mohArea,
+      mohArea: mohArea ? mohArea.value : null,
       location,
       symptomsStartDate: e.target[1].value,
     };
