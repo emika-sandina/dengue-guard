@@ -15,7 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # SonarCloud Scan
+            # SonarCloud scan
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
         with:
@@ -27,20 +27,40 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
-          
-      # Scan backend image
-      - name: Trivy Scan Backend Docker Image
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: thimansa/dengueguard-backend:latest
-          format: json   
 
-      # Scan frontend image
-      - name: Trivy Scan Frontend Docker Image
+      # OWASP Dependency Check
+      - name: OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "DengueGuard"
+          path: "."
+          format: "HTML"
+          out: "reports"
+
+      # Upload Dependency Check report
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports
+
+      # Set Git SHA tag
+      - name: Set image tag
+        run: echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      # Trivy container scan (use Git SHA tagged images)
+      - name: Trivy Scan Backend
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: thimansa/dengueguard-frontend:latest
+          image-ref: thimansa/dengueguard-backend:$IMAGE_TAG
           format: json
+          
+      - name: Trivy Scan Frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: thimansa/dengueguard-frontend:$IMAGE_TAG
+          format: json
+
 
       # Docker Login
       - name: Login to DockerHub
@@ -50,18 +70,18 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-
       # Build & Push Backend
       - name: Build & Push Backend
         run: |
-          docker build -t thimansa/dengueguard-backend:latest ./backend
-          docker push thimansa/dengueguard-backend:latest
+          docker build -t thimansa/dengueguard-backend:$IMAGE_TAG ./backend
+          docker push thimansa/dengueguard-backend:$IMAGE_TAG
 
       # Build & Push Frontend
       - name: Build & Push Frontend
         run: |
-          docker build -t thimansa/dengueguard-frontend:latest ./frontend
-          docker push thimansa/dengueguard-frontend:latest
+          docker build -t thimansa/dengueguard-frontend:$IMAGE_TAG ./frontend
+          docker push thimansa/dengueguard-frontend:$IMAGE_TAG
+      
 
       # Authenticate to GCP
       - name: Authenticate to GCP
