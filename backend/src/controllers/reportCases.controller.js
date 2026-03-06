@@ -65,8 +65,8 @@ export const updateStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!status || !["verified", "resolved"].includes(status)) {
-      return res.status(400).json({ error: "Invalid status provided. Must be 'verified' or 'resolved'." });
+    if (!status || status !== "resolved") {
+      return res.status(400).json({ error: "Invalid status provided. Must be 'resolved'." });
     }
 
     const { updateCaseStatus } = await import("../services/reportCases.service.js");

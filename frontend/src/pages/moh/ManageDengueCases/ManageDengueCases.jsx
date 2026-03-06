@@ -24,6 +24,10 @@ function ManageDengueCases() {
   const [sortOpen, setSortOpen] = useState(false);
   // MOH division of the currently logged-in officer
   const [mohDivision, setMohDivision] = useState(null);
+  // Modal state for Assign PHI
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [assigningCaseId, setAssigningCaseId] = useState(null);
+  const [phiName, setPhiName] = useState("");
 
   // On mount: read the logged-in MOH officer's moh_area from Supabase,
   // then fetch only the cases that belong to that division.
@@ -110,38 +114,35 @@ function ManageDengueCases() {
     }
   };
 
-  //function to handle the verify action
-  const handleVerify = async (id) => {
-    try {
-      await fetch(`http://localhost:5000/api/report-cases/${id}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "verified" }),
-      });
-      setReports((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, status: "verified" } : r))
-      );
-    } catch (error) {
-      console.error("Error verifying case:", error);
-    }
+
+  //function to handle the assign action - now opens custom modal
+  const handleAssignPHI = (id) => {
+    setAssigningCaseId(id);
+    const report = reports.find(r => r.id === id);
+    setPhiName(report?.assignee || "");
+    setShowAssignModal(true);
   };
 
-  //function to handle the assign action
-  const handleAssignPHI = async (id) => {
-    const name = prompt("Enter PHI Officer Name:");
-    if (name) {
-      try {
-        await fetch(`http://localhost:5000/api/report-cases/${id}/assign`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ assignee: name }),
-        });
-        setReports((prev) =>
-          prev.map((r) => (r.id === id ? { ...r, assignee: name } : r))
-        );
-      } catch (error) {
-        console.error("Error assigning PHI:", error);
-      }
+  const confirmAssignment = async () => {
+    if (!phiName.trim()) {
+      alert("Please enter a PHI name");
+      return;
+    }
+
+    try {
+      await fetch(`http://localhost:5000/api/report-cases/${assigningCaseId}/assign`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignee: phiName }),
+      });
+      setReports((prev) =>
+        prev.map((r) => (r.id === assigningCaseId ? { ...r, assignee: phiName } : r))
+      );
+      setShowAssignModal(false);
+      setAssigningCaseId(null);
+      setPhiName("");
+    } catch (error) {
+      console.error("Error assigning PHI:", error);
     }
   };
 
@@ -223,9 +224,6 @@ function ManageDengueCases() {
                   {report.status === "resolved" && (
                     <span className="mdc-badge mdc-badge--resolved">Resolved</span>
                   )}
-                  {report.status === "verified" && (
-                    <span className="mdc-badge mdc-badge--verified">Verified</span>
-                  )}
 
                   {/* Address */}
                   <div className="mdc-card-address">
@@ -272,10 +270,10 @@ function ManageDengueCases() {
                     ) : (
                       <>
                         <button
-                          className="mdc-btn mdc-btn--verify"
-                          onClick={() => handleVerify(report.id)}
+                          className="mdc-btn mdc-btn--resolve"
+                          onClick={() => handleResolve(report.id)}
                         >
-                          Verify
+                          Resolve
                         </button>
                         <button
                           className="mdc-btn mdc-btn--remove"
@@ -298,6 +296,31 @@ function ManageDengueCases() {
           </div>
         </main>  
       </div>
+      {/* ── Assign PHI Modal ── */}
+      {showAssignModal && (
+        <div className="mdc-modal-overlay" onClick={() => setShowAssignModal(false)}>
+          <div className="mdc-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2 className="mdc-modal-title">Assign PHI Officer</h2>
+            <p className="mdc-modal-subtitle">Enter the name of the PHI officer to assign to this case.</p>
+            <input 
+              type="text" 
+              className="mdc-modal-input" 
+              placeholder="PHI Officer Name"
+              value={phiName}
+              onChange={(e) => setPhiName(e.target.value)}
+              autoFocus
+            />
+            <div className="mdc-modal-actions">
+              <button className="mdc-modal-btn mdc-modal-btn--cancel" onClick={() => setShowAssignModal(false)}>
+                Cancel
+              </button>
+              <button className="mdc-modal-btn mdc-modal-btn--confirm" onClick={confirmAssignment}>
+                Assign Officer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

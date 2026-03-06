@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 // Log to verify it's reading the .env correctly
 console.log("Connecting to Supabase at:", supabaseUrl);
@@ -14,7 +14,6 @@ if (!supabaseKey || !supabaseKey.startsWith("eyJ")) {
 } else {
   console.log("Supabase key format looks valid (starts with eyJ).");
 }
-console.log("Using key:", process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
