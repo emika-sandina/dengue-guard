@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./mohHome.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
+import { supabase } from "../../../lib/supabaseClient";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
@@ -8,6 +10,38 @@ import announcementPlaceholder from "../../../assets/announcements.svg";
 
 function MOHHome() {
   const navigate = useNavigate();
+  const [mohArea, setMohArea] = useState("Loading...");
+
+  useEffect(() => {
+    const fetchOfficerArea = async () => {
+      try {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+          console.error("Could not get user session:", userError);
+          setMohArea("Unknown Location");
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('moh_area')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching officer profile:", profileError);
+          setMohArea(user.user_metadata?.moh_area || "Unknown Location");
+        } else {
+          setMohArea(profile.moh_area || "Unspecified Location");
+        }
+      } catch (err) {
+        console.error("Error initializing home page:", err);
+        setMohArea("Error Loading Location");
+      }
+    };
+
+    fetchOfficerArea();
+  }, []);
 
   const menu = [
     {
@@ -69,7 +103,7 @@ function MOHHome() {
           <div>
             <h3>Risk Level</h3>
             <p>
-              <h2>Current MOH Location</h2>
+              <h2>{mohArea}</h2>
             </p>
             <small>Based on reports and weather data</small>
           </div>

@@ -34,17 +34,32 @@ function ManageDengueCases() {
   useEffect(() => {
     const initPage = async () => {
       try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        if (error || !user) {
-          console.error("Could not get current user:", error);
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+          console.error("Could not get current user:", userError);
           return;
         }
-        // moh_area is stored in user_metadata at signup
-        const area = user.user_metadata?.moh_area || null;
-        setMohDivision(area);
-        fetchCases(area);
+
+        // Fetch moh_area from the 'profiles' table (authoritative source)
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('moh_area')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching officer profile:", profileError);
+          // Fallback to metadata if profile fetch fails, or set to null
+          const area = user.user_metadata?.moh_area || null;
+          setMohDivision(area);
+          fetchCases(area);
+        } else {
+          const area = profile.moh_area || null;
+          setMohDivision(area);
+          fetchCases(area);
+        }
       } catch (err) {
-        console.error("Error reading user session:", err);
+        console.error("Error initializing page:", err);
       }
     };
     initPage();
