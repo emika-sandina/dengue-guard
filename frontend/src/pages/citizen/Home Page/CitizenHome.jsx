@@ -9,7 +9,9 @@ import blueheroimg from "../../../assets/blueheroimg.png";
 import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useState } from "react";
+
 import HeatMap from "./Heatmap.jsx";
+// need to update heatmap
 
 function CitizenHome() {
   const navigate = useNavigate();
