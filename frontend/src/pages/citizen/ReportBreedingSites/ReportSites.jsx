@@ -6,6 +6,7 @@ import { mohAreas } from "../../../services/mohAreas";
 function ReportSites() {
   //array for certain issue types
   const issueTypes = [
+    "Select the type of the issue",
     "Standing Water",
     "Water Containers",
     "Construction Site",
@@ -21,6 +22,9 @@ function ReportSites() {
   const [issueType, setIssueType] = useState("");
   const [urgency, setUrgency] = useState("Low");
   const [mohArea, setMohArea] = useState("");
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState("");
+  const [popUpType, setPopUpType] = useState("");
 
   //handling file uploads
   const handlePhotoUpload = (e) => {
@@ -69,8 +73,10 @@ function ReportSites() {
     e.preventDefault();
 
     // Basic validation
-    if (!location || !issueType || !mohArea) {
-      alert("Please fill in the required fields!");
+    if (!location || !issueType || !mohArea || issueType === issueTypes[0]) {
+      setPopUpMessage("Please fill in all required fields before submitting.");
+      setPopUpType("error");
+      setShowPopUp(true);
       return;
     }
 
@@ -98,8 +104,10 @@ function ReportSites() {
       const result = await response.json();
 
       if (response.ok) {
-        alert("Success: " + result.message);
-
+        //Show the popup with the successfull report submission msg
+        setPopUpMessage(result.message || "Report Submitted Successfully!");
+        setPopUpType("success");
+        setShowPopUp(true);
         // Reset form upon succesful upload
         setLocation("");
         setDescription("");
@@ -108,10 +116,12 @@ function ReportSites() {
         setUrgency("Low");
         setMohArea(mohAreas[0]);
       } else {
-        alert("Error: " + result.error);
+        setPopUpMessage(result.error || "Failed to submit the report!");
+        setPopUpType("error");
+        setShowPopUp(true);
       }
     } catch (error) {
-      alert("Could not connect to backend server!");
+      alert("Could not connect to Network!");
     }
   };
 
@@ -131,6 +141,7 @@ function ReportSites() {
               placeholder="Enter address or use GPS"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
+              required
             />
             <span className="location-link" onClick={getCurrentLocation}>
               Get Current Location
@@ -142,6 +153,7 @@ function ReportSites() {
               rows={5}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              required
             ></textarea>
 
             <label>Upload Photo</label>
@@ -154,6 +166,7 @@ function ReportSites() {
             <select
               value={issueType}
               onChange={(e) => setIssueType(e.target.value)}
+              required
             >
               {issueTypes.map((issue, index) => (
                 <option key={index}>{issue}</option>
@@ -164,6 +177,7 @@ function ReportSites() {
             <select
               value={mohArea}
               onChange={(e) => setMohArea(e.target.value)}
+              required
             >
               {mohAreas.map((mohArea, index) => (
                 <option>{mohArea}</option>
@@ -189,6 +203,23 @@ function ReportSites() {
           Submit Report
         </button>
       </main>
+
+      {showPopUp && (
+        <div className="popup-overlay">
+          <div className={`popup-box ${popUpType}`}>
+            <h1>{popUpType === "success" ? "✅" : "❌"}</h1>
+            <h3>{popUpType === "success" ? "Success" : "Error"}</h3>
+            <p>{popUpMessage}</p>
+
+            <button
+              onClick={() => setShowPopUp(false)}
+              className="popup-close-btn"
+              >
+                OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
