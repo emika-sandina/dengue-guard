@@ -50,6 +50,13 @@ select {
   transition: border 0.2s ease-in-out;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+  border: 1px solid #007bff;
+  box-shadow: 0 0 6px rgba(0,123,255,0.3);
+}
+
 input:hover,
 textarea:hover,
 select:hover {
@@ -112,6 +119,7 @@ textarea {
 
 .submit-btn:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
 .location-link {
@@ -224,12 +232,12 @@ textarea {
   input,
   textarea,
   select {
-    padding: 15px; /* Adjust padding for better touch targets */
-    font-size: 16px; /* Prevents iOS auto-zoom on input focus */
+    padding: 15px; 
+    font-size: 16px; 
   }
 
   .urgency-buttons {
-    flex-direction: row; /* Keep buttons side-by-side or stack them */
+    flex-direction: row; 
     flex-wrap: wrap;
   }
 
@@ -242,6 +250,24 @@ textarea {
     width: 100%;
     margin: 20px 0;
   }
+
+    .popup-box {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .popup-box h3 {
+    font-size: 18px;
+  }
+
+  .popup-box p {
+    font-size: 14px;
+  }
+
+  .popup-close-btn {
+    width: 100%;
+    padding: 10px;
+  }
 }
 
 /* --- Small Phones (480px and below) --- */
@@ -253,5 +279,14 @@ textarea {
 
   label {
     font-size: 16px;
+  }
+
+    .popup-box {
+    width: 95%;
+    padding: 18px;
+  }
+
+  .popup-close-btn {
+    font-size: 14px;
   }
 }
