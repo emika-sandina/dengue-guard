@@ -24,10 +24,17 @@ function ManageDengueCases() {
   const [sortOpen, setSortOpen] = useState(false);
   // MOH division of the currently logged-in officer
   const [mohDivision, setMohDivision] = useState(null);
-  // Modal state for Assign PHI
+  
+  // Modal states
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [assigningCaseId, setAssigningCaseId] = useState(null);
   const [phiName, setPhiName] = useState("");
+
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [removingCaseId, setRemovingCaseId] = useState(null);
+
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
 
   // On mount: read the logged-in MOH officer's moh_area from Supabase,
   // then fetch only the cases that belong to that division.
@@ -92,6 +99,11 @@ function ManageDengueCases() {
           symptoms: Array.isArray(c.symptoms) ? c.symptoms : JSON.parse(c.symptoms || "[]"),
           status: c.status || "pending",
           assignee: c.assignee || null,
+          // Additional fields for details view
+          reportingFor: c.reporting_for,
+          doctorStatus: c.doctor_status,
+          dengueDiagnosis: c.dengue_diagnosis,
+          symptomsStartDate: c.symptoms_start_date ? new Date(c.symptoms_start_date).toLocaleDateString() : "Unknown",
         }));
         console.log("Formatted cases for UI:", formattedCases);
         setReports(formattedCases);
@@ -118,12 +130,19 @@ function ManageDengueCases() {
     }
   };
 
-  //function to handle the remove action
-  const handleRemove = async (id) => {
+  // function to trigger remove confirmation
+  const handleRemove = (id) => {
+    setRemovingCaseId(id);
+    setShowRemoveModal(true);
+  };
+
+  // actual remove action
+  const confirmRemoval = async () => {
     try {
-      if (!window.confirm("Are you sure you want to remove this case?")) return;
-      await fetch(`http://localhost:5000/api/report-cases/${id}`, { method: "DELETE" });
-      setReports((prev) => prev.filter((r) => r.id !== id));
+      await fetch(`http://localhost:5000/api/report-cases/${removingCaseId}`, { method: "DELETE" });
+      setReports((prev) => prev.filter((r) => r.id !== removingCaseId));
+      setShowRemoveModal(false);
+      setRemovingCaseId(null);
     } catch (error) {
       console.error("Error removing case:", error);
     }
@@ -159,6 +178,11 @@ function ManageDengueCases() {
     } catch (error) {
       console.error("Error assigning PHI:", error);
     }
+  };
+
+  const handleOpenDetails = (report) => {
+    setSelectedReport(report);
+    setShowDetailsModal(true);
   };
 
   //function to filter the reports based on the search bar
@@ -234,76 +258,64 @@ function ManageDengueCases() {
                 <p className="mdc-empty">No reports found.</p>
               )}
               {filtered.map((report) => (
-                <div key={report.id} className={`mdc-card mdc-card--${report.status}`}>
+                <div key={report.id} className={`mdc-card mdc-card--${report.status}`} onClick={() => handleOpenDetails(report)}>
                   {/* Status badge */}
                   {report.status === "resolved" && (
                     <span className="mdc-badge mdc-badge--resolved">Resolved</span>
                   )}
 
-                  {/* Address */}
-                  <div className="mdc-card-address">
+                  {/* Header: Address */}
+                  <div className="mdc-card-header">
                     <span className="mdc-pin">📍</span>
-                    <span>{report.address}</span>
+                    <span className="mdc-card-address-text">{report.address}</span>
                   </div>
 
-                  {/* Time & Date */}
-                  <div className="mdc-card-meta">
-                    <span>Reported {report.time}</span>
-                    <span>{report.date}</span>
-                  </div>
+                  <div className="mdc-card-content">
+                    {/* Time & Date */}
+                    <div className="mdc-card-info">
+                      <span>Reported {report.time}</span>
+                      <span>{report.date}</span>
+                    </div>
 
-                  {/* Symptom Tags */}
-                  <div className="mdc-tags">
-                    {report.symptoms.map((sym) => (
-                      <span key={sym} className="mdc-tag">
-                        {sym}
-                      </span>
-                    ))}
-                  </div>
+                    {/* Dengue Diagnosis Row */}
+                    <div className={`mdc-card-diagnosis ${report.dengueDiagnosis === 'Yes' ? 'mdc-card-diagnosis--yes' : 'mdc-card-diagnosis--no'}`}>
+                       The patient diagnosed with Dengue : 
+                       <span className={`mdc-diagnosis-status ${report.dengueDiagnosis === 'Yes' ? 'yes' : 'no'}`}>
+                          {report.dengueDiagnosis === 'Yes' ? ' yes' : ' no'}
+                       </span>
+                    </div>
 
-                  {/* Action Buttons */}
-                  <div className="mdc-card-actions">
-                    {report.status === "resolved" ? (
-                      <>
-                        <button
-                          className="mdc-btn mdc-btn--resolve"
-                          onClick={() => handleResolve(report.id)}
-                          disabled
-                        >
-                          Resolve
-                        </button>
-                        <button
-                          className="mdc-btn mdc-btn--remove"
-                          onClick={() => handleRemove(report.id)}
-                        >
-                          Remove
-                        </button>
-                        <button className="mdc-btn mdc-btn--assignee" disabled>
-                          {report.assignee}
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="mdc-btn mdc-btn--resolve"
-                          onClick={() => handleResolve(report.id)}
-                        >
-                          Resolve
-                        </button>
-                        <button
-                          className="mdc-btn mdc-btn--remove"
-                          onClick={() => handleRemove(report.id)}
-                        >
-                          Remove
-                        </button>
-                        <button
-                          className={`mdc-btn mdc-btn--assign ${report.assignee ? "assigned" : ""}`}
-                          onClick={() => handleAssignPHI(report.id)}
-                        >
-                          {report.assignee ? report.assignee : "Assign PHI"}
-                        </button>
-                      </>
-                    )}
+                    {/* Assignee Pill */}
+                    <div className="mdc-assignee-row">
+                      <button 
+                         className={`mdc-assignee-pill ${report.assignee ? "assigned" : ""}`}
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           if (report.status === 'resolved') return;
+                           handleAssignPHI(report.id);
+                         }}
+                         disabled={report.status === 'resolved'}
+                      >
+                        {report.assignee ? `Assigned PHI : ${report.assignee}` : "Assign PHI Agent"}
+                      </button>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="mdc-card-actions" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        className="mdc-btn mdc-btn--resolve"
+                        onClick={() => handleResolve(report.id)}
+                        disabled={report.status === "resolved"}
+                      >
+                        Resolve
+                      </button>
+                      <button
+                        className="mdc-btn mdc-btn--remove"
+                        onClick={() => handleRemove(report.id)}
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -331,6 +343,66 @@ function ManageDengueCases() {
               </button>
               <button className="mdc-modal-btn mdc-modal-btn--confirm" onClick={confirmAssignment}>
                 Assign Officer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Remove Report Modal ── */}
+      {showRemoveModal && (
+        <div className="mdc-modal-overlay" onClick={() => setShowRemoveModal(false)}>
+          <div className="mdc-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2 className="mdc-modal-title">Remove Report?</h2>
+            <p className="mdc-modal-subtitle">Are you sure you want to remove this dengue case report? This action cannot be undone.</p>
+            <div className="mdc-modal-actions">
+              <button className="mdc-modal-btn mdc-modal-btn--cancel" onClick={() => setShowRemoveModal(false)}>
+                Cancel
+              </button>
+              <button className="mdc-modal-btn mdc-modal-btn--confirm mdc-modal-btn--danger" onClick={confirmRemoval}>
+                Yes, Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Details Modal ── */}
+      {showDetailsModal && selectedReport && (
+        <div className="mdc-modal-overlay" onClick={() => setShowDetailsModal(false)}>
+          <div className="mdc-modal-content mdc-modal-content--large" onClick={(e) => e.stopPropagation()}>
+            <h2 className="mdc-modal-title">Patient Case Details</h2>
+            <div className="mdc-details-grid">
+               <div className="mdc-detail-item">
+                  <label>Reporting For:</label>
+                  <span>{selectedReport.reportingFor}</span>
+               </div>
+               <div className="mdc-detail-item">
+                  <label>Symptoms Start Date:</label>
+                  <span>{selectedReport.symptomsStartDate}</span>
+               </div>
+               <div className="mdc-detail-item">
+                  <label>Consulted a Doctor:</label>
+                  <span>{selectedReport.doctorStatus}</span>
+               </div>
+               <div className="mdc-detail-item">
+                  <label>Dengue Diagnosis:</label>
+                  <span>{selectedReport.dengueDiagnosis}</span>
+               </div>
+               <div className="mdc-detail-item mdc-detail-item--full">
+                  <label>Location:</label>
+                  <span>{selectedReport.address}</span>
+               </div>
+               <div className="mdc-detail-item mdc-detail-item--full">
+                  <label>Reported Symptoms:</label>
+                  <div className="mdc-details-tags">
+                    {selectedReport.symptoms.map(s => <span key={s} className="mdc-details-tag">{s}</span>)}
+                  </div>
+               </div>
+            </div>
+            <div className="mdc-modal-actions">
+              <button className="mdc-modal-btn mdc-modal-btn--confirm" onClick={() => setShowDetailsModal(false)}>
+                Done
               </button>
             </div>
           </div>
