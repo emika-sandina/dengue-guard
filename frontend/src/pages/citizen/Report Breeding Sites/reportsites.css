@@ -82,13 +82,11 @@ textarea {
   transition: background 0.2s ease-in-out;
 }
 
-
 .urgency-btn.medium {
   background: #ffd680;
   color: #a06b00;
   transition: background 0.2s ease-in-out;
 }
-
 
 .urgency-btn.high {
   background: #ff9999;
@@ -113,28 +111,88 @@ textarea {
 }
 
 .submit-btn:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .location-link {
-    display: inline-block;
-    margin-top: 6px;
-    font-size: 14px;
-    color: #2563eb;
-    cursor: pointer;
-    font-weight: 500;
-}
-  
-.location-link:hover {
-    text-decoration: underline;
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 500;
 }
 
+.location-link:hover {
+  text-decoration: underline;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.popup-box {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  text-align: center;
+  width: 320px;
+  max-width: 90%;
+  animation: popupScale 0.5s ease;
+}
+
+.popup-box.success {
+  border-top: 5px solid #28a745;
+}
+
+.popup-box.error {
+  border-top: 5px solid #dc3545;
+}
+
+.popup-close-btn {
+  margin-top: 15px;
+  padding: 8px 18px;
+  border: none;
+  background: #dadada;
+  color: rgb(90, 90, 90);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popupScale {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 /* --- Desktop and Tablet Adjustments (Standard screens) --- */
 @media (max-width: 1024px) {
   .main-content {
     padding: 40px; /* Reduce large desktop padding */
   }
-  
+
   .report-card {
     gap: 20px;
   }
@@ -172,7 +230,7 @@ textarea {
 
   .urgency-buttons {
     flex-direction: row; /* Keep buttons side-by-side or stack them */
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
   }
 
   .urgency-btn {
@@ -181,7 +239,7 @@ textarea {
   }
 
   .submit-btn {
-    width: 100%; 
+    width: 100%;
     margin: 20px 0;
   }
 }
