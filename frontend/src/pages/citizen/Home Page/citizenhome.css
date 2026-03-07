@@ -1,13 +1,14 @@
+/* VARIABLES & THEME */
 :root {
-  --primary-teal: #4db6ac;
-  --secondary-teal: #80cbc4;
-  --bg-gradient: linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%);
+  --primary-teal: #4d6eb6;
+  --secondary-teal: #80a3cb;
+  --bg-gradient: linear-gradient(135deg, #c9e5f2, #ffffff 100%);
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(255, 255, 255, 0.3);
   --text-dark: #2c3e50;
   --risk-orange: linear-gradient(90deg, #ffb74d, #fff176);
 }
-
+/* Base layout */
 .citizen-layout {
   min-height: 100vh;
   background: var(--bg-gradient);
@@ -18,15 +19,16 @@
   padding: 20px;
   color: var(--text-dark);
 }
+/* Responsive image handling */
 .heroimg {
-  width: 650px;
   width: 100%;
   height: auto;
   display: block;
   border: none;
-  mix-blend-mode: multiply;
+  mix-blend-mode: multiply; /* Ensures image blends with background gradient */
 }
 
+/* Header Section */
 .header-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -37,7 +39,7 @@
 
 .citizen-layout .header-section h1 {
   font-size: 2.8rem;
-  color: #1e4d46;
+  color: #1e2b83;
   margin-bottom: 15px;
   font-weight: 700;
 }
@@ -55,31 +57,8 @@
 .main-content {
   background-repeat: no-repeat;
   background-position: top right;
-
   padding: 20px !important;
   margin: 0 !important;
-}
-
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
-}
-
-.card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 30px;
-  text-align: center;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  cursor: pointer;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
 .card:hover {
@@ -87,110 +66,6 @@
   box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
 }
 
-/* 
-.menu-icon {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.menu-icon img {
-  width: 40px;
-  height: 40px;
-}
-
-.card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  color: #1a4a44;
-}
-
-.card p {
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: #607d8b;
-}
-
-.risk-box {
-  background: var(--risk-orange);
-  border-radius: 20px;
-  padding: 25px 40px;
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  margin-bottom: 40px;
-  box-shadow: 0 10px 20px rgba(255, 183, 77, 0.2);
-}
-
-.risk-box h1 {
-  margin: 0;
-  font-size: 3rem;
-}
-
-.risk-box h3 {
-  margin: 0;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  color: #e65100;
-}
-
-.risk-box h2 {
-  margin: 5px 0;
-  font-size: 1.8rem;
-  color: #3e2723;
-}
-
-.risk-box small {
-  color: #5d4037;
-  font-weight: 500;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-.stat-card {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border-left: 5px solid var(--primary-teal);
-}
-
-.stat-card h2 {
-  font-size: 2rem;
-  margin: 0;
-  color: var(--primary-teal);
-}
-
-.stat-card p {
-  margin: 5px 0 0;
-  color: #78909c;
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-@media (max-width: 768px) {
-  .risk-box {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .stats {
-    grid-template-columns: 1fr;
-  }
-} */
-
-/* Card Grid Layout */
 .card-gridcm {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -198,7 +73,7 @@
   margin-bottom: 40px;
 }
 
-/* Glassmorphism Card Style */
+/* Card components */
 .cardcm {
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
@@ -248,7 +123,7 @@
   color: #607d8b;
 }
 
-/* Risk Box Section */
+/* Risk and stats section */
 .risk-boxcm {
   background: var(--risk-orange);
   border-radius: 20px;

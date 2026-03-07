@@ -46,6 +46,7 @@
   position: sticky;
   top: 0;
   z-index: 999;
+  border-radius: 48px;
 
   display: flex;
   align-items: center;
@@ -72,13 +73,14 @@
 .logo {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #0f2d20;
+  color: #0f192d;
+
   letter-spacing: -0.4px;
   margin: 0;
   -webkit-user-select: none;
   user-select: none;
 
-  background: linear-gradient(135deg, #1a9e6a, #0f2d20);
+  background: linear-gradient(135deg, #1a8c9e, #0f162d);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -99,7 +101,7 @@
 
   font-size: 0.9rem;
   font-weight: 500;
-  color: #557066;
+  color: #556b70;
   text-decoration: none;
   white-space: nowrap;
 
@@ -109,8 +111,8 @@
 }
 
 .navbar-links a:hover {
-  color: #0f2d20;
-  background: rgba(45, 201, 138, 0.1);
+  color: #0f1a2d;
+  background: rgba(45, 162, 201, 0.1);
 }
 
 .navbar-links a.active {

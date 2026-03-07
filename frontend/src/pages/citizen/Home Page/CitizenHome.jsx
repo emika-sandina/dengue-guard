@@ -5,6 +5,7 @@ import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
 import educationIcon from "../../../assets/education.svg";
+import blueheroimg from "../../../assets/blueheroimg.png";
 import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import heroImg2 from "../../../../src/heroimg2.jpg";
@@ -62,7 +63,7 @@ function CitizenHome() {
             </div>
             <img
               className="heroimg"
-              src={heroImg2}
+              src={blueheroimg}
               alt="Community members working together to identify and prevent mosquito breeding sites in residential areas, promoting public health awareness"
             />
           </div>
