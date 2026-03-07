@@ -13,27 +13,17 @@ function MOHHome() {
   const [mohArea, setMohArea] = useState("Loading...");
 
   useEffect(() => {
-    const fetchOfficerArea = async () => {
+    const fetchOfficerArea = () => {
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (userError || !user) {
-          console.error("Could not get user session:", userError);
+        const userStr = localStorage.getItem('dgUser');
+        if (!userStr) {
+          console.error("No user session found in localStorage");
           setMohArea("Unknown Location");
           return;
         }
 
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('moh_area')
-          .eq('id', user.id)
-          .single();
-
-        if (profileError) {
-          console.error("Error fetching officer profile:", profileError);
-          setMohArea(user.user_metadata?.moh_area || "Unknown Location");
-        } else {
-          setMohArea(profile.moh_area || "Unspecified Location");
-        }
+        const user = JSON.parse(userStr);
+        setMohArea(user.mohArea || "Unspecified Location");
       } catch (err) {
         console.error("Error initializing home page:", err);
         setMohArea("Error Loading Location");

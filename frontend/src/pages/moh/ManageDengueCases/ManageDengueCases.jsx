@@ -38,33 +38,22 @@ function ManageDengueCases() {
 
   // On mount: read the logged-in MOH officer's moh_area from Supabase,
   // then fetch only the cases that belong to that division.
+  // On mount: read the logged-in MOH officer's data from localStorage (set during professional login),
+  // then fetch cases. The backend will automatically filter by the token's MOH area.
   useEffect(() => {
     const initPage = async () => {
       try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (userError || !user) {
-          console.error("Could not get current user:", userError);
+        const userStr = localStorage.getItem('dgUser');
+        if (!userStr) {
+          console.error("No user data found in localStorage. Redirecting to login...");
+          // In a real app, you'd navigate to /login here
           return;
         }
 
-        // Fetch moh_area from the 'profiles' table (authoritative source)
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('moh_area')
-          .eq('id', user.id)
-          .single();
-
-        if (profileError) {
-          console.error("Error fetching officer profile:", profileError);
-          // Fallback to metadata if profile fetch fails, or set to null
-          const area = user.user_metadata?.moh_area || null;
-          setMohDivision(area);
-          fetchCases(area);
-        } else {
-          const area = profile.moh_area || null;
-          setMohDivision(area);
-          fetchCases(area);
-        }
+        const user = JSON.parse(userStr);
+        const area = user.mohArea || null;
+        setMohDivision(area);
+        fetchCases(); // Area filtering is now handled by the backend using the JWT
       } catch (err) {
         console.error("Error initializing page:", err);
       }
@@ -72,25 +61,30 @@ function ManageDengueCases() {
     initPage();
   }, []);
 
-  const fetchCases = async (mohArea) => {
+  const fetchCases = async () => {
     try {
-      // Build the URL – pass the officer's MOH area as a query param so the
-      // backend returns only that division's cases.
-      const url = mohArea
-        ? `http://localhost:5000/api/report-cases?mohArea=${encodeURIComponent(mohArea)}`
-        : "http://localhost:5000/api/report-cases";
-      console.log("Fetching cases from backend with URL:", url);
-      const res = await fetch(url);
+      const token = localStorage.getItem('dgToken');
+      const url = "http://localhost:5000/api/report-cases";
+      
+      console.log("Fetching cases from backend with Professional JWT...");
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
       if (!res.ok) {
         const errData = await res.json();
         console.error("Backend returned error:", errData);
-        alert("Backend Error: " + (errData.error || "Failed to fetch"));
+        if (res.status === 401) alert("Session expired. Please login again.");
+        else alert("Backend Error: " + (errData.error || "Failed to fetch"));
         return;
       }
       const data = await res.json();
       console.log("Data received from backend:", data);
       
       if (data.cases) {
+// ... (rest of the formatting logic remains same)
         const formattedCases = data.cases.map((c) => ({
           id: c.id,
           address: c.location || "Unknown Location",
@@ -117,9 +111,13 @@ function ManageDengueCases() {
   //function to handle the resolve action
   const handleResolve = async (id) => {
     try {
+      const token = localStorage.getItem('dgToken');
       await fetch(`http://localhost:5000/api/report-cases/${id}/status`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ status: "resolved" }),
       });
       setReports((prev) =>
@@ -139,7 +137,13 @@ function ManageDengueCases() {
   // actual remove action
   const confirmRemoval = async () => {
     try {
-      await fetch(`http://localhost:5000/api/report-cases/${removingCaseId}`, { method: "DELETE" });
+      const token = localStorage.getItem('dgToken');
+      await fetch(`http://localhost:5000/api/report-cases/${removingCaseId}`, { 
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
       setReports((prev) => prev.filter((r) => r.id !== removingCaseId));
       setShowRemoveModal(false);
       setRemovingCaseId(null);
@@ -164,9 +168,13 @@ function ManageDengueCases() {
     }
 
     try {
+      const token = localStorage.getItem('dgToken');
       await fetch(`http://localhost:5000/api/report-cases/${assigningCaseId}/assign`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify({ assignee: phiName }),
       });
       setReports((prev) =>

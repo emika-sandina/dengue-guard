@@ -45,12 +45,16 @@ export const getDengueCases = async (req, res) => {
     // We import this directly into the function to avoid circular dependencies if any crop up
     const { getAllDengueCases } = await import("../services/reportCases.service.js");
 
-    // Read the optional mohArea query param (e.g. GET /api/report-cases?mohArea=Colombo)
-    const mohArea = req.query.mohArea || null;
+    // Read mohArea from token (provided by authMiddleware)
+    const { mohArea: userMohArea, role } = req.user;
+    
+    // If user is MOH, enforce their specific area. 
+    // Otherwise (e.g. admin), they can still use query params or see all.
+    const mohArea = role === 'moh' ? userMohArea : (req.query.mohArea || null);
 
     const cases = await getAllDengueCases(mohArea);
     console.log(
-      `FETCH SUCCESS: Found ${cases?.length || 0} cases${mohArea ? ` for MOH area "${mohArea}"` : " (all areas)"} in Supabase.`
+      `FETCH SUCCESS: User [${req.user.email}] (${role}) requested cases. Filtering by area: "${mohArea || "all"}". Found ${cases?.length || 0} cases.`
     );
     return res.status(200).json({ cases });
   } catch (error) {

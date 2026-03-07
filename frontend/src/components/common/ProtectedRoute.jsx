@@ -8,36 +8,24 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const checkUser = () => {
       try {
-        // Get the current session from Supabase
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError || !session) {
+        const token = localStorage.getItem('dgToken');
+        const userStr = localStorage.getItem('dgUser');
+
+        if (!token || !userStr) {
           setAuthenticated(false);
           setLoading(false);
           return;
         }
 
+        const user = JSON.parse(userStr);
         setAuthenticated(true);
+        setUserRole(user.role);
 
-        // If a specific role is required, fetch it from the database
-        if (allowedRole) {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', session.user.id)
-            .single();
-
-          if (profileError || !profile) {
-            console.error("Profile fetch error:", profileError);
-            setUserRole(null);
-          } else {
-            setUserRole(profile.role);
-          }
-        }
       } catch (err) {
         console.error("Auth security check failed:", err);
+        setAuthenticated(false);
       } finally {
         setLoading(false);
       }

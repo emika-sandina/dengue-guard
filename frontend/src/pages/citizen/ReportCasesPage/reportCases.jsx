@@ -76,10 +76,14 @@ function ReportCases() {
 
     try {
       console.log("Submitting report with data:", data);
+      const token = localStorage.getItem('dgToken');
       //send a post request to backend api
       const response = await fetch("http://localhost:5000/api/report-case", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(data),
       });
 
