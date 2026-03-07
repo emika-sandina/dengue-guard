@@ -5,38 +5,55 @@ import ReactMarkdown from "react-markdown";
 
 
 function Chatbot() {
+
+    // Controls whether chatbot UI is open or closed
     const [isOpen, setIsOpen] = useState(false);
+
+    // Stores backend response data 
     let[data,setData]=useState("")
+
+    // Stores conversation messages
     const [messages, setMessages] = useState([
     { sender: "bot", text: "Hi! I'm your Dengue Assistant. How can I help you today?" },
     ]);
+
+    // Stores current input typed by the user
     const [input, setInput] = useState("");
 
+    // Function triggered when user sends a message
     const handleSend = () => {
+
+        //Handles emplty inputs
         if (!input.trim()) return;
 
         const userMessage={sender:"user",text:input}
+        // Add user message to chat
         setMessages((prevMessages)=>[...prevMessages,userMessage]);
+
+        //Clears the input field
         setInput("")
+
+        //Send a post request to backend
         axios.post('http://localhost:5000/chatbot/ask',{input})
-        .then((res)=>res.data)
+        .then((res)=>res.data)// Extract response body
         .then((finalRes)=>{
             console.log(finalRes);
 
+            //If the message is succesfull set it as bot response
             if (finalRes._status){
                 setData=(finalRes.finalData)
 
+                //Label the response and add it to the chat
                 const botMessage={sender:"bot",text:finalRes.finalData};
                 setMessages((prevMessages=>[...prevMessages,botMessage]))
             } else {
+                //Handle errors
                 const botMessage= {sender:"bot",text:"Sorry I encounterd an error.Please try again."}
                 setMessages((prevMessages=>[...prevMessages,botMessage]))
             }
-        })
-        
+        })        
     };
-  
-
+    
     return (
         <>
         {/* Floating button */}

@@ -1,10 +1,30 @@
 {
   "dependencies": {
+    "@supabase/supabase-js": "^2.95.3",
     "axios": "^1.13.2",
     "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
     "env": "^0.0.2",
     "express": "^5.2.1",
     "generative-ai": "^0.1.4",
     "react-markdown": "^10.1.0"
-  }
+  },
+  "name": "dengue-guard",
+  "version": "1.0.0",
+  "description": "DengueGuard is a web-based dengue prevention and prediction prototype for Sri Lanka. It allows citizens to report mosquito breeding sites while enabling Medical Officers of Health (MOH) to manage, verify, and resolve reports. The system focuses on usability, data collection, and public health awareness using React, Node.js, Express, and MySQL.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emika-sandina/Dengue-Guard.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emika-sandina/Dengue-Guard/issues"
+  },
+  "homepage": "https://github.com/emika-sandina/Dengue-Guard#readme"
 }

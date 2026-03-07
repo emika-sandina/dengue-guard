@@ -1,6 +1,6 @@
 import "./citizenhome.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
-import Chatbot from "../../../components/citizen/ChatBot/Chatbot";
+import Chatbot from "../../../components/citizen/Chatbot/Chatbot";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
