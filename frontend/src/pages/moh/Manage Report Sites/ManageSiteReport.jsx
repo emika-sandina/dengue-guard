@@ -102,6 +102,40 @@ const ManageReport = () => {
       }
   }
 
+  const handleVerify = async (e, siteId) => {
+    // to block the row click
+    e.stopPropagation();
+
+    try {
+        // Gets current users session information from supabase
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;  // Supabase JSON Web TOKEN (JWT)
+
+        if (!token) {
+          console.error("No session found");
+          nav("/");
+          return;
+        }
+        const response = await fetch(`http://localhost:5000/api/site-reports/${siteId}`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({status:"Verified"})
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update from server");
+        }
+        // To update the report from the UI
+        setSites(sites.map(site => site.id === siteId? {...site, status:"Verfied"}:site));
+    }catch (error){
+      console.error("Fetch error message: " + error.message);
+      }
+  }
+
   return (
     <div className="moh-layout">
       <NavBar role="MOH" />
@@ -146,10 +180,10 @@ const ManageReport = () => {
                 </td>  
 
                 <td className="button">
-                    <button className="btn-action" id="verifyBtn">Verify</button>  {/*TODO add e.stopPropagation(); to block the row click*/} 
+                    <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified"}>{site.status === "Verified" ? "Verified" : "Verify"}</button>  {/*TODO add e.stopPropagation(); to block the row click*/} 
                     <button className="btn-action btn-delete" onClick={(e) => handleDelete(e,site.id)}>Delete</button>
                     <button className="btn-action btn-resolve">Resolve</button>
-                    <button className="btn-status" key={index}onClick={() => "document.getElementById('verifyBtn').innerHTML= 'Verified';"}>{site.status || "Pending"}</button>
+                    <button className="btn-action btn-status">{site.status || "Pending"}</button>
                 </td>
               </tr>
             ))}

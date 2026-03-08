@@ -20,6 +20,7 @@ const Priority = (urgency) =>{
   if (level === "low") return "priority-low";
 };
 
+// To handle deleting a breeding site
 const handleDelete = async (e, siteId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this file?");
     if (!confirmDelete) return;

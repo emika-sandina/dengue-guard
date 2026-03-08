@@ -45,15 +45,32 @@ export const fetchMohLocation = async (token) =>{
 // Function to delete breeding site from supabase
 export const deleteSites = async (siteId)  =>{
     try {
+        // if the id in supabase is equal to the siteId then delete
         const {error} = await supabase.from("breeding_sites").delete().eq("id",siteId)
 
         if (error){
             throw new Error(error.message); 
         }
-
         return {success :true}
     }catch (error){
         console.error("Error deleting site: ", error.message);
+        throw(error);
+    }
+}
+
+
+// Function to verify breeding site from supabase
+export const verifySites = async (siteId,newStatus) => {
+    try {
+        // if the id in supabase is equal to the siteId then delete
+        const {error} = await supabase.from("breeding_sites").update({status: newStatus}).eq("id",siteId)
+
+        if (error){
+            throw new Error(error.message); 
+        }
+        return {success :true}
+    }catch (error){
+        console.error("Error verifying site: ", error.message);
         throw(error);
     }
 }

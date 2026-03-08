@@ -124,14 +124,15 @@
   border-color:#a5d6a7;
 }
 
-.btn-status{
-  /* margin-top: 3px; */
-  font-size: 12px;
-  color: #666;
-  background: #f0f0f0;
-  border-radius: 12px;
-  padding: 6px 12px;
-  width: fit-content;
+.btn-verify:hover{
+  background-color: #e8e8e8;
+  color: #c6b731;
+  border-color:#a5d6a7;
+}
+
+.btn-verify:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-status:hover{
