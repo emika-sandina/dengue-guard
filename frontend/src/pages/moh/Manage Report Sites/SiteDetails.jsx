@@ -22,23 +22,30 @@ const Priority = (urgency) =>{
 return (
     <div className="moh-layout">
       <NavBar role="MOH" />
-      <main className="site-content">   {/*TODO*/}
-        <h1>{site.issue_type}</h1>
-        <div title={site.location}>{site.location}</div>
-        <div className="desciption-container">{site.description}</div>
-        <div className={`priority-level ${Priority(site.urgency)}`}>{site.urgency}</div>    {/*To constomize different levels of urgency*/}
-        <div>
-            {site.photo_url ? (
-                      <img
-                        src={site.photo_url}
-                        alt="Breeding site image"
-                        className="site-image"
-                      />
-                    ) : (
-                      <span>No image provided</span>
-            )}
+      <main className="site-content">   
+        <div className="card">
+          <div className="left-card">
+            <h1>{site.issue_type}</h1>
+            <div title={site.location}>{site.location}</div>
+            <div>{site.moh_area}</div>
+            <div className="desciption-container">{site.description}</div>
+          </div>
+
+          <div className="right-card">
+            <div className={`priority-level ${Priority(site.urgency)}`}>{site.urgency}</div>    {/*To constomize different levels of urgency*/}
+            <div>
+                {site.photo_url ? (
+                          <img
+                            src={site.photo_url}
+                            alt="Breeding site image"
+                            className="site-image"
+                          />
+                        ) : (
+                          <span>No image provided</span>
+                )}
+            </div>
+          </div>
         </div>
-        <div>{site.moh_area}</div>
       </main>
     </div>)
 }

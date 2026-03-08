@@ -32,6 +32,26 @@
   background: #bddeff;
 }
 
+.report{
+  display: flex;
+  background-color: #e0e4e0; /* Slightly darker grey for the card */
+  border-radius: 30px;
+  width: 100%;
+}
+
+.left-card{
+  flex: 2;
+  border: #2e7d32;
+  color: #f90f0f;
+}
+
+.right-card{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: #c0392b;
+}
+
 /* Greeting */
 .greeting {
   color: #7a7a7a;
