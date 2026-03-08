@@ -51,7 +51,12 @@ const SendAnnouncements = () => {
     <div className="container">
       <div className="card">
         <h2 className="title">Send Announcemants</h2>
-        <form className="announcementform">
+
+        {/* Show success or error message after submission */}
+        {message && <p>{message}</p>}
+
+        {/* onSubmit triggers handleSubmit when the button is clicked */}
+        <form className="announcementform" onSubmit={handleSubmit}>
           <div className="group">
             <label>Announcement Title</label>
             <input
@@ -94,6 +99,11 @@ const SendAnnouncements = () => {
               onChange={handleChange}
             ></textarea>
           </div>
+
+          {/* type="submit" triggers the form's onSubmit when clicked */}
+          <button type="submit" className="submitBtn">
+            Send Announcement
+          </button>
         </form>
       </div>
     </div>
