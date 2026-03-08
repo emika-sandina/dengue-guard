@@ -60,7 +60,7 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/moh/site-details/:id" element={
+        <Route path="/moh/site-reports/:id" element={
           <ProtectedRoute allowedRole="moh">
             <SiteDetails/>
           </ProtectedRoute>
