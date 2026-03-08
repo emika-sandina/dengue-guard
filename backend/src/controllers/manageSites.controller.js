@@ -1,5 +1,5 @@
 // Created a safety net for in case there are no breeding sites reported, successfully displayed and error
-import {fetchReportSites, fetchMohLocation, deleteSites, verifySites} from "../services/manageSites.service.js";
+import {fetchReportSites, fetchMohLocation, deleteSites, verifySites, resolveSites} from "../services/manageSites.service.js";
 
 export const displaySites = async (req, res) => {
     try{
@@ -61,5 +61,16 @@ export const verifySite = async (req, res) => {
         res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ error: "Couldn't verify the site, " + error.message });
+    }
+};
+
+export const resolveSite = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const {status: newStatus} = req.body;
+        const result = await resolveSites(id,newStatus);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: "Couldn't resolve the site, " + error.message });
     }
 };

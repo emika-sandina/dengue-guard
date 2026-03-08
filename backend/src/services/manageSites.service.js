@@ -74,3 +74,19 @@ export const verifySites = async (siteId,newStatus) => {
         throw(error);
     }
 }
+
+// Function to resolve breeding site from supabase
+export const resolveSites = async (siteId,newStatus) => {
+    try {
+        // if the id in supabase is equal to the siteId then delete
+        const {error} = await supabase.from("breeding_sites").update({status: newStatus}).eq("id",siteId)
+
+        if (error){
+            throw new Error(error.message); 
+        }
+        return {success :true}
+    }catch (error){
+        console.error("Error resolving site: ", error.message);
+        throw(error);
+    }
+}

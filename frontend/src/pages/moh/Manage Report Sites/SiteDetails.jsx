@@ -7,9 +7,9 @@ import { supabase } from "../../../lib/supabaseClient";
 const SiteDetails = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
 // Accessing the data
-const site = location.state?.siteData;
+const site = location.state?.siteData;  // current URL and any data that gets passed through 
+const [status, setStatus] = useState(site?.status || "Pending");  // on page load inistialie status to with what is site.status currently
 
 // To handle displaying different levels of urgency
 const Priority = (urgency) =>{
@@ -53,12 +53,49 @@ const handleDelete = async (e, siteId) => {
       console.error("Fetch error message: " + error.message);
       }
   }
+const handleResolve = async(e,siteId) =>{
+    // to block the row click
+    e.stopPropagation();
+
+    if (status !== "Verified"){
+      alert("Site has to be Verified before it can be Resolved");
+      return;
+    }
+    try {
+        // Gets current users session information from supabase
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;  // Supabase JSON Web TOKEN (JWT)
+
+        if (!token) {
+          console.error("No session found");
+          navigate("/");
+          return;
+        }
+        const response = await fetch(`http://localhost:5000/api/site-reports/${siteId}`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({status:"Resolved"})
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update from server");
+        }
+        // To update the report from the UI
+        setStatus("Resolved");
+    }catch (error){
+      console.error("Fetch error message: " + error.message);
+    }
+  }
 
 return (
     <div className="moh-layout">
       <NavBar role="MOH" />
       <main className="site-container">   
-        <div className="card">
+        <div className="detail-card">
           <div className="left-card">
             <h2 title={site.location}>{site.issue_type} - {site.location}</h2>
             <div>{site.moh_area}</div>
@@ -80,7 +117,7 @@ return (
             <div className={`priority-level ${Priority(site.urgency)}`}>{site.urgency}</div>    {/*To constomize different levels of urgency*/}
             <button className="btn btn-view">View Location</button>
             <button className="btn btn-delete" onClick={(e) => handleDelete(e,site.id)}>Delete Report</button>
-            <button className="btn btn-resolve">Resolve</button>
+            <button className="btn btn-resolve" onClick={(e) => handleResolve(e,site.id)} disabled={status === "Resolved"}>{status === "Resolved" ? "Resolved" : "Resolve"}</button>
           </div>
         </div>
       </main>

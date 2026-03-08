@@ -17,7 +17,7 @@ const Priority = (urgency) =>{
 
 // displaying breeding side data
 const ManageReport = () => {
-  const [sites, setSites] = useState([]);
+  const [sites, setSites] = useState([]); // inistialies an empty array (useState([])) to ensure that program doesn't crash till useEffect fills it with data from the API
 
   // navigating to the site details page
   const nav = useNavigate();
@@ -116,6 +116,7 @@ const ManageReport = () => {
           nav("/");
           return;
         }
+        // HTTP protocol PATCH to modify to an exisiting resource
         const response = await fetch(`http://localhost:5000/api/site-reports/${siteId}`, {
           method: "PATCH",
           headers: {
@@ -130,7 +131,45 @@ const ManageReport = () => {
           throw new Error(errorData.error || "Failed to update from server");
         }
         // To update the report from the UI
-        setSites(sites.map(site => site.id === siteId? {...site, status:"Verfied"}:site));
+        setSites(sites.map(site => site.id === siteId? {...site, status:"Verified"}:site)); // ...site copies the site details data and only changes the status to "Verified"
+    }catch (error){
+      console.error("Fetch error message: " + error.message);
+      }
+  }
+
+  const handleResolve = async(e,siteId,siteStatus) =>{
+    // to block the row click
+    e.stopPropagation();
+
+    if (siteStatus !== "Verified"){
+      alert("Site has to be Verified before it can be Resolved");
+      return;
+    }
+    try {
+        // Gets current users session information from supabase
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;  // Supabase JSON Web TOKEN (JWT)
+
+        if (!token) {
+          console.error("No session found");
+          nav("/");
+          return;
+        }
+        const response = await fetch(`http://localhost:5000/api/site-reports/${siteId}`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({status:"Resolved"})
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to update from server");
+        }
+        // To update the report from the UI
+        setSites(sites.map(site => site.id === siteId? {...site, status:"Resolved"}:site)); // ...site copies the site details data and only changes the status to "Resolved"
     }catch (error){
       console.error("Fetch error message: " + error.message);
       }
@@ -180,10 +219,10 @@ const ManageReport = () => {
                 </td>  
 
                 <td className="button">
-                    <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified"}>{site.status === "Verified" ? "Verified" : "Verify"}</button>  {/*TODO add e.stopPropagation(); to block the row click*/} 
+                    <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified" || site.status === "Resolved"}>{site.status === "Verified" || site.status === "Resolved" ? "Verified" : "Verify"}</button>
                     <button className="btn-action btn-delete" onClick={(e) => handleDelete(e,site.id)}>Delete</button>
-                    <button className="btn-action btn-resolve">Resolve</button>
-                    <button className="btn-action btn-status">{site.status || "Pending"}</button>
+                    <button className="btn-action btn-resolve" onClick={(e) => handleResolve(e,site.id,site.status)} disabled={site.status === "Resolved"}>{site.status === "Resolved" ? "Resolved" : "Resolve"}</button>
+                    <button className="btn-action btn-status" onClick={(e) => e.stopPropagation()}>{site.status || "Pending"}</button>
                 </td>
               </tr>
             ))}

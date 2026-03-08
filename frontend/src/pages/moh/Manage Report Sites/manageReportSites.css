@@ -130,7 +130,7 @@
   border-color:#a5d6a7;
 }
 
-.btn-verify:disabled{
+.btn-verify:disabled, .btn-resolve:disabled{
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -176,8 +176,8 @@
   /*border: 2px solid blue; TODO remove when done*/
 }
 
-.card {
-  background: #d4d8d4;  /*TODO Change*/
+.detail-card {
+  background: #d4d8d4;
   border-radius: 18px;
   margin: auto;
   padding: 22px;
@@ -191,7 +191,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card:hover {
+.detail-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
