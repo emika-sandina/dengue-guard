@@ -1,6 +1,5 @@
 // Created a safety net for in case there are no breeding sites reported, successfully displayed and error
-import {fetchReportSites} from "../services/manageSites.service.js";
-import {fetchMohLocation} from "../services/manageSites.service.js";
+import {fetchReportSites, fetchMohLocation, deleteSites} from "../services/manageSites.service.js";
 
 export const displaySites = async (req, res) => {
     try{
@@ -43,3 +42,13 @@ export const displaySites = async (req, res) => {
         });
     }
 }
+
+export const removeSite = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const result = await deleteSites(id);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: "Couldn't delete the site, " + error.message });
+    }
+};

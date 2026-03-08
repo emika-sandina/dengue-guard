@@ -24,7 +24,7 @@ const ManageReport = () => {
 
   const navigate = (site) =>{
     // navigate to the path
-    nav(`/moh/site-reports/${site.id}`,{state: {siteData: site}});   // 
+    nav(`/moh/site-reports/${site.id}`,{state: {siteData: site}});  
   }
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const ManageReport = () => {
 
         // Gets current users session information from supabase
         const { data: { session } } = await supabase.auth.getSession();
-        const token = session?.access_token;  // Supabase JSON Web TOKEN (JWT format)
+        const token = session?.access_token;  // Supabase JSON Web TOKEN (JWT)
 
         if (!token) {
           console.error("No session found");
@@ -64,6 +64,43 @@ const ManageReport = () => {
       }
     };
     loadBreedingSites();}, []);
+  
+  const handleDelete = async (e, siteId) => {
+    // to block the row click
+    e.stopPropagation();
+
+    const confirmDelete = window.confirm("Are you sure you want to delete this file?");
+    if (!confirmDelete) return;
+
+    try {
+        // Gets current users session information from supabase
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;  // Supabase JSON Web TOKEN (JWT)
+
+        if (!token) {
+          console.error("No session found");
+          nav("/");
+          return;
+        }
+        const response = await fetch(`http://localhost:5000/api/site-reports/${siteId}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to delete from server");
+        }
+        alert("Report deleted successfully!");
+        // To remove the report from the UI
+        setSites(sites.filter(site => site.id !== siteId));
+    }catch (error){
+      console.error("Fetch error message: " + error.message);
+      }
+  }
 
   return (
     <div className="moh-layout">
@@ -110,7 +147,7 @@ const ManageReport = () => {
 
                 <td className="button">
                     <button className="btn-action" id="verifyBtn">Verify</button>  {/*TODO add e.stopPropagation(); to block the row click*/} 
-                    <button className="btn-action btn-delete">Delete</button>
+                    <button className="btn-action btn-delete" onClick={(e) => handleDelete(e,site.id)}>Delete</button>
                     <button className="btn-action btn-resolve">Resolve</button>
                     <button className="btn-status" key={index}onClick={() => "document.getElementById('verifyBtn').innerHTML= 'Verified';"}>{site.status || "Pending"}</button>
                 </td>
