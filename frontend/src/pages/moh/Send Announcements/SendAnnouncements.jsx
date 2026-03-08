@@ -4,15 +4,49 @@ import NavBar from "../../../components/common/Navbar/NavBar";
 import React, { useState } from "react";
 
 const SendAnnouncements = () => {
+  // Store the form input values
   const [formData, setFormData] = useState({
     title: "",
     targetArea: "",
     type: "",
     description: "",
   });
+
+  // Track submission status to show feedback to the user
+  const [message, setMessage] = useState("");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleSubmit = async (e) => {
+    // Prevent page from refreshing on form submit
+    e.preventDefault();
+
+    try {
+      // Send the form data to the backend
+      const response = await fetch(
+        "http://localhost:5000/api/send-announcement",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      const result = await response.json();
+
+      // Show error message if request failed
+      if (!response.ok) throw new Error(result.message);
+
+      // Show success message and clear the form
+      setMessage("Announcement sent successfully!");
+      setFormData({ title: "", targetArea: "", type: "", description: "" });
+    } catch (error) {
+      setMessage(error.message);
+    }
+  };
+
   return (
     <div className="container">
       <div className="card">
