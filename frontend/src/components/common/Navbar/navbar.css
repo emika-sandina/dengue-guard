@@ -1,41 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
+
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 1%;
+  z-index: 9999 !important;
+  top: 20px;
+  border-radius: 50px;
+  width: 100%;
+  max-width: 1500px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #dde0da;
-  padding: 14px 24px;
-  border-radius: 12px;
-  margin: 16px;
-  position: fixed;
-  width: 94%;
+  height: 75px;
+  padding: 0 48px;
+
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+
+  font-family: "DM Sans", sans-serif;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
 }
 
 .logo {
-  color: #0b3c3d;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172d;
+  letter-spacing: -0.4px;
+  margin: 0;
+  -webkit-user-select: none;
+  user-select: none;
+
+  background: linear-gradient(135deg, #1a6e9e, #0f102d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .navbar-links {
   display: flex;
-  gap: 16px;
+  align-items: center;
+  gap: 2px;
 }
 
 .navbar-links a {
-  text-decoration: none;
-  color: #0b3c3d;
-  padding: 8px 12px;
-  border-radius: 10px;
-  font-weight: 500;
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  position: relative;
   display: inline-block;
+
+  padding: 8px 15px;
+  border-radius: 50px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #556270;
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
 .navbar-links a:hover {
-  background-color: rgba(11, 60, 61, 0.1);
-  transform: translateY(-4px);
+  color: #0f1d2d;
+  background: rgba(45, 107, 201, 0.1);
 }
 
 .navbar-links a.active {
-    font-weight: bold;
+  color: #0f1d2d;
+  font-weight: 600;
+  background: #ffffff;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 0 28px;
+  }
 
+  .navbar-links a {
+    font-size: 0.85rem;
+    padding: 7px 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 14px 20px 10px;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .navbar-links a {
+    font-size: 0.82rem;
+    padding: 6px 12px;
+  }
+}

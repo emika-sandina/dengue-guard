@@ -1,10 +1,11 @@
 .sitereport-layout {
   min-height: 100vh;
   background: #f5f7fa;
+  margin-top: 140px;
 }
 
 .main-content {
-  padding: 80px;
+  padding: 120px 80px 80px 80px;
 }
 
 .page-title {
@@ -198,7 +199,7 @@ textarea {
 /* --- Desktop and Tablet Adjustments (Standard screens) --- */
 @media (max-width: 1024px) {
   .main-content {
-    padding: 40px; /* Reduce large desktop padding */
+    padding: 120px 40px 40px 40px; /* Reduce large desktop padding */
   }
 
   .report-card {
@@ -209,7 +210,7 @@ textarea {
 /* --- Mobile View (768px and below) --- */
 @media (max-width: 768px) {
   .main-content {
-    padding: 20px; /* Slimmer padding for mobile */
+     padding: 120px 20px 20px 20px;/* Slimmer padding for mobile */
   }
 
   .page-title {
@@ -273,7 +274,7 @@ textarea {
 /* --- Small Phones (480px and below) --- */
 @media (max-width: 480px) {
   .report-card {
-    padding: 15px;
+    padding: 90px 15px 15px 15px;
     border-radius: 12px;
   }
 
