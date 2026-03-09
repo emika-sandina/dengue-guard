@@ -54,9 +54,6 @@ const handleDelete = async (e, siteId) => {
       }
   }
 const handleResolve = async(e,siteId) =>{
-    // to block the row click
-    e.stopPropagation();
-
     if (status !== "Verified"){
       alert("Site has to be Verified before it can be Resolved");
       return;
@@ -91,6 +88,31 @@ const handleResolve = async(e,siteId) =>{
     }
   }
 
+const viewLocation = async(e,siteLocation) =>{
+  try{
+    // convert the location to lat, long coordinates
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(siteLocation)}`; //search the location in textual description. format to json(output). q is free-form query
+    // encodeURIComponent to ensure no spaces are there
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.length === 0){
+      alert("Location not found on map");
+      return;
+    }
+
+    const {lat, lon} = data[0];
+    console.log(lat,lon);
+
+    window.open(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=17`,"_blank");
+
+  } catch (error){
+    console.error("Error finding location: " +error.message);
+    alert("Could not find location on map");
+  }
+    
+  }
+
 return (
     <div className="moh-layout">
       <NavBar role="MOH" />
@@ -115,7 +137,7 @@ return (
 
           <div className="right-card">
             <div className={`priority-level ${Priority(site.urgency)}`}>{site.urgency}</div>    {/*To constomize different levels of urgency*/}
-            <button className="btn btn-view">View Location</button>
+            <button className="btn btn-view" onClick={(e) => viewLocation(e,site.location)}>View Location</button>
             <button className="btn btn-delete" onClick={(e) => handleDelete(e,site.id)}>Delete Report</button>
             <button className="btn btn-resolve" onClick={(e) => handleResolve(e,site.id)} disabled={status === "Resolved"}>{status === "Resolved" ? "Resolved" : "Resolve"}</button>
           </div>
