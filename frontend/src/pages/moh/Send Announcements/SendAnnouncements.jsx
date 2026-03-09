@@ -50,7 +50,7 @@ const SendAnnouncements = () => {
   return (
     <div className="container">
       <div className="card">
-        <h2 className="title">Send Announcemants</h2>
+        <h2 className="title">Send Announcements To Citizens</h2>
 
         {/* Show success or error message after submission */}
         {message && <p>{message}</p>}
