@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useState } from "react";
 
-import HeatMap from "../../../components/common/Heatmap.jsx";
+import HeatMap from "../../../components/common/Heatmap/HeatMap.jsx";
 // need to update heatmap
 
 function CitizenHome() {
