@@ -76,3 +76,46 @@ input:focus,
 textarea:focus {
   border-color: #adb0ad;
 }
+
+/* Tablets */
+@media (max-width: 768px) {
+  .card {
+    padding: 30px 20px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+  }
+
+  .card {
+    padding: 25px 15px;
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  input,
+  textarea {
+    font-size: 13px;
+    padding: 10px 15px;
+  }
+
+  .submitBtn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
