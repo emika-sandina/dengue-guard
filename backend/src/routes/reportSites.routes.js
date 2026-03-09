@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import {submitSiteReports} from "../controllers/reportSites.controller.js"
+import { authMiddleware } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ const upload = multer({
 // Attach middleware before controller
 router.post(
   "/report-sites",
+  authMiddleware,
   upload.single("photo"),
   submitSiteReports
 );

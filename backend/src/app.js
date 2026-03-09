@@ -6,6 +6,7 @@ import cors from "cors";
 import chatbotRoutes from "./routes/chatbot.routes.js";
 import reportCasesRoutes from "./routes/reportCases.routes.js";
 import reportSitesRoutes from "./routes/reportSites.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -16,7 +17,9 @@ app.use(express.json());
 //register chatbot route
 app.use("/chatbot", chatbotRoutes);
 
-app.use("/chatbot", chatbotRoutes);
+//register auth route
+app.use("/api/auth", authRoutes);
+
 //register report cases route (frontend expects /api/report-case)
 app.use("/api", reportCasesRoutes);
 //register report breeding sites route
