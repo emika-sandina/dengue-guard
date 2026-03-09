@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useState } from "react";
 
-import HeatMap from "./Heatmap";
+import HeatMap from "../../../components/common/Heatmap/HeatMap.jsx";
 
 function MOHHome() {
   const navigate = useNavigate();
