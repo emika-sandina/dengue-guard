@@ -102,7 +102,6 @@ const viewLocation = async(e,siteLocation) =>{
     }
 
     const {lat, lon} = data[0];
-    console.log(lat,lon);
 
     window.open(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=17`,"_blank");
 
