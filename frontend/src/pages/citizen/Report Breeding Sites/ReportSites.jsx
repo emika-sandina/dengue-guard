@@ -96,12 +96,8 @@ function ReportSites() {
     }
 
     try {
-      const token = localStorage.getItem('dgToken');
       const response = await fetch("http://localhost:5000/api/report-sites", {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        },
         body: formData,
       });
 

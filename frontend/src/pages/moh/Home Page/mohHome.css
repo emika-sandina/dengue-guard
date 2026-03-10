@@ -1,7 +1,18 @@
+:root {
+  --primary-teal: #4d6eb6;
+  --secondary-teal: #80a3cb;
+  --bg-gradient: linear-gradient(135deg, #c9e5f2, #ffffff 100%);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --text-dark: #2c3e50;
+  --risk-orange: linear-gradient(90deg, #ffb74d, #fff176);
+}
+
 /* Page base */
 .moh-layout {
   min-height: 100vh;
   background: #f4f5f3;
+  background: var(--bg-gradient);
 }
 
 /* Main content */
@@ -15,7 +26,7 @@
 }
 
 .main-content h1 {
-  color: #0b3c3d;
+  color: #081494;
   margin-bottom: 28px;
 }
 
@@ -33,7 +44,9 @@
   padding: 22px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .card:hover {
@@ -52,29 +65,39 @@
   color: #6a6a6a;
 }
 
-/* Risk section */
 .risk-box {
+  background: var(--risk-orange);
+  border-radius: 20px;
+  padding: 10px 40px;
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: #dde0da;
-  border-radius: 18px;
-  padding: 22px;
-  margin-bottom: 28px;
+  gap: 25px;
+  margin-bottom: 40px;
+  box-shadow: 0 10px 20px rgba(255, 183, 77, 0.2);
+}
+
+.risk-box h1 {
+  margin: 0;
+  font-size: 3rem;
 }
 
 .risk-box h3 {
   margin: 0;
-  color: #c47b00;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: #e65100;
 }
 
-.risk-box p {
-  margin: 4px 0;
-  font-weight: 600;
+.risk-box h2 {
+  margin: 5px 0;
+  font-size: 1.8rem;
+  color: #3e2723;
 }
 
 .risk-box small {
-  color: #5f5f5f;
+  color: #5d4037;
+  font-weight: 500;
 }
 
 /* Statistics */
@@ -85,33 +108,28 @@
 }
 
 .stat-card {
-  background: #dde0da;
-  border-radius: 18px;
-  padding: 28px;
-  width: 220px;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-left: 5px solid var(--primary-teal);
 }
 
 .stat-card h2 {
+  font-size: 2rem;
   margin: 0;
-  font-size: 28px;
-  color: #0b3c3d;
+  color: var(--primary-teal);
 }
 
 .stat-card p {
-  margin-top: 6px;
-  font-size: 14px;
-  color: #6a6a6a;
+  margin: 5px 0 0;
+  color: #78909c;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .menu-icon img {
-    width: 80px;
+  width: 80px;
 }
 
 /* Responsive */

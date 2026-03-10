@@ -1,62 +1,34 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import "./mohHome.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
-import { supabase } from "../../../lib/supabaseClient";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 
 function MOHHome() {
-  const navigate = useNavigate();
-  const [mohArea, setMohArea] = useState("Loading...");
-
-  useEffect(() => {
-    const fetchOfficerArea = () => {
-      try {
-        const userStr = localStorage.getItem('dgUser');
-        if (!userStr) {
-          console.error("No user session found in localStorage");
-          setMohArea("Unknown Location");
-          return;
-        }
-
-        const user = JSON.parse(userStr);
-        setMohArea(user.mohArea || "Unspecified Location");
-      } catch (err) {
-        console.error("Error initializing home page:", err);
-        setMohArea("Error Loading Location");
-      }
-    };
-
-    fetchOfficerArea();
-  }, []);
-
   const menu = [
     {
       icon: siteReportIcon,
       name: "Site Reports",
-      description: "View Reports on Breeding Sites",
-      route: "/moh/site-reports",
+      description:
+        "View Reports on Breeding Sites",
     },
     {
       icon: symptomIcon,
       name: "Symptom Reports",
-      description: "View Reports on Dengue Symptoms",
-      route: "/moh/manage-cases",
+      description:
+        "View Reports on Dengue Symptoms",
     },
     {
       icon: announcementPlaceholder,
       name: "Communication",
       description: "Send Alerts and Messages",
-      route: "/moh/send-announcements",
     },
     {
       icon: heatmapIcon,
       name: "Risk Areas",
-      description: "View Heatmap",
-      route: "/moh/statistics",
+      description:
+        "View Heatmap",
     },
   ];
 
@@ -74,14 +46,11 @@ function MOHHome() {
 
         <div className="card-grid">
           {menu.map((menuOption, index) => (
-            <div
-              className="card"
-              key={index}
-              onClick={() => navigate(menuOption.route)}
-            >
+            <div className="card">
               <div className="menu-icon">
                 <img src={menuOption.icon} alt="" />
               </div>
+
               <h3>{menuOption.name}</h3>
               <p>{menuOption.description}</p>
             </div>
@@ -93,7 +62,7 @@ function MOHHome() {
           <div>
             <h3>Risk Level</h3>
             <p>
-              <h2>{mohArea}</h2>
+              <h2>Current MOH Location</h2>
             </p>
             <small>Based on reports and weather data</small>
           </div>

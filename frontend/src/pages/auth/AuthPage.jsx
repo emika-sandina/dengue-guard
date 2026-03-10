@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import shieldLogo from '../../assets/shieldsvg.svg';
 import './auth.css';
-import Dropdown from '../citizen/ReportCasesPage/Dropdown.jsx';
+import Dropdown from '../citizen/Report Cases Page/Dropdown.jsx';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,19 +20,18 @@ const AuthPage = () => {
 
     try {
       if (isLogin) {
-        // Professional Login via Backend
-        const response = await fetch('http://localhost:5000/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
+        // Sign In
+        const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
 
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Login failed');
+        // Fetch Role from our profile table
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
 
-        // Store JWT and User data
-        localStorage.setItem('dgToken', data.token);
-        localStorage.setItem('dgUser', JSON.stringify(data.user));
+        if (profileError) throw profileError;
 
         // Redirect based on role from token
         if (data.user.role === 'moh') navigate('/moh/dashboard');

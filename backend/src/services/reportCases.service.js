@@ -10,86 +10,21 @@ export const insertReportCases = async (data) => {
   const payload = {
     reporting_for: data.reportingFor,
     symptoms_start_date: data.symptomsStartDate, 
-    symptoms: Array.isArray(data.symptoms) ? data.symptoms : [data.symptoms],
+    symptoms: data.symptoms,
     location: data.location,
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
-    moh_area: typeof data.mohArea === 'object' && data.mohArea !== null ? data.mohArea.value : data.mohArea,
+    moh_area: data.mohArea,
   };
 
-  // Insert the data to table
+  //Inser the data to table
   const { data: insertedData, error } = await supabase
     .from("dengue_cases")
-    .insert([payload])
-    .select(); // CRITICAL: Added select() to return the inserted row
+    .insert([payload]);
 
-  if (error) {
-    console.error("Supabase Insert Error:", error);
-    throw error;
-  }
+  if (error) throw error;
 
   return insertedData;
-};
-
-// Step 1: Fetch dengue cases from the database, optionally filtered by MOH area
-export const getAllDengueCases = async (mohArea = null) => {
-  let query = supabase
-    .from("dengue_cases")
-    .select("*")
-    .order("created_at", { ascending: false }); // Show newest cases first
-
-  // If a specific MOH area is provided, filter to only that division's cases
-  if (mohArea) {
-    query = query.eq("moh_area", mohArea);
-  }
-
-  const { data, error } = await query;
-
-  if (error) {
-    console.error("Supabase Fetch Error:", error);
-    throw error;
-  }
-
-  return data || [];
-};
-
-// Step 4: Update status of a dengue case (e.g. Verify or Resolve)
-export const updateCaseStatus = async (id, status) => {
-  const { data, error } = await supabase
-    .from("dengue_cases")
-    .update({ status })
-    .eq("id", id)
-    .select();
-
-  if (error) throw error;
-
-  return data;
-};
-
-// Step 7: Assign PHI to a dengue case
-export const assignPHIToCase = async (id, assignee) => {
-  const { data, error } = await supabase
-    .from("dengue_cases")
-    .update({ assignee })
-    .eq("id", id)
-    .select();
-
-  if (error) throw error;
-
-  return data;
-};
-
-// Step 10: Remove/Delete a dengue case
-export const removeCase = async (id) => {
-  const { data, error } = await supabase
-    .from("dengue_cases")
-    .delete()
-    .eq("id", id)
-    .select();
-
-  if (error) throw error;
-
-  return data;
 };
 
 
