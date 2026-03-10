@@ -22,6 +22,11 @@ const ManageReport = () => {
   const [showSiteDetailsModal, setSiteDetailsModal] = useState(false);
   const [selectedSite, setSeletectedSite] = useState(null);
   const [expand, setExpand] = useState(false);
+  const [showPopup, setShowPopUp] = useState(false);
+  const [popupMessage, setPopUpMessage] = useState("");
+  const [popUpType, setPopUpType] = useState("");
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState("");
 
   useEffect(() => {
     const loadBreedingSites = async () => {
@@ -72,10 +77,14 @@ const ManageReport = () => {
 
     // to block the row click
     e.stopPropagation();
+    setPendingDeleteId(siteId);
+    setShowConfirmPopup(true);
+  }
 
-    const confirmDelete = window.confirm("Are you sure you want to delete this file?");
-    if (!confirmDelete) return;
+  const deleteSite = async (siteId) => {
 
+    setShowConfirmPopup(false);
+  
     try {
         // Gets current users session information from supabase
         const { data: { session } } = await supabase.auth.getSession();
@@ -98,9 +107,14 @@ const ManageReport = () => {
           const errorData = await response.json();
           throw new Error(errorData.error || "Failed to delete from server");
         }
-        alert("Report deleted successfully!");
+
+        setPopUpMessage("Report deleted successfully!");
+        setPopUpType("success");
+        setShowPopUp(true);
+
         // To remove the report from the UI
         setSites(sites.filter(site => site.id !== siteId));
+        setSiteDetailsModal(false); // close the modal
     }catch (error){
       console.error("Fetch error message: " + error.message);
       }
@@ -148,7 +162,9 @@ const ManageReport = () => {
     e.stopPropagation();
 
     if (siteStatus !== "Verified"){
-      alert("Site has to be Verified before it can be Resolved");
+      setPopUpMessage("Site has to be Verified before it can be Resolved");
+      setPopUpType("error");
+      setShowPopUp(true);
       return;
     }
     try {
@@ -191,7 +207,9 @@ const ManageReport = () => {
     const data = await response.json();
 
     if (data.length === 0){
-      alert("Location not found on map");
+      setPopUpMessage("Location not found on map");
+      setPopUpType("error");
+      setShowPopUp(true);
       return;
     }
 
@@ -201,7 +219,9 @@ const ManageReport = () => {
 
   } catch (error){
     console.error("Error finding location: " +error.message);
-    alert("Could not find location on map");
+    setPopUpMessage("Could not find location on map");
+    setPopUpType("error");
+    setShowPopUp(true);
   }
     
   }
@@ -265,7 +285,39 @@ const ManageReport = () => {
         </div>
       </main>
 
-    {/* Modal with the site details*/}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className={`popup-box ${popUpType}`}>
+            <h1>{popUpType === "success" ? "✅" : "❌"}</h1>
+            <h3>{popUpType === "success" ? "Success" : "Error"}</h3>
+            <p>{popupMessage}</p>
+
+            <button
+              onClick={() => setShowPopUp(false)}
+              className="popup-close-btn"
+              >
+                OK
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Get confirmation to delete a site */}
+      {showConfirmPopup && (
+        <div className="popup-overlay">
+          <div className={`popup-box ${popUpType}`}>
+            <h1>🗑️</h1>
+            <h3>Delete Report</h3>
+            <p>Are you sure you want to delete this report?</p>
+            <div className="button">
+              <button className="btn-action btn-remove" onClick={() => deleteSite(pendingDeleteId)}>Yes, Delete</button>
+              <button className="btn-action" onClick={() => setShowConfirmPopup(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal with the site details*/}
       {showSiteDetailsModal && selectedSite && (
       <div className="mrs-modal-overlay" onClick={() => setSiteDetailsModal(false)}>
         <div className="mrs-modal-content mdc-modal-content--large" onClick={(e) => e.stopPropagation()}>
@@ -310,10 +362,10 @@ const ManageReport = () => {
           </div>
           <div className="button">
             <button className="btn-action btn-view" onClick={(e) => viewLocation(e,selectedSite.location)}>View Location</button>
-            <button className="btn-action btn-remove" onClick={(e) => handleDelete(e,selectedSite.id)}>Delete Report</button>
+            <button className="btn-action btn-remove" onClick={(e) => handleRemove(e,selectedSite.id)}>Remove Report</button>
           </div>
         </div>
-      </div>  
+      </div>   
     )}
     </div>
   );
