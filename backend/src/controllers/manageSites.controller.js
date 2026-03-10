@@ -15,7 +15,7 @@ export const displaySites = async (req, res) => {
         }
 
         // calls the fetchReportSites function in the service file, which return all the details of the sites
-        // TODO NOTE better performance, we should filter directly in the SQL query later
+        // NOTE better performance, we should filter directly in the SQL query later
         const reportSite = await fetchReportSites(token);
 
         if (reportSite.length === 0){

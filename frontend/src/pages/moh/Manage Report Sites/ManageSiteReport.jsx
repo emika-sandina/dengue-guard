@@ -19,13 +19,9 @@ const Priority = (urgency) =>{
 const ManageReport = () => {
   const [sites, setSites] = useState([]); // inistialies an empty array (useState([])) to ensure that program doesn't crash till useEffect fills it with data from the API
 
-  // navigating to the site details page
-  const nav = useNavigate();
-
-  const navigate = (site) =>{
-    // navigate to the path
-    nav(`/moh/site-reports/${site.id}`,{state: {siteData: site}});  
-  }
+  const [showSiteDetailsModal, setSiteDetailsModal] = useState(false);
+  const [selectedSite, setSeletectedSite] = useState(null);
+  const [expand, setExpand] = useState(false);
 
   useEffect(() => {
     const loadBreedingSites = async () => {
@@ -58,14 +54,22 @@ const ManageReport = () => {
         // converts raw data to JSON object
         const data = await response.json();
 
-        setSites(data.filteredSites || []); // if there is no data it will send an empty array
+        const formattedSites = (data.filteredSites || []).map((site) => ({
+          ...site,  // to only make changes to time and date
+          time: new Date(site.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          date: new Date(site.created_at).toLocaleDateString()
+        }));
+
+        setSites(formattedSites); // if there is no data it will send an empty array
       } catch (error) {
         console.error("Fetch error message: " + error.message);
       }
     };
     loadBreedingSites();}, []);
   
-  const handleDelete = async (e, siteId) => {
+    // function to remove a site report
+  const handleRemove = async (e, siteId) => {
+
     // to block the row click
     e.stopPropagation();
 
@@ -102,6 +106,7 @@ const ManageReport = () => {
       }
   }
 
+  // function to indicate verification
   const handleVerify = async (e, siteId) => {
     // to block the row click
     e.stopPropagation();
@@ -137,6 +142,7 @@ const ManageReport = () => {
       }
   }
 
+  // function to indicate resolve
   const handleResolve = async(e,siteId,siteStatus) =>{
     // to block the row click
     e.stopPropagation();
@@ -175,60 +181,140 @@ const ManageReport = () => {
       }
   }
 
+  // function to view the location 
+  const viewLocation = async(e,siteLocation) =>{
+  try{
+    // convert the location to lat, long coordinates
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(siteLocation)}`; //search the location in textual description. format to json(output). q is free-form query
+    // encodeURIComponent to ensure no spaces are there
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.length === 0){
+      alert("Location not found on map");
+      return;
+    }
+
+    const {lat, lon} = data[0];
+
+    window.open(`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=17`,"_blank");
+
+  } catch (error){
+    console.error("Error finding location: " +error.message);
+    alert("Could not find location on map");
+  }
+    
+  }
+
+  // function to show site details
+  const openSiteDetails = async(siteDetails) => {
+    setExpand(false);
+    setSiteDetailsModal(true);
+    setSeletectedSite(siteDetails);
+  }
+
   return (
     <div className="moh-layout">
       <NavBar role="MOH" />
       <main className="main-content">
         <h1>Reported Breeding Sites</h1>
 
-        <table className="manage-table">
-          <thead>
-            <tr>
-              <th>Report Title</th>
-              <th>Location</th>
-              <th>Priority</th>
-              <th>Image</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-      
-          <tbody>
+        <div className="mrs-cards-container">
+          <div className="mrs-cards-grid">
+            {sites.length === 0 && (
+              <p className="mrs-empty">No reports found</p>
+            )}
+
+            {/*Individual cards*/}
             {sites.map((site, index) => (
-              <tr key={index}onClick={() => navigate(site)}> {/*On click it will route to the details page*/}
-                <td><h3>{site.issue_type}</h3></td> 
+              <div key={index} className="mrs-card" onClick={() => openSiteDetails(site)}> {/*On click it will route to the details page*/}
 
-                <td className="location-column" title={site.location}>{site.location}</td>
+                {/*card header*/}
+                <div className="mrs-card-header">
+                  <span className="mrs-card-title">{site.issue_type}</span>
 
-                <td>
-                  <span className={`priority-level ${Priority(site.urgency)}`}> {/*To constomize different levels of urgency*/}
-                    {site.urgency}
-                  </span>
-                </td>
+                  {/*priority level*/}
+                  <div className="mrs-card-priority">
+                    <span className={`priority-level ${Priority(site.urgency)}`}> {/*To constomize different levels of urgency*/}
+                      {site.urgency}
+                    </span>
+                  </div>
+
+                </div> 
+
+                {/*card content*/}
+                <div className="mrs-card-content">
+                  {/*time and date*/}
+                  <div className="mrs-card-info">
+                      <span>Reported {site.time}</span>
+                      <span>{site.date}</span>
+                    </div>
+
+                  <span className="location-column" title={site.location}>{site.location}</span>
                 
-                <td>
-                  {site.photo_url ? (
-                      <img
-                        src={site.photo_url}
-                        alt="Breeding site image"
-                        className="site-image"
-                      />
-                    ) : (
-                      <span>No image provided</span>
-                    )}
-                  
-                </td>  
-
-                <td className="button">
-                    <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified" || site.status === "Resolved"}>{site.status === "Verified" || site.status === "Resolved" ? "Verified" : "Verify"}</button>
-                    <button className="btn-action btn-delete" onClick={(e) => handleDelete(e,site.id)}>Delete</button>
-                    <button className="btn-action btn-resolve" onClick={(e) => handleResolve(e,site.id,site.status)} disabled={site.status === "Resolved"}>{site.status === "Resolved" ? "Resolved" : "Resolve"}</button>
-                    <button className="btn-action btn-status" onClick={(e) => e.stopPropagation()}>{site.status || "Pending"}</button>
-                </td>
-              </tr>
+                  <div className="button">
+                      <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified" || site.status === "Resolved"}>{site.status === "Verified" || site.status === "Resolved" ? "Verified" : "Verify"}</button>
+                      <button className="btn-action btn-remove" onClick={(e) => handleRemove(e,site.id)}>Remove</button>
+                      <button className="btn-action btn-resolve" onClick={(e) => handleResolve(e,site.id,site.status)} disabled={site.status === "Resolved"}>{site.status === "Resolved" ? "Resolved" : "Resolve"}</button>
+                      <button className="btn-action btn-status" onClick={(e) => e.stopPropagation()}>{site.status || "Pending"}</button>
+                  </div>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </main>
+
+    {/* Modal with the site details*/}
+      {showSiteDetailsModal && selectedSite && (
+      <div className="mrs-modal-overlay" onClick={() => setSiteDetailsModal(false)}>
+        <div className="mrs-modal-content mdc-modal-content--large" onClick={(e) => e.stopPropagation()}>
+
+        <div className="mrs-modal-title">
+          {/* modal title has type of problem and priority level */}
+          <p className="mrs-modal-issue">{selectedSite.issue_type}</p>
+
+          {/*priority level*/}
+          <div className="mrs-card-priority">
+            <span className={`priority-level ${Priority(selectedSite.urgency)}`}> {/*To constomize different levels of urgency*/}
+              {selectedSite.urgency}
+            </span>
+          </div>
+        </div>
+
+          <div className="mrs-srcoll">
+            {/* If the description is long change appearance */}
+            <p className="mrs-modal-description"> 
+              {expand ? selectedSite.description : `${selectedSite.description?.slice(0,100)}...`} 
+              {selectedSite.description?.length > 100 && (
+                <span className="mrs-read-more" onClick={() => setExpand(!expand)}>
+                  {expand ? "Read less" : "Read more"}
+                </span>
+              )} 
+            </p>
+            
+            <div className="mrs-card-image-container">
+              {selectedSite.photo_url ? (
+                  <img
+                    src={selectedSite.photo_url}
+                    alt="Breeding site image"
+                    className="mrs-card-image"
+                  />
+                ) : (
+                  <div className="mrs-no-img">
+                    <span>📷</span>
+                    <p>No image provided</p>
+                  </div>
+                )}
+            </div> 
+          </div>
+          <div className="button">
+            <button className="btn-action btn-view" onClick={(e) => viewLocation(e,selectedSite.location)}>View Location</button>
+            <button className="btn-action btn-remove" onClick={(e) => handleDelete(e,selectedSite.id)}>Delete Report</button>
+          </div>
+        </div>
+      </div>  
+    )}
     </div>
   );
 };
