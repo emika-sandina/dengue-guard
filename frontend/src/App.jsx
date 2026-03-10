@@ -13,7 +13,6 @@ import ReportCases from "./pages/citizen/Report Cases Page/reportCases";
 import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 import ManageReport from "./pages/moh/Manage Report Sites/ManageSiteReport.jsx";
-import SiteDetails from "./pages/moh/Manage Report Sites/SiteDetails.jsx";
 
 function App() {
   return (
@@ -57,12 +56,6 @@ function App() {
         <Route path="/moh/site-reports" element={
           <ProtectedRoute allowedRole="moh">
             <ManageReport />
-          </ProtectedRoute>
-        } />
-
-        <Route path="/moh/site-reports/:id" element={
-          <ProtectedRoute allowedRole="moh">
-            <SiteDetails/>
           </ProtectedRoute>
         } />
 
