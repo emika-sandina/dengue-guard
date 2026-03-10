@@ -41,7 +41,7 @@ function App() {
         } />
 
         {/* Protected MOH Routes */}
-        <Route path="/moh/home" element={
+        <Route path="/moh/dashboard" element={
           <ProtectedRoute allowedRole="moh">
             <MOHHome />
           </ProtectedRoute>

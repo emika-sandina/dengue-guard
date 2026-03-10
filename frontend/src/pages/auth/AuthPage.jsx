@@ -35,7 +35,7 @@ const AuthPage = () => {
         localStorage.setItem('dgUser', JSON.stringify(data.user));
 
         // Redirect based on role from token
-        if (data.user.role === 'moh') navigate('/moh/home');
+        if (data.user.role === 'moh') navigate('/moh/dashboard');
         else navigate('/citizen/home');
 
       } else {
