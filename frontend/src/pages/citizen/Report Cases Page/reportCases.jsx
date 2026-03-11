@@ -11,6 +11,9 @@ function ReportCases() {
   const [doctorStatus, setdoctorStatus] = useState("");
   const [dengueDiagnosis, setdengueDiagnosis] = useState("");
   const [location, setLocation] = useState("");
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState("");
+  const [popUpType, setPopUpType] = useState("");
 
 
   //Handles checkbox selection
@@ -63,16 +66,36 @@ function ReportCases() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const reportingFor = e.target[0].value;
+    const symptomsStartDate = e.target[1].value;
+
     //Build data object to send to backend
     const data = {
-      reportingFor: e.target[0].value,
+      reportingFor,
       symptoms,
       doctorStatus,
       dengueDiagnosis,
       mohArea,
       location,
-      symptomsStartDate: e.target[1].value,
+      symptomsStartDate,
     };
+      //Validation
+  if (
+    !reportingFor ||
+    symptoms.length === 0 ||
+    !doctorStatus ||
+    !dengueDiagnosis ||
+    !mohArea ||
+    !location ||
+    !symptomsStartDate
+  ) {
+    setPopUpMessage("Please fill in all required fields before submitting.");
+    setPopUpType("error");
+    setShowPopUp(true);
+    return;
+  }
+
+
 
     try {
       //send a post request to backend api
@@ -98,18 +121,24 @@ function ReportCases() {
 
       //sends an alert if backend results a error message
       if (!response.ok) {
-        alert(result.error || "Failed to submit report");
+        setPopUpMessage("Failed to submit the report.");
+        setPopUpType("error");
+        setShowPopUp(true);
         return;
       }
 
       //success case
-      alert(result.message || "Report submitted successfully");
+      setPopUpMessage("Report submitted successfully");
+      setPopUpType("success");
+      setShowPopUp(true);
       console.log(result);
 
     // catch any errors
     } catch (error) {
       console.error("Submit error:", error);
-      alert("Failed to submit the report: " + error.message);
+      setPopUpMessage("Failed to submit the report:"+ error.message);
+      setPopUpType("error");
+      setShowPopUp(true);
     }
   };
 
@@ -117,9 +146,9 @@ function ReportCases() {
     <>
     <NavBar></NavBar>
     <div className="report-container">
-    <br/>
-    <br/>
-    <br/>
+      <br/>
+      <br/>
+      <br/>
 
       <h1>Reporting Dengue Cases</h1>
       <form onSubmit={handleSubmit} className="report-form">
@@ -219,6 +248,22 @@ function ReportCases() {
         <button type="submit">Report Case</button>
       </form>
     </div>
+    {showPopUp && (
+        <div className="popup-overlay">
+          <div className={`popup-box ${popUpType}`}>
+            <h1>{popUpType === "success" ? "✅" : "❌"}</h1>
+            <h3>{popUpType === "success" ? "Success" : "Error"}</h3>
+            <p>{popUpMessage}</p>
+
+            <button
+              onClick={() => setShowPopUp(false)}
+              className="popup-close-btn"
+              >
+                OK
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
