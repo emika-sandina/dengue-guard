@@ -5,20 +5,55 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import AuthPage from "./pages/Auth/AuthPage";
 import CitizenHome from "./pages/citizen/Home Page/CitizenHome";
 import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
-import ReportCases from "./pages/citizen/Report Cases Page/reportCases"
+import ReportCases from "./pages/citizen/Report Cases Page/reportCases";
+import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements";
+import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/citizen/home" />} />
-        <Route path="/citizen/home" element={<CitizenHome />} />
-        <Route path="/moh/home" element={<MOHHome />}/>
-        <Route path="/citizen/report-sites" element={<ReportSites/>}/>
-        <Route path="/citizen/report-cases" element={<ReportCases/>}/>        
+        {/* The Login Page*/}
+        <Route path="/login" element={<AuthPage />} />
+
+        {/* Protected Citizen Routes */}
+        <Route path="/citizen/home" element={
+          <ProtectedRoute allowedRole="citizen">
+            <CitizenHome />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/citizen/report-sites" element={
+          <ProtectedRoute allowedRole="citizen">
+            <ReportSites />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/citizen/report-cases" element={
+          <ProtectedRoute allowedRole="citizen">
+            <ReportCases />
+          </ProtectedRoute>
+        } />
+
+        {/* Protected MOH Routes */}
+        <Route path="/moh/home" element={
+          <ProtectedRoute allowedRole="moh">
+            <MOHHome />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/moh/send-announcements" element={
+          <ProtectedRoute allowedRole="moh">
+            <SendAnnouncements />
+          </ProtectedRoute>
+        } />
+
+        {/* Default Redirect: Send unauthenticated users to login */}
+        <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
   );

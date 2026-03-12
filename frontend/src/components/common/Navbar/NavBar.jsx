@@ -29,6 +29,7 @@ function NavBar({ role = "Citizen" }) {
               <NavLink to="/moh/case-reports">Dengue Case Reports</NavLink>
               <NavLink to="/moh/alerts">Alerts</NavLink>
               <NavLink to="/moh/statistics">Risk Heat Map</NavLink>
+              <NavLink to="/moh/send-announcements">Send Announcements</NavLink>
             </>
           )}
         </nav>

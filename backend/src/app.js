@@ -1,20 +1,29 @@
-//import necessary libraries
-const express = require('express');
-const cors = require('cors');
+//Importing the necessary libraries
+import express from "express";
+import cors from "cors";
 
-//import chatbot route
-const chatbotRoutes = require('./routes/chatbot.routes');
-const reportCasesRoutes = require('./routes/reportCases.routes');
+//Importing the necessary routes
+import chatbotRoutes from "./routes/chatbot.routes.js";
+import reportCasesRoutes from "./routes/reportCases.routes.js";
+import reportSitesRoutes from "./routes/reportSites.routes.js";
+import announcementRoutes from "./routes/announcements.routes.js";
+
 const app = express();
 
-//enables fronntend to talk to backend
+//Allows the frontend to talk to the backend
 app.use(cors());
 app.use(express.json());
 
 //register chatbot route
-app.use('/chatbot', chatbotRoutes);
-//register report cases route (frontend expects /api/report-case)
-app.use('/api', reportCasesRoutes);
-//export app to server.js
-module.exports = app;
+app.use("/chatbot", chatbotRoutes);
 
+app.use("/chatbot", chatbotRoutes);
+//register report cases route (frontend expects /api/report-case)
+app.use("/api", reportCasesRoutes);
+//register report breeding sites route
+app.use("/api", reportSitesRoutes);
+//register send announcement route
+app.use("/api", announcementRoutes);
+//export app to server.js
+
+export default app;
