@@ -10,6 +10,7 @@
 .card {
   background-color: #e7e9e7;
   padding: 40px;
+  margin-top: 120px;
   border-radius: 15px;
   width: 100%;
   max-width: 700px;
@@ -81,6 +82,7 @@ textarea:focus {
 @media (max-width: 768px) {
   .card {
     padding: 30px 20px;
+    margin-top: 150px;
   }
 
   .title {
