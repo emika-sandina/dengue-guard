@@ -58,7 +58,6 @@ export const deleteSites = async (siteId)  =>{
     }
 }
 
-
 // Function to verify breeding site from supabase
 export const verifySites = async (siteId,newStatus) => {
     try {
@@ -75,18 +74,17 @@ export const verifySites = async (siteId,newStatus) => {
     }
 }
 
-// Function to resolve breeding site from supabase
-export const resolveSites = async (siteId,newStatus) => {
-    try {
-        // if the id in supabase is equal to the siteId then delete
-        const {error} = await supabase.from("breeding_sites").update({status: newStatus}).eq("id",siteId)
+// Function to assign a PHI to a breeding site case
+export const assignPhi = async (siteId,assigned) => {
+    try{
+        const {error} = await supabase.from("breeding_sites").update({phi_assign: assigned}).eq("id",siteId)
 
-        if (error){
+       if (error){
             throw new Error(error.message); 
         }
         return {success :true}
     }catch (error){
-        console.error("Error resolving site: ", error.message);
+        console.error("Error assigning PHI to site: ", error.message);
         throw(error);
     }
 }
