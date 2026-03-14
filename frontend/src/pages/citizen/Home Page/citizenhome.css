@@ -15,10 +15,6 @@
 .citizen-layout {
   min-height: 100vh;
   background: var(--bg-gradient);
-  font-family:
-    "Inter",
-    -apple-system,
-    sans-serif;
   padding: 20px;
   color: var(--text-dark);
 }
