@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useState } from "react";
 
-import HeatMap from "./Heatmap.jsx";
+import HeatMap from "../../../components/common/HeatMap/Heatmap.jsx";
 // need to update heatmap
 
 function CitizenHome() {
@@ -136,13 +136,13 @@ function CitizenHome() {
           </footer>
           <div className="statscm">
             <div className="stat-cardcm">
-              <h2>Community Report Count</h2>
-              <p>Community Reports</p>
+              <h2>Case Count</h2>
+              <p>Dengue Cases Reported</p>
             </div>
 
             <div className="stat-cardcm">
               <h2>Site Count</h2>
-              <p>Sites Cleaned</p>
+              <p>Breeding Sites Reported</p>
             </div>
           </div>
         </main>
