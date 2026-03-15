@@ -319,7 +319,7 @@ const ManageReport = () => {
 
             {/*Individual cards*/}
             {sites.map((site, index) => (
-              <div key={index} className="mrs-card" onClick={() => openSiteDetails(site)}> {/*On click it will route to the details page*/}
+              <div key={site.id} className="mrs-card" onClick={() => openSiteDetails(site)}> {/*On click it will route to the details page*/}
 
                 {/*card header*/}
                 <div className="mrs-card-header">
@@ -341,14 +341,21 @@ const ManageReport = () => {
                       <span>{site.date}</span>
                     </div>
 
+                  {/* Adding location to card */}
                   <span className="location-column" title={site.location}>{site.location}</span>
-                  <button className="btn-action btn-assign-phi" onClick={(e) => handleAssignPhi(e,site.id)}>Assgin PHI</button>
 
-                  <div className="button">
-                      <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified" || site.status === "Resolved"}>{site.status === "Verified" || site.status === "Resolved" ? "Verified" : "Verify"}</button>
-                      <button className="btn-action btn-remove" onClick={(e) => handleRemove(e,site.id)}>Remove</button>
-                      <button className="btn-action btn-resolve" onClick={(e) => handleResolve(e,site.id,site.status)} disabled={site.status === "Resolved"}>{site.status === "Resolved" ? "Resolved" : "Resolve"}</button>
-                      <button className="btn-action btn-status" onClick={(e) => e.stopPropagation()}>{site.status || "Pending"}</button>
+                  <div className="mrs-card-footer">
+                    {/* Assign moh officer to breeding site */}
+                    <div className="phi_div">
+                      <button className="btn-assign-phi" onClick={(e) => handleAssignPhi(e,site.id)}>{site.phi_assign ? `Assgined PHI : ${site.phi_assign}` : "Assgin PHI"}</button>
+                    </div>
+
+                    <div className="button">
+                        <button className="btn-action btn-verify" onClick={(e) => handleVerify(e,site.id)} disabled={site.status === "Verified" || site.status === "Resolved"}>{site.status === "Verified" || site.status === "Resolved" ? "Verified" : "Verify"}</button>
+                        <button className="btn-action btn-remove" onClick={(e) => handleRemove(e,site.id)}>Remove</button>
+                        <button className="btn-action btn-resolve" onClick={(e) => handleResolve(e,site.id,site.status)} disabled={site.status === "Resolved"}>{site.status === "Resolved" ? "Resolved" : "Resolve"}</button>
+                        <button className="btn-action btn-status" onClick={(e) => e.stopPropagation()}>{site.status || "Pending"}</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -408,7 +415,7 @@ const ManageReport = () => {
       {/* Modal with the site details*/}
       {showSiteDetailsModal && selectedSite && (
       <div className="mrs-modal-overlay" onClick={() => setSiteDetailsModal(false)}>
-        <div className="mrs-modal-content mdc-modal-content--large" onClick={(e) => e.stopPropagation()}>
+        <div className="mrs-modal-content" onClick={(e) => e.stopPropagation()}>
 
           {/* Header modal */}
           <div className="mrs-modal-title">
@@ -433,7 +440,7 @@ const ManageReport = () => {
                     src={selectedSite.photo_url}
                     alt="Breeding site image"
                     className="mrs-card-image"
-                    style={{height: "100%", minHeight: "200px"}}
+                    style={{minHeight: "200px"}}
                   />
                 ) : (
                   <div className="mrs-no-img">
@@ -450,7 +457,7 @@ const ManageReport = () => {
                   <div className="mrs-modal-location" title={selectedSite.location}>{selectedSite.location}</div>
                 </div>
 
-                <div>
+                <div className="mrs-srcoll">
                   {/* If the description is long change appearance */}
                   <p className="mrs-modal-label">Description: </p>
                   <div className="mrs-modal-description"> 

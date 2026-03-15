@@ -50,6 +50,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
+  height: 100%;
   cursor: pointer;
   border: 1px solid rgba(11, 60, 61, 0.05);
 }
@@ -112,11 +113,11 @@
 }
 
 .mrs-card-content{
-  padding: 18px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 12px;
-  justify-content: space-between;
 }
 
 /* Meta: Time and Date */
@@ -131,10 +132,15 @@
   padding-bottom: 8px;
 }
 
+.mrs-card-footer{
+  margin-top: auto;
+  padding-top: 8px;
+}
+
 .button{
   display: flex;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 10px 16px;
   border-top: 2px solid #f0f4f4;
   justify-content: center;  
   margin-top: auto;
@@ -146,7 +152,7 @@
   border-radius: 20px;
   border: 1.5px solid #ccc;
   background: #f9f9f9;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: #333;
   cursor: pointer;
@@ -214,6 +220,40 @@
   transform: translateY(-2px);
 }
 
+.phi_div{
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+}
+
+.btn-assign-phi{
+  background: #f0f4f4;
+  border: 1px solid #0b6b6e22;
+  padding: 8px 24px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b6b6e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-assign-phi:disabled{
+  background: #f0f4f4;
+  color: #a0aec0; /* Muted grey */
+  cursor: default;
+  border-color: #cbd5e0;
+  transform: none !important;
+  opacity: 0.7;
+}
+
+.btn-assign-phi.assigned {
+  background: #0b6b6e11;
+  color: #0b3c3d;
+  font-weight: 800;
+}
+
 /*######################################*/
 
 /*Speciffic Details*/
@@ -238,8 +278,8 @@
   padding: 0; 
   width: 88vw; 
   max-width: 680px;
-  max-height: 80vh; /*prevent from going off screen */
-  overflow-y: hidden; /*add scroll*/
+  max-height: 70vh; /*prevent from going off screen */
+  overflow-y: auto; /*add scroll*/
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
   transform: translateY(0);
   animation: modalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -372,7 +412,7 @@
 
 .mrs-card-image{
   width: 100%;
-  height: 220px;        /* fixed height */
+  height: 180px;        /* fixed height */
   object-fit: cover;    /* crops to fit without stretching */
   border-radius: 16px;
 }
@@ -380,7 +420,7 @@
 .mrs-modal-footer{
   display: flex;
   gap: 16px;
-  padding: 12px 20px 16px;
+  padding: 18px 20px 16px;
   border-top: 2px solid #f0f4f4;
   justify-content: center;
 }
@@ -455,27 +495,28 @@
 
 @media (max-width: 600px) {
   .moh-layout {
-    padding: 10px;
+    padding: 10px 5px;
   }
 
   .main-content {
-    padding: 12px;
+    padding: 10px;
   }
 
   .mrs-cards-container{
     padding: 12px;
-    overflow: hidden;
+    overflow: auto;
   }
 
   .mrs-modal-body{
     grid-template-columns: 1fr; /*mobile has one column*/
-    padding: 12px;
+    padding: 15px;
+    overflow-y: auto;
   }
 
   .mrs-modal-content {
-    width: 95vw;
-    max-height: 88vh;
-    margin: 0;
+    width: 92vw;
+    max-height: 90vh;
+    overflow-y: auto;
   }
 
   .mrs-cards-grid {
@@ -488,11 +529,13 @@
   }
 
   .button{
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    padding: 12px;
-    justify-content: unset;
+    padding: 12px 16px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin-top: 0;
   }
 
   .mrs-modal-footer{
@@ -514,14 +557,14 @@
   }
 
   .main-content h1{
-    margin: 170px 0 15px 0;
-    font-size: 20px;
-    padding-left: 10px;
+    margin: 80px 0 15px 0;
+    font-size: 22px;
+    text-align: center;
   }
 
   .btn-action{
-    min-width: unset;
-    width: 100%;
+    padding: 10px 5px;
+    font-size: 12px;  
   }
 
   .mrs-card {
@@ -548,7 +591,7 @@
 
   .mrs-modal-overlay{
     z-index: 900;
-    align-items: flex-end;  
+    align-items: center;  
   }
 }
 
