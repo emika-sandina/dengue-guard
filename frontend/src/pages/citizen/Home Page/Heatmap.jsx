@@ -66,7 +66,6 @@ const HeatMap = () => {
   
     fetchPatients(); 
     const interval = setInterval(fetchPatients, 5000);
-
     return () => clearInterval(interval);
   }, []);
 
