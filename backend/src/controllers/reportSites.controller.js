@@ -6,7 +6,7 @@ export const submitSiteReports = async (req, res) => {
     const reportData = req.body;
     const file = req.file;
 
-    // ✅ FIX: convert coordinates to numbers
+    // convert coordinates to numbers
     reportData.latitude = parseFloat(reportData.latitude);
     reportData.longitude = parseFloat(reportData.longitude);
     
@@ -31,6 +31,18 @@ export const submitSiteReports = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: "Failed to save report: " + error.message,
+    });
+  }
+};
+
+export const getBreedingSitesLocations = async (req, res) => {
+  try {
+    const data = await breedingService.fetchBreedingSitesLocations();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: "Failed to fetch breeding sites",
     });
   }
 };
