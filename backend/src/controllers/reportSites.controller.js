@@ -5,6 +5,17 @@ export const submitSiteReports = async (req, res) => {
     //Get the form body and the uploaded image from the client
     const reportData = req.body;
     const file = req.file;
+
+    // ✅ FIX: convert coordinates to numbers
+    reportData.latitude = parseFloat(reportData.latitude);
+    reportData.longitude = parseFloat(reportData.longitude);
+    
+    // Optional safety check
+    if (!reportData.latitude || !reportData.longitude) {
+      return res.status(400).json({
+        error: "Coordinates are required",
+      });
+      }
     //Sending both the data and the image of the report back to the service.
     const data = await breedingService.insertSiteReports(
       reportData,
