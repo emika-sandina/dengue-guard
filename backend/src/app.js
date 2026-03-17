@@ -7,6 +7,7 @@ import chatbotRoutes from "./routes/chatbot.routes.js";
 import reportCasesRoutes from "./routes/reportCases.routes.js";
 import reportSitesRoutes from "./routes/reportSites.routes.js";
 import announcementRoutes from "./routes/announcements.routes.js";
+import dashboardRoutes from "./routes/dashboard.routes.js";
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use("/api", reportCasesRoutes);
 app.use("/api", reportSitesRoutes);
 //register send announcement route
 app.use("/api", announcementRoutes);
+//register dashboard summary route
+app.use("/api", dashboardRoutes);
 //export app to server.js
 
 export default app;
