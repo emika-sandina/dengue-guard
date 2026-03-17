@@ -43,4 +43,5 @@ export const fetchReportCaseLocations = async () => {
         ? { lat: row.latitude, lng: row.longtitude }
         : null,
   }));
-}
+
+};
