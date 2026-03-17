@@ -7,6 +7,7 @@ export const submitReportCases = async (req, res) => {
     const reportData = req.body;
 
     const requiredFields = [
+    
       "reportingFor",
       "symptoms",
       "doctorStatus",
@@ -14,6 +15,7 @@ export const submitReportCases = async (req, res) => {
       "mohArea",
       "location",
       "symptomsStartDate",
+      "coordinates"
     ];
 
     //Check if all the inputs are present

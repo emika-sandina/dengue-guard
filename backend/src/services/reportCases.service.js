@@ -15,6 +15,8 @@ export const insertReportCases = async (data) => {
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
     moh_area: data.mohArea,
+    latitude: data.coordinates?.lat || null,
+    longtitude: data.coordinates?.lng || null,
   };
 
   //Inser the data to table
