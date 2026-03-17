@@ -14,6 +14,8 @@ function ReportCases() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
+  const [reportingFor, setReportingFor] = useState("");
+  const [symptomsStartDate, setSymptomsStartDate] = useState("");
 
 
   //Handles checkbox selection
