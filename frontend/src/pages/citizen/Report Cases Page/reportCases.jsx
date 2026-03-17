@@ -74,7 +74,8 @@ function ReportCases() {
       mohArea,
       location,
       symptomsStartDate: e.target[1].value,
-      coordinates
+      latitude: coordinates.lat,
+      longitude: coordinates.lng,
     };
 
     try {

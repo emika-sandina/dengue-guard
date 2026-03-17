@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.heat";
@@ -38,12 +38,6 @@ const dengueRiskPoints = [
   [8.3114, 80.4037, 0.4],
   [6.0535, 80.221, 0.4],
 ];
-// Breeding site locations (static for now)
-const breedingSites = [
-  [6.930, 79.860],
-  [7.085, 80.010],
-  [7.295, 80.640],
-];
 
 const HeatMap = () => {
   const mapRef = useRef(null);
@@ -51,23 +45,34 @@ const HeatMap = () => {
   const [patients, setPatients] = useState([]); // fetched patient locations
 
   useEffect(() => {
-    // Fetch patient locations from backend
     const fetchPatients = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/report-case");
+        const res = await fetch("http://localhost:5000/api/report-case/data");
         const data = await res.json();
-        setPatients(data); // store patient reports
+  
+        // Ensure patients is always an array
+        const patientArray = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+          ? data.data
+          : [];
+  
+        setPatients(patientArray);
       } catch (err) {
         console.error("Failed to fetch patient locations:", err);
+        setPatients([]); // fallback to empty array
       }
     };
+  
+    fetchPatients(); 
+    const interval = setInterval(fetchPatients, 5000);
 
-    fetchPatients();
+    return () => clearInterval(interval);
   }, []);
-
 
   useEffect(() => {
     if (mapInstance.current) return;
+    if (!mapRef.current) return;
 
     // Set view centered on Sri Lanka
     mapInstance.current = L.map(mapRef.current).setView([7.8731, 80.7718], 7);
@@ -91,6 +96,26 @@ const HeatMap = () => {
       }
     };
   }, []);
+
+    useEffect(() => {
+      if (!mapInstance.current) return;
+    
+      patients.forEach(({ coordinates, name }) => {
+        if (!coordinates) return;
+        const { lat, lng } = coordinates;
+    
+        L.marker([lat, lng], {
+          icon: L.divIcon({
+            className: "",
+            html: "😷",
+            iconSize: [30, 30],
+            popupAnchor: [0, -15],
+          }),
+        })
+          .addTo(mapInstance.current)
+          .bindPopup(`Patient: ${name || "Unknown"}`);
+      });
+    }, [patients]);
 
   return (
     <div
