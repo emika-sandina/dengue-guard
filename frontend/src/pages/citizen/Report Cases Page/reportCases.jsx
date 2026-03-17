@@ -68,9 +68,6 @@ function ReportCases() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const reportingFor = e.target[0].value;
-    const symptomsStartDate = e.target[1].value;
-
     //Build data object to send to backend
     const data = {
       reportingFor,
@@ -157,13 +154,20 @@ function ReportCases() {
         <div className="form-left">
             <div className="form-group">
             <label>Reporting For</label><br />
-            <input type="text" placeholder="Myself, Family, Friend" />
+            <input type="text"
+              placeholder="Myself, Family, Friend"  
+              value={reportingFor}
+              onChange={(e) => setReportingFor(e.target.value)}
+/>
             </div>
 
 
             <div className="form-group">
             <label>When did symptoms start:</label><br />
-            <input type="date" />
+            <input type="date" 
+              value={symptomsStartDate}
+              onChange={(e) => setSymptomsStartDate(e.target.value)}
+            />
             </div>
 
             <label>Symptoms (Check all that apply)</label><br />
