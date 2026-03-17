@@ -25,6 +25,8 @@ function ReportSites() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
+  const [coordinates, setCoordinates] = useState({ lat: null, lng: null }); // lat/lng
+
 
   //handling file uploads
   const handlePhotoUpload = (e) => {
@@ -43,6 +45,7 @@ function ReportSites() {
       //if the user allows access to his/her current location this block of code runs
       (position) => {
         const { latitude, longitude } = position.coords;
+        setCoordinates({lat:latitude,lng:longitude})//store the latitude and longtitude
         reverseGeocode(latitude, longitude);
       },
       //this code block runs if the user denies permission
@@ -89,6 +92,9 @@ function ReportSites() {
     formData.append("issueType", issueType);
     formData.append("urgency", urgency);
     formData.append("mohArea", mohArea);
+    // Append coordinates
+    formData.append("latitude", coordinates.lat);
+    formData.append("longtitude", coordinates.lng);
 
     // Append image file (if selected)
     if (photo) {
