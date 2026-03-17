@@ -15,6 +15,8 @@ export const insertReportCases = async (data) => {
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
     moh_area: data.mohArea,
+    latitude: data.coordinates?.lat ?? data.latitude ?? null,
+    longtitude: data.coordinates?.lng ?? data.longtitude ?? data.longitude ?? null,
   };
 
   //Inser the data to table
@@ -27,4 +29,18 @@ export const insertReportCases = async (data) => {
   return insertedData;
 };
 
+export const fetchReportCaseLocations = async () => {
+  const { data, error } = await supabase
+    .from("dengue_cases")
+    .select("id, reporting_for, location, latitude, longtitude, created_at")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
 
+  return (data ?? []).map((row) => ({
+    ...row,
+    coordinates:
+      row.latitude != null && row.longtitude != null
+        ? { lat: row.latitude, lng: row.longtitude }
+        : null,
+  }));
+}
