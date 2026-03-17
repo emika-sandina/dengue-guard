@@ -8,10 +8,10 @@ export const submitSiteReports = async (req, res) => {
 
     // convert coordinates to numbers
     reportData.latitude = parseFloat(reportData.latitude);
-    reportData.longitude = parseFloat(reportData.longitude);
+    reportData.longtitude = parseFloat(reportData.longtitude);
     
     // Optional safety check
-    if (!reportData.latitude || !reportData.longitude) {
+    if (!reportData.latitude || !reportData.longtitude) {
       return res.status(400).json({
         error: "Coordinates are required",
       });
@@ -31,6 +31,7 @@ export const submitSiteReports = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: "Failed to save report: " + error.message,
+
     });
   }
 };

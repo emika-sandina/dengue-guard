@@ -49,7 +49,7 @@ export const insertSiteReports = async (reportData, file) => {
         moh_area: reportData.mohArea,
         photo_url: photoUrl,
         latitude: reportData.latitude,
-        longitude: reportData.longtitude,
+        longtitude: reportData.longtitude,
       },
     ])
     .select();
