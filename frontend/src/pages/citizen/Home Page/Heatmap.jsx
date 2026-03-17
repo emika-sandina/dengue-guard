@@ -38,10 +38,33 @@ const dengueRiskPoints = [
   [8.3114, 80.4037, 0.4],
   [6.0535, 80.221, 0.4],
 ];
+// Breeding site locations (static for now)
+const breedingSites = [
+  [6.930, 79.860],
+  [7.085, 80.010],
+  [7.295, 80.640],
+];
 
 const HeatMap = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
+  const [patients, setPatients] = useState([]); // fetched patient locations
+
+  useEffect(() => {
+    // Fetch patient locations from backend
+    const fetchPatients = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/report-case");
+        const data = await res.json();
+        setPatients(data); // store patient reports
+      } catch (err) {
+        console.error("Failed to fetch patient locations:", err);
+      }
+    };
+
+    fetchPatients();
+  }, []);
+
 
   useEffect(() => {
     if (mapInstance.current) return;
