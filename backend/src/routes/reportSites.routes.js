@@ -1,6 +1,9 @@
 import express from "express";
 import multer from "multer";
-import {submitSiteReports} from "../controllers/reportSites.controller.js"
+import { 
+  submitSiteReports,
+  getBreedingSitesLocations
+} from "../controllers/reportSites.controller.js";
 
 const router = express.Router();
 
@@ -28,5 +31,8 @@ router.post(
   upload.single("photo"),
   submitSiteReports
 );
+
+router.get("/report-sites/data", getBreedingSitesLocations);
+
 
 export default router;
