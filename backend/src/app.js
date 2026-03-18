@@ -18,16 +18,17 @@ app.use(express.json());
 //register chatbot route
 app.use("/chatbot", chatbotRoutes);
 
-app.use("/chatbot", chatbotRoutes);
 //register report cases route (frontend expects /api/report-case)
-
 app.use("/api", reportCasesRoutes);
-//register report breeding sites route
 
+//register report breeding sites route
 app.use("/api", reportSitesRoutes);
+
 //register send announcement route
 app.use("/api", announcementRoutes);
-//export app to server.js
 
+//register manage sites route
 app.use("/api",manageSitesRoutes);
+
+//export app to server.js
 export default app;

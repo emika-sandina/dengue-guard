@@ -9,9 +9,6 @@ import { authenticate } from '../middleware/authMS.middleware.js';
 router.get('/site-reports',authenticate, displaySites);
 // Defining delete to delete the sites
 router.delete('/site-reports/:id', authenticate, removeSite);
-router.patch('/site-reports/:id', authenticate, updateSite)
-// router.patch('/site-reports/:id', authenticate, verifySite);
-// router.patch('/site-reports/:id', authenticate, resolveSite);
-// router.patch('/site-reports/:id', authenticate, sitePhiAssign);
+router.patch('/site-reports/:id', authenticate, updateSite);
 
 export default router;

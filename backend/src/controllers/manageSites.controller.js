@@ -70,7 +70,7 @@ export const updateSite = async (req, res) => {
             return res.status(200).json(result);
         }
 
-        return res.status(400).json({error: "No vaild fields to update"});
+        return res.status(400).json({error: "No valid fields to update"});
     }
     catch (error){
         res.status(500).json({
@@ -80,36 +80,3 @@ export const updateSite = async (req, res) => {
         });
     }
 };
-
-// export const verifySite = async (req, res) => {
-//     try{
-//         const { id } = req.params;
-//         const {status: newStatus} = req.body;
-//         const result = await verifySites(id,newStatus);
-//         res.status(200).json(result);
-//     } catch (error) {
-//         res.status(500).json({ error: "Couldn't verify the site, " + error.message });
-//     }
-// };
-
-// export const resolveSite = async (req, res) => {
-//     try{
-//         const { id } = req.params;
-//         const {status: newStatus} = req.body;
-//         const result = await resolveSites(id,newStatus);
-//         res.status(200).json(result);
-//     } catch (error) {
-//         res.status(500).json({ error: "Couldn't resolve the site, " + error.message });
-//     }
-// };
-
-// export const sitePhiAssign = async (req,res) => {
-//     try{
-//         const {id} = req.params;
-//         const {phi_assign: assigned} = req.body;
-//         const result = await assignPhi(id, assigned);
-//         res.status(200).json(result);
-//     }catch (error){
-//         res.status(500).json({error: "Couldn't assign a PHI to site, " + error.message});
-//     }
-// };
