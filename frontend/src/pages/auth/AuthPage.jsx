@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import shieldLogo from '../../assets/shieldsvg.svg';
 import './auth.css';
-import Dropdown from '../citizen/Report Cases Page/Dropdown.jsx';
+import Dropdown from '../../components/common/Dropdown/Dropdown';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);

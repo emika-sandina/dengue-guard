@@ -1,7 +1,7 @@
 import NavBar from "../../../components/common/Navbar/NavBar";
 import "./reportsites.css";
 import { useState } from "react";
-import { mohAreas } from "../../../services/mohAreas";
+import Dropdown from "../../../components/common/Dropdown/Dropdown";
 
 function ReportSites() {
   //array for certain issue types
@@ -21,7 +21,7 @@ function ReportSites() {
   const [photo, setPhoto] = useState(null);
   const [issueType, setIssueType] = useState("");
   const [urgency, setUrgency] = useState("Low");
-  const [mohArea, setMohArea] = useState("");
+  const [mohArea, setMohArea] = useState(null);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
@@ -88,7 +88,7 @@ function ReportSites() {
     formData.append("description", description);
     formData.append("issueType", issueType);
     formData.append("urgency", urgency);
-    formData.append("mohArea", mohArea);
+    formData.append("mohArea", mohArea.value || mohArea.label);
 
     // Append image file (if selected)
     if (photo) {
@@ -114,7 +114,7 @@ function ReportSites() {
         setPhoto(null);
         setIssueType(issueTypes[0]);
         setUrgency("Low");
-        setMohArea(mohAreas[0]);
+        setMohArea(null);
       } else {
         setPopUpMessage(result.error || "Failed to submit the report!");
         setPopUpType("error");
@@ -174,15 +174,7 @@ function ReportSites() {
             </select>
 
             <label>Select MOH Area</label>
-            <select
-              value={mohArea}
-              onChange={(e) => setMohArea(e.target.value)}
-              required
-            >
-              {mohAreas.map((mohArea, index) => (
-                <option>{mohArea}</option>
-              ))}
-            </select>
+            <Dropdown value={mohArea} onChange={setMohArea} />
 
             <label>Urgency Level</label>
             <div className="urgency-buttons">
@@ -214,8 +206,8 @@ function ReportSites() {
             <button
               onClick={() => setShowPopUp(false)}
               className="popup-close-btn"
-              >
-                OK
+            >
+              OK
             </button>
           </div>
         </div>
