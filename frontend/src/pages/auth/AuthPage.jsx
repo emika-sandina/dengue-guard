@@ -20,21 +20,22 @@ const AuthPage = () => {
 
     try {
       if (isLogin) {
-        // Sign In
-        const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        // Sign In via Professional Backend API
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Login failed');
 
-        // Fetch Role from our profile table
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-
-        if (profileError) throw profileError;
+        // Save token and user data for our ProtectedRoutes and Pages
+        localStorage.setItem('dgToken', data.token);
+        localStorage.setItem('dgUser', JSON.stringify(data.user));
 
         // Redirect based on role
-        if (profile.role === 'moh') navigate('/moh/home');
+        if (data.user.role === 'moh') navigate('/moh/home');
         else navigate('/citizen/home');
 
       } else {

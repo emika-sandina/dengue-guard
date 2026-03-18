@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
 
 const ProtectedRoute = ({ children, allowedRole }) => {
   const [loading, setLoading] = useState(true);
@@ -8,34 +7,21 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const checkUser = () => {
       try {
-        // Get the current session from Supabase
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const token = localStorage.getItem('dgToken');
+        const userStr = localStorage.getItem('dgUser');
         
-        if (sessionError || !session) {
+        if (!token || !userStr) {
           setAuthenticated(false);
+          setUserRole(null);
           setLoading(false);
           return;
         }
 
+        const user = JSON.parse(userStr);
         setAuthenticated(true);
-
-        // If a specific role is required, fetch it from the database
-        if (allowedRole) {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', session.user.id)
-            .single();
-
-          if (profileError || !profile) {
-            console.error("Profile fetch error:", profileError);
-            setUserRole(null);
-          } else {
-            setUserRole(profile.role);
-          }
-        }
+        setUserRole(user.role);
       } catch (err) {
         console.error("Auth security check failed:", err);
       } finally {
@@ -46,7 +32,7 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     checkUser();
   }, [allowedRole]);
 
-  // While checking the database, show a loading screen or spinner
+  // While checking the session, show a loading screen or spinner
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20%' }}>
