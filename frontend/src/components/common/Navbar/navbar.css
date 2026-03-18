@@ -1,9 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .navbar {
   position: fixed;
-  top: 0;
-  left: 1%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 9999 !important;
   top: 20px;
   border-radius: 50px;
@@ -134,10 +140,11 @@
 
 @media (max-width: 768px) {
   .navbar {
-    left: 0;
-    right: 0;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
     width: calc(100% - 20px);
-    margin: 0 10px;
+    margin: 0;
     height: auto;
     padding: 12px 14px;
     align-items: center;
