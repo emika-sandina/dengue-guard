@@ -57,7 +57,7 @@ function NavBar({ role = "Citizen" }) {
               </>
             ) : (
               <>
-                <NavLink to="/moh/dashboard" onClick={closeMenu}>
+                <NavLink to="/moh/home" onClick={closeMenu}>
                   Dashboard
                 </NavLink>
                 <NavLink to="/moh/site-reports" onClick={closeMenu}>
