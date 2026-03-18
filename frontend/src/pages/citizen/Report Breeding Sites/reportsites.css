@@ -1,17 +1,19 @@
 .sitereport-layout {
   min-height: 100vh;
   background: #f5f7fa;
-  margin-top: 140px;
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main-content {
-  padding: 120px 80px 80px 80px;
+  width: 90%;
 }
 
 .page-title {
   font-size: 24px;
   font-weight: 700;
-  margin-top: 20px;
   margin-bottom: 20px;
 }
 
