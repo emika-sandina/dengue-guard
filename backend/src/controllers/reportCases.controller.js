@@ -10,7 +10,6 @@ export const submitReportCases = async (req, res) => {
       "reportingFor",
       "symptoms",
       "doctorStatus",
-      "dengueDiagnosis",
       "mohArea",
       "location",
       "symptomsStartDate",
@@ -21,6 +20,11 @@ export const submitReportCases = async (req, res) => {
       if (!reportData[field]) {
         return res.status(400).json({ error: `${field} is reqired` });
       }
+    }
+
+    // dengueDiagnosis is only required when doctorStatus is "Yes"
+    if (reportData.doctorStatus === "Yes" && !reportData.dengueDiagnosis) {
+      return res.status(400).json({ error: "dengueDiagnosis is required when doctor has been consulted" });
     }
     // Call the service layer function to insert data into Supabase
     const result = await insertReportCases(reportData);
