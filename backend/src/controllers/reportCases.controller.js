@@ -24,14 +24,15 @@ export const submitReportCases = async (req, res) => {
     }
     // Call the service layer function to insert data into Supabase
     const result = await insertReportCases(reportData);
+    console.log("SUCCESS: Case inserted into Supabase:", result);
     return res
       .status(200)
       .json({ message: "Report submitted successfully", result });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to submit report" });
+    console.error("Error in submitReportCases:", error);
+    return res.status(500).json({ 
+      error: "Failed to submit report", 
+      details: error.message || error 
+    });
   }
 };
-
-// Export the controller function to use in route
-
