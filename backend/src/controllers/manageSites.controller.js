@@ -3,10 +3,10 @@ import {fetchReportSites, deleteSites, verifySites, assignPhi} from "../services
 
 export const displaySites = async (req, res) => {
     try{
-        const {token, profile} = req;  // token and profile from the middleware
+        const {user} = req;  // user from the middleware
 
         // calls the fetchReportSites function in the service file, which return all the details of the sites
-        const reportSite = await fetchReportSites(token);
+        const reportSite = await fetchReportSites();
 
         if (reportSite.length === 0){
             res.status(200).json({
@@ -17,8 +17,10 @@ export const displaySites = async (req, res) => {
 
         // filter to only diplay sites from the same moh area as the moh officer
         const filteredSites = reportSite.filter(
-            (site) => site.moh_area?.replace("MOH-","").trim().toLowerCase() === profile.moh_area.trim().toLowerCase()   // NOTE Short-term fix on the names of the moh area. best to change it on supabase
-        );
+            (site) => {if (!site.moh_area || !user.mohArea) return false;
+               return site.moh_area.replace("MOH-","").trim().toLowerCase() === user.mohArea.trim().toLowerCase() 
+                
+        });
 
         // Return the filtered list to the frontend
         res.status(200).json({

@@ -30,12 +30,12 @@
   padding: 14px 24px;
   border-radius: 24px;
   border: none;
-  background: #d4d7d3; /* Darkened for better visibility */
   font-size: 15px;
   color: #333;
   outline: none;
   transition: box-shadow 0.2s;
   font-weight: 500;
+  background: #e4e4e4;
 }
 
 .mrs-search:focus {
@@ -348,6 +348,21 @@
 }
 
 /*######################################*/
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /*Speciffic Details*/
 .mrs-modal-overlay {
@@ -690,21 +705,5 @@
     z-index: 900;
     align-items: center;  
     top: 50px;
-  }
-}
-
-@keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes modalSlideUp {
-  from { 
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
   }
 }

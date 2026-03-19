@@ -1,9 +1,8 @@
 // front-end of the MOH side manage  report sites
-
 import "./manageReportSites.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
 import React, { useEffect, useState } from "react";
-import { supabase } from "../../../lib/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 const SORT_OPTIONS = [
   { value: "datetime", label: "Date & Time (Default)" },
@@ -38,19 +37,17 @@ const ManageReport = () => {
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("datetime");
   const [sortOption, setSortOption] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadBreedingSites = async () => {
       try {
-        // Gets current users session information from supabase
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        const token = session?.access_token; // Supabase JSON Web TOKEN (JWT)
+        // token that is saved in the localStorage
+        const token = localStorage.getItem("dgToken");
 
         if (!token) {
-          console.error("No session found");
-          nav("/");
+          console.error("No token found in local storage");
+          navigate("/");
           return;
         }
 
@@ -93,6 +90,7 @@ const ManageReport = () => {
     // to block the row click
     e.stopPropagation();
     setPendingDeleteId(siteId);
+    setSiteDetailsModal(false); // close the modal
     setShowConfirmPopup(true);
   };
 
@@ -100,17 +98,15 @@ const ManageReport = () => {
     setShowConfirmPopup(false);
 
     try {
-      // Gets current users session information from supabase
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token; // Supabase JSON Web TOKEN (JWT)
+      // token that is saved in the localStorage
+      const token = localStorage.getItem("dgToken");
 
       if (!token) {
-        console.error("No session found");
-        nav("/");
+        console.error("No token found in local storage");
+        navigate("/");
         return;
       }
+
       const response = await fetch(
         `http://localhost:5000/api/site-reports/${siteId}`,
         {
@@ -145,17 +141,15 @@ const ManageReport = () => {
     e.stopPropagation();
 
     try {
-      // Gets current users session information from supabase
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token; // Supabase JSON Web TOKEN (JWT)
+      // token that is saved in the localStorage
+      const token = localStorage.getItem("dgToken");
 
       if (!token) {
-        console.error("No session found");
-        nav("/");
+        console.error("No token found in local storage");
+        navigate("/");
         return;
       }
+
       // HTTP protocol PATCH to modify to an exisiting resource
       const response = await fetch(
         `http://localhost:5000/api/site-reports/${siteId}`,
@@ -196,17 +190,15 @@ const ManageReport = () => {
       return;
     }
     try {
-      // Gets current users session information from supabase
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token; // Supabase JSON Web TOKEN (JWT)
+      // token that is saved in the localStorage
+      const token = localStorage.getItem("dgToken");
 
       if (!token) {
-        console.error("No session found");
-        nav("/");
+        console.error("No token found in local storage");
+        navigate("/");
         return;
       }
+
       const response = await fetch(
         `http://localhost:5000/api/site-reports/${siteId}`,
         {
@@ -302,17 +294,15 @@ const ManageReport = () => {
     }
 
     try {
-      // Gets current users session information from supabase
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token; // Supabase JSON Web TOKEN (JWT)
+      // token that is saved in the localStorage
+      const token = localStorage.getItem("dgToken");
 
       if (!token) {
-        console.error("No session found");
-        nav("/");
+        console.error("No token found in local storage");
+        navigate("/");
         return;
       }
+
       const response = await fetch(
         `http://localhost:5000/api/site-reports/${caseId}`,
         {
