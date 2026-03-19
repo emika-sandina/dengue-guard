@@ -88,7 +88,7 @@ function ReportCases() {
     !reportingFor ||
     symptoms.length === 0 ||
     !doctorStatus ||
-    !dengueDiagnosis ||
+    (doctorStatus === "Yes" && !dengueDiagnosis) ||
     !mohArea ||
     !location ||
     !symptomsStartDate
@@ -101,9 +101,13 @@ function ReportCases() {
 
     try {
       //send a post request to backend api
+      const token = localStorage.getItem('dgToken');
       const response = await fetch("http://localhost:5000/api/report-case", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(data),
       });
 

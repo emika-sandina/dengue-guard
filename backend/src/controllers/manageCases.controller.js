@@ -1,0 +1,87 @@
+// Step 2: Controller to fetch dengue cases, optionally filtered by MOH area
+export const getDengueCases = async (req, res) => {
+  try {
+    // We import this directly into the function to avoid circular dependencies if any crop up
+    const { getAllDengueCases } = await import("../services/manageCases.service.js");
+
+    // Read mohArea and role from token (provided by authMiddleware)
+    const { mohArea: userMohArea, role } = req.user;
+
+    // Only MOH users are allowed to access dengue case data
+    if (role !== "moh") {
+      return res.status(403).json({ error: "Forbidden: insufficient permissions to view dengue cases" });
+    }
+
+    // Enforce the MOH user's specific area from their token; do not allow overriding via query params
+    const mohArea = userMohArea;
+
+    const cases = await getAllDengueCases(mohArea);
+    console.log(
+      `FETCH SUCCESS: User [${req.user.email}] (${role}) requested cases. Filtering by area: "${mohArea || "all"}". Found ${cases?.length || 0} cases.`
+    );
+    return res.status(200).json({ cases });
+  } catch (error) {
+    console.error("Error fetching dengue cases:", error);
+    return res.status(500).json({ error: "Failed to fetch dengue cases" });
+  }
+};
+
+// Controller to update dengue case status (e.g. Verify or Resolve)
+export const updateStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status || status !== "resolved") {
+      return res.status(400).json({ error: "Invalid status provided. Must be 'resolved'." });
+    }
+
+    const { updateCaseStatus } = await import("../services/manageCases.service.js");
+    const result = await updateCaseStatus(id, status);
+    
+    return res.status(200).json({ message: "Case status updated successfully", result });
+  } catch (error) {
+    console.error("Error updating dengue case status:", error);
+    return res.status(500).json({ error: "Failed to update dengue case status" });
+  }
+};
+
+// Controller to assign PHI to a dengue case
+export const assignPHI = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { assignee } = req.body;
+
+    if (!assignee) {
+      return res.status(400).json({ error: "Assignee name is required." });
+    }
+
+    const { assignPHIToCase } = await import("../services/manageCases.service.js");
+    const result = await assignPHIToCase(id, assignee);
+    
+    return res.status(200).json({ message: "PHI assigned successfully", result });
+  } catch (error) {
+    console.error("Error assigning PHI to dengue case:", error);
+    return res.status(500).json({ error: "Failed to assign PHI to dengue case" });
+  }
+};
+
+// Controller to delete/remove a dengue case
+export const deleteCase = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { removeCase } = await import("../services/manageCases.service.js");
+    const result = await removeCase(id);
+    
+    // Supabase returns an empty array if no rows were deleted (e.g., ID not found)
+    if (!result || result.length === 0) {
+      return res.status(404).json({ error: "Case not found or already deleted" });
+    }
+
+    return res.status(200).json({ message: "Dengue case deleted successfully", result });
+  } catch (error) {
+    console.error("Error deleting dengue case:", error);
+    return res.status(500).json({ error: "Failed to delete dengue case" });
+  }
+};
