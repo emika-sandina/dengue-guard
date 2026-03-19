@@ -75,9 +75,23 @@ function ReportSites() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     // Basic validation
-    if (!location || !issueType || !mohArea || issueType === issueTypes[0]) {
+    if (
+      !location ||
+      !description ||
+      !issueType ||
+      issueType === issueTypes[0] ||
+      !mohArea
+    ) {
       setPopUpMessage("Please fill in all required fields before submitting.");
+      setPopUpType("error");
+      setShowPopUp(true);
+      return;
+    }
+    
+    if (!coordinates.lat || !coordinates.lng) {
+      setPopUpMessage("Please click 'Get Current Location' first.");
       setPopUpType("error");
       setShowPopUp(true);
       return;
@@ -185,8 +199,10 @@ function ReportSites() {
               onChange={(e) => setMohArea(e.target.value)}
               required
             >
-              {mohAreas.map((mohArea, index) => (
-                <option>{mohArea}</option>
+                {mohAreas.map((area, index) => (
+                <option key={index} value={area}>
+                  {area}
+                </option>
               ))}
             </select>
 

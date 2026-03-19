@@ -80,9 +80,10 @@ function ReportCases() {
       location,
       symptomsStartDate,
       latitude: coordinates.lat,
-      longitude: coordinates.lng,
+      longtitude: coordinates.lng,
     };
-      //Validation
+
+          //Validation
   if (
     !reportingFor ||
     symptoms.length === 0 ||
@@ -129,15 +130,16 @@ function ReportCases() {
         setPopUpMessage("Failed to submit the report.");
         setPopUpType("error");
         setShowPopUp(true);
+        
         return;
       }
 
-         //success case
-        setPopUpMessage("Report submitted successfully");
-        setPopUpType("success");
-        setShowPopUp(true);
-        alert(result.message || "Report submitted successfully");
-        console.log(result);
+      //success case
+      
+      setPopUpMessage("Report submitted successfully");
+      setPopUpType("success");
+      setShowPopUp(true);
+      console.log(result);
 
     // catch any errors
     } catch (error) {
@@ -164,7 +166,8 @@ function ReportCases() {
             <input type="text"
               placeholder="Myself, Family, Friend"  
               value={reportingFor}
-              onChange={(e) => setReportingFor(e.target.value)}/>
+              onChange={(e) => setReportingFor(e.target.value)}
+/>
             </div>
 
 

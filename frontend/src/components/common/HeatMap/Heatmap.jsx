@@ -97,7 +97,7 @@ const HeatMap = () => {
       L.marker([lat, lng], {
         icon: L.divIcon({
           className: "",
-          html: `<div style="font-size: 20px;">😷</div>`,
+          html: '<div style="font-size: 20px;">😷</div>',
           iconSize: [30, 30],
           popupAnchor: [0, -15],
         }),
@@ -119,13 +119,12 @@ const HeatMap = () => {
       L.marker([latitude, longtitude], {
         icon: L.divIcon({
           className: "",
-          html: `<div style="font-size: 20px;">🦟</div>`,
+          html: '<div style="font-size: 20px;">🦟</div>',
           iconSize: [30, 30],
           popupAnchor: [0, -15],
         }),
       })
         .addTo(breedingLayerRef.current)
-        .bindPopup(`Breeding Site: ${location || "Unknown"}`);
     });
   }, [breedingSites]);
 

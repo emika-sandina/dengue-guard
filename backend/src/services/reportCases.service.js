@@ -6,18 +6,23 @@ dotenv.config();
 //function to insert data into the tabl
 export const insertReportCases = async (data) => {
 
-  //Map frontend data to column names
   const payload = {
     reporting_for: data.reportingFor,
-    symptoms_start_date: data.symptomsStartDate, 
+    symptoms_start_date: data.symptomsStartDate,
     symptoms: Array.isArray(data.symptoms) ? data.symptoms : [data.symptoms],
     location: data.location,
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
-    moh_area: data.mohArea,
+
+    // mohArea handling (supports both string and object)
+    moh_area:
+      typeof data.mohArea === "object" && data.mohArea !== null
+        ? data.mohArea.value
+        : data.mohArea,
+
+    // coordinates handling
     latitude: data.coordinates?.lat ?? data.latitude ?? null,
-    longtitude: data.coordinates?.lng ?? data.longtitude ?? data.longitude ?? null,
-    moh_area: typeof data.mohArea === 'object' && data.mohArea !== null ? data.mohArea.value : data.mohArea,
+    longtitude: data.coordinates?.lng ?? data.longitude ?? data.longtitude ?? null,
   };
 
   // Insert the data to table

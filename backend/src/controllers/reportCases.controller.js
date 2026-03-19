@@ -24,16 +24,21 @@ export const submitReportCases = async (req, res) => {
       }
     }
 
-    // dengueDiagnosis is only required when doctorStatus is "Yes"
     if (reportData.doctorStatus === "Yes" && !reportData.dengueDiagnosis) {
-      return res.status(400).json({ error: "dengueDiagnosis is required when doctor has been consulted" });
+      return res.status(400).json({
+        error: "dengueDiagnosis is required when doctor has been consulted",
+      });
     }
+    
     // Call the service layer function to insert data into Supabase
     const result = await insertReportCases(reportData);
+    
     console.log("SUCCESS: Case inserted into Supabase:", result);
-    return res
-      .status(200)
-      .json({ message: "Report submitted successfully", result });
+    
+    return res.status(200).json({
+      message: "Report submitted successfully",
+      result,
+    });
   } catch (error) {
     console.error("Error in submitReportCases:", error);
     const responseBody = {
