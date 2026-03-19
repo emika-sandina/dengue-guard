@@ -380,6 +380,7 @@ const ManageReport = () => {
         {/* Search & Sort row */}
         {/* search the type of issue */}
         <div className="mrs-searchSort">
+          {/* users keyword to filter */}
           <input
             className="mrs-search"
             type="text"
@@ -389,7 +390,7 @@ const ManageReport = () => {
           />
 
           <div className="mrs-sort-wrapper">
-            {/* sort button */}
+            {/* sorts by the currently selected sort label */}
             <button
               className="mrs-sort-btn"
               onClick={() => setSortOption((option) => !option)}
@@ -406,8 +407,8 @@ const ManageReport = () => {
                     key={opt.value}
                     className={sortBy === opt.value ? "selected" : ""}
                     onClick={() => {
-                      setSortBy(opt.value);
-                      setSortOption(false);
+                      setSortBy(opt.value); // apply the selected sort
+                      setSortOption(false); // close the dropdown list
                     }}
                   >
                     {opt.label}
@@ -426,12 +427,7 @@ const ManageReport = () => {
 
             {/*Individual cards*/}
             {filterSite.map((site, index) => (
-              <div
-                key={site.id}
-                className="mrs-card"
-                onClick={() => openSiteDetails(site)}
-              >
-                {" "}
+              <div key={site.id} className="mrs-card" onClick={() => openSiteDetails(site)}>
                 {/*On click it will route to the details page*/}
                 {/*card header*/}
                 <div className="mrs-card-header">
@@ -439,10 +435,7 @@ const ManageReport = () => {
 
                   {/*priority level*/}
                   <div className="mrs-card-priority">
-                    <span
-                      className={`priority-level ${Priority(site.urgency)}`}
-                    >
-                      {" "}
+                    <span className={`priority-level ${Priority(site.urgency)}`}>
                       {/*To constomize different levels of urgency*/}
                       {site.urgency}
                     </span>
@@ -582,12 +575,11 @@ const ManageReport = () => {
             </div>
           </div>
 
-          {/* modal body */}
-          <div className="mrs-modal-body">
-
-            {/* Image comes to the left */}
-            <div className="mrs-card-image-container">
-              {selectedSite.photo_url ? (
+            {/* modal body */}
+            <div className="mrs-modal-body">
+              {/* Image comes to the left */}
+              <div className="mrs-card-image-container">
+                {selectedSite.photo_url ? (
                   <img
                     src={selectedSite.photo_url}
                     alt="Breeding site image"
@@ -614,7 +606,7 @@ const ManageReport = () => {
                   </div>
                 </div>
 
-                <div className="mrs-srcoll">
+                <div className="mrs-scroll">
                   {/* If the description is long change appearance */}
                   <p className="mrs-modal-label">Description: </p>
                   <div className="mrs-modal-description">
@@ -634,14 +626,24 @@ const ManageReport = () => {
               </div>
             </div>
 
-          {/* Footer */}
-          <div className="mrs-modal-footer">
-            <button className="btn-action btn-view" onClick={(e) => viewLocation(e,selectedSite.location)}>View Location</button>
-            <button className="btn-action btn-remove" onClick={(e) => handleRemove(e,selectedSite.id)}>Remove Report</button>
+            {/* Footer */}
+            <div className="mrs-modal-footer">
+              <button
+                className="btn-action btn-view"
+                onClick={(e) => viewLocation(e, selectedSite.location)}
+              >
+                View Location
+              </button>
+              <button
+                className="btn-action btn-remove"
+                onClick={(e) => handleRemove(e, selectedSite.id)}
+              >
+                Remove Report
+              </button>
+            </div>
           </div>
         </div>
-      </div>   
-    )}
+      )}
     </div>
   );
 };

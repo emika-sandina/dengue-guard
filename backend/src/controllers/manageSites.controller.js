@@ -1,21 +1,11 @@
 // Created a safety net for in case there are no breeding sites reported, successfully displayed and error
-import {fetchReportSites, fetchMohLocation, deleteSites, verifySites, assignPhi} from "../services/manageSites.service.js";
+import {fetchReportSites, deleteSites, verifySites, assignPhi} from "../services/manageSites.service.js";
 
 export const displaySites = async (req, res) => {
     try{
-        const {token, user} = req;  // token and user from the middleware
-
-        // calls then fetchMohloaction function in the service file, which returns the moh officers id and moh area
-        const mohProfile = await fetchMohLocation(token);
-
-        if (!mohProfile){
-            return res.status(404).json({
-                message: "Officer profile not found"
-            })
-        }
+        const {token, profile} = req;  // token and profile from the middleware
 
         // calls the fetchReportSites function in the service file, which return all the details of the sites
-        // NOTE better performance, we should filter directly in the SQL query later
         const reportSite = await fetchReportSites(token);
 
         if (reportSite.length === 0){
@@ -27,7 +17,7 @@ export const displaySites = async (req, res) => {
 
         // filter to only diplay sites from the same moh area as the moh officer
         const filteredSites = reportSite.filter(
-            (site) => site.moh_area?.replace("MOH-","").trim().toLowerCase() === mohProfile.moh_area.trim().toLowerCase()   // NOTE Short-term fix on the names of the moh area. best to change it on supabase
+            (site) => site.moh_area?.replace("MOH-","").trim().toLowerCase() === profile.moh_area.trim().toLowerCase()   // NOTE Short-term fix on the names of the moh area. best to change it on supabase
         );
 
         // Return the filtered list to the frontend
@@ -54,7 +44,7 @@ export const removeSite = async (req, res) => {
     }
 };
 
-// Function to update breeding site (veridy, resolved, assign PHI)
+// Function to update breeding site (verify, resolved, assign PHI)
 export const updateSite = async (req, res) => {
     try{
         const {id} = req.params;
