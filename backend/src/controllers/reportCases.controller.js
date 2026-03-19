@@ -14,7 +14,8 @@ export const submitReportCases = async (req, res) => {
       "mohArea",
       "location",
       "symptomsStartDate",
-      "coordinates"
+      "latitude",
+      "longtitude"
     ];
 
     // Check if all the inputs are present
