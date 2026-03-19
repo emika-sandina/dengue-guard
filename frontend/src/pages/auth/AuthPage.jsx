@@ -5,6 +5,8 @@ import shieldLogo from '../../assets/shieldsvg.svg';
 import './auth.css';
 import Dropdown from '../citizen/Report Cases Page/Dropdown.jsx';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ const AuthPage = () => {
     try {
       if (isLogin) {
         // Sign In via Professional Backend API
-        const response = await fetch('http://localhost:5000/api/auth/login', {
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -30,9 +32,12 @@ const AuthPage = () => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Login failed');
 
-        // Save token and user data for our ProtectedRoutes and Pages
+        // Save token and minimal user data for our ProtectedRoutes and Pages
         localStorage.setItem('dgToken', data.token);
         localStorage.setItem('dgUser', JSON.stringify(data.user));
+        if (data.user && data.user.role) {
+          localStorage.setItem('dgUserRole', data.user.role);
+        }
 
         // Redirect based on role
         if (data.user.role === 'moh') navigate('/moh/home');

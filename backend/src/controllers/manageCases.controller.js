@@ -4,12 +4,16 @@ export const getDengueCases = async (req, res) => {
     // We import this directly into the function to avoid circular dependencies if any crop up
     const { getAllDengueCases } = await import("../services/manageCases.service.js");
 
-    // Read mohArea from token (provided by authMiddleware)
+    // Read mohArea and role from token (provided by authMiddleware)
     const { mohArea: userMohArea, role } = req.user;
-    
-    // If user is MOH, enforce their specific area. 
-    // Otherwise (e.g. admin), they can still use query params or see all.
-    const mohArea = role === 'moh' ? userMohArea : (req.query.mohArea || null);
+
+    // Only MOH users are allowed to access dengue case data
+    if (role !== "moh") {
+      return res.status(403).json({ error: "Forbidden: insufficient permissions to view dengue cases" });
+    }
+
+    // Enforce the MOH user's specific area from their token; do not allow overriding via query params
+    const mohArea = userMohArea;
 
     const cases = await getAllDengueCases(mohArea);
     console.log(

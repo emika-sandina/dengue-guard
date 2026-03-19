@@ -18,7 +18,7 @@ export const submitReportCases = async (req, res) => {
     //Check if all the inputs are present
     for (const field of requiredFields) {
       if (!reportData[field]) {
-        return res.status(400).json({ error: `${field} is reqired` });
+        return res.status(400).json({ error: `${field} is required` });
       }
     }
 
@@ -34,9 +34,12 @@ export const submitReportCases = async (req, res) => {
       .json({ message: "Report submitted successfully", result });
   } catch (error) {
     console.error("Error in submitReportCases:", error);
-    return res.status(500).json({ 
-      error: "Failed to submit report", 
-      details: error.message || error 
-    });
+    const responseBody = {
+      error: "Failed to submit report",
+    };
+    if (process.env.NODE_ENV !== "production") {
+      responseBody.details = error.message || String(error);
+    }
+    return res.status(500).json(responseBody);
   }
 };

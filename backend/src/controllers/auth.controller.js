@@ -39,6 +39,13 @@ export const login = async (req, res) => {
     const mohArea = profile?.moh_area || user.user_metadata?.moh_area || null;
 
     // 3. Generate JWT
+    if (!JWT_SECRET) {
+      console.error("Server configuration error: JWT_SECRET environment variable is not set.");
+      return res
+        .status(500)
+        .json({ error: "Server configuration error: JWT secret is not configured" });
+    }
+
     const token = jwt.sign(
       {
         id: user.id,

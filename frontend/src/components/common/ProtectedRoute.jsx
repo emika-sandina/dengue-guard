@@ -1,6 +1,28 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+// Basic JWT expiration check using the `exp` claim.
+// Returns true if the token is expired or malformed.
+const isTokenExpired = (token) => {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return true;
+    }
+    const payloadJson = atob(parts[1]);
+    const payload = JSON.parse(payloadJson);
+    if (!payload || typeof payload.exp !== 'number') {
+      // If there is no exp claim, treat the token as non-expiring.
+      return false;
+    }
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    return payload.exp < nowInSeconds;
+  } catch (e) {
+    // Any error while decoding should treat the token as invalid/expired.
+    return true;
+  }
+};
+
 const ProtectedRoute = ({ children, allowedRole }) => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
@@ -11,8 +33,12 @@ const ProtectedRoute = ({ children, allowedRole }) => {
       try {
         const token = localStorage.getItem('dgToken');
         const userStr = localStorage.getItem('dgUser');
-        
-        if (!token || !userStr) {
+
+        // If there is no token/user info or the token is expired/invalid,
+        // clear any stored auth state and treat as unauthenticated.
+        if (!token || !userStr || isTokenExpired(token)) {
+          localStorage.removeItem('dgToken');
+          localStorage.removeItem('dgUser');
           setAuthenticated(false);
           setUserRole(null);
           setLoading(false);
