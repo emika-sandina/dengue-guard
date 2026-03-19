@@ -1,0 +1,601 @@
+/* ─── Page wrapper ─────────────────────────────── */
+.manage-dengue-cases-page {
+  min-height: 100vh;
+  background: #eceeed;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Body Wrapper ─────────────────────────────── */
+.manage-dengue-cases-body {
+  flex: 1;
+  display: flex;
+  padding: 110px 40px 40px; /* Increased top padding to clear fixed navbar */
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ─── Main content area ────────────────────────── */
+.mdc-main {
+  flex: 1;
+  width: 100%;
+}
+
+.mdc-title {
+  font-size: 36px;
+  font-weight: 800;
+  color: #0b3c3d;
+  margin: 0 0 24px 0;
+}
+
+/* Division badge shown inline in the page title */
+.mdc-division-badge {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0b6b6e;
+  background: #d4f0f0;
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-left: 12px;
+  vertical-align: middle;
+  letter-spacing: 0.01em;
+}
+
+/* ─── Controls: search + sort ──────────────────── */
+.mdc-controls {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.mdc-search {
+  width: 350px;
+  padding: 14px 24px;
+  border-radius: 24px;
+  border: none;
+  background: #d4d7d3; /* Darkened for better visibility */
+  font-size: 15px;
+  color: #333;
+  outline: none;
+  transition: box-shadow 0.2s;
+  font-weight: 500;
+}
+
+.mdc-search:focus {
+  box-shadow: 0 0 0 2px #0b3c3d66;
+}
+
+.mdc-search::placeholder {
+  color: #777;
+}
+
+.mdc-sort-wrapper {
+  position: relative;
+}
+
+.mdc-sort-btn {
+  padding: 14px 24px;
+  border-radius: 24px;
+  border: none;
+  background: #d4d7d3; /* Darkened for better visibility */
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.18s;
+  white-space: nowrap;
+  min-width: 250px;
+  justify-content: space-between;
+}
+
+.mdc-sort-btn:hover {
+  background: #d5d8d3;
+}
+
+.mdc-sort-arrow {
+  font-size: 12px;
+  color: #777;
+}
+
+.mdc-sort-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  z-index: 100;
+  width: 100%;
+}
+
+.mdc-sort-dropdown li {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #444;
+  transition: background 0.15s;
+  font-weight: 500;
+}
+
+.mdc-sort-dropdown li:hover {
+  background: #f4f6f4;
+}
+
+.mdc-sort-dropdown li.selected {
+  background: #0b3c3d;
+  color: #fff;
+}
+
+/* ─── Cards Container & Grid ───────────────────── */
+.mdc-cards-container {
+  background: #dcdedd;
+  border-radius: 24px; /* Reduced from 32px */
+  padding: 24px; /* Reduced from 32px */
+}
+
+.mdc-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); /* Narrowed from 420px */
+  gap: 20px; /* Reduced from 32px */
+}
+
+.mdc-empty {
+  color: #777;
+  font-size: 14px;
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* ─── Individual card ──────────────────────────── */
+.mdc-card {
+  background: #ffffff; /* Brighter white for better contrast */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(11, 60, 61, 0.08); /* More defined teal-tinted shadow */
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  border: 1px solid rgba(11, 60, 61, 0.05);
+}
+
+.mdc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(11, 60, 61, 0.15);
+}
+
+.mdc-card--resolved {
+  opacity: 0.85;
+  filter: grayscale(0.2);
+}
+
+/* Status badge */
+.mdc-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  z-index: 5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mdc-badge--resolved {
+  background: #27ae60;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
+}
+
+/* ─── New Card Components ───────────────────────── */
+
+/* Header: Teal-Blue background with location */
+.mdc-card-header {
+  background: linear-gradient(135deg, #0b6b6e 0%, #0b3c3d 100%); /* Vibrant teal gradient */
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: none;
+}
+
+.mdc-pin {
+  font-size: 18px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.mdc-card-address-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff; /* White text for contrast on teal */
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mdc-card-content {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Meta: Time and Date */
+.mdc-card-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  color: #0b3c3d; /* Teal for cohesiveness */
+  font-size: 15px;
+  font-weight: 700;
+  border-bottom: 2px solid #f0f4f4;
+  padding-bottom: 8px;
+}
+
+/* Diagnosis row */
+.mdc-card-diagnosis {
+  padding: 10px 18px;
+  border-radius: 12px; /* Slightly more geometric */
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a202c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.mdc-card-diagnosis--yes {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+}
+
+.mdc-card-diagnosis--no {
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+}
+
+.mdc-diagnosis-status {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.mdc-diagnosis-status.yes {
+  color: #c53030;
+}
+
+.mdc-diagnosis-status.no {
+  color: #2f855a;
+}
+
+/* Assignee Pill centered */
+.mdc-assignee-row {
+  display: flex;
+  justify-content: center;
+  margin: 2px 0;
+}
+
+.mdc-assignee-pill {
+  background: #f0f4f4;
+  border: 1px solid #0b6b6e22;
+  padding: 8px 24px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b6b6e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mdc-assignee-pill:disabled {
+  background: #f0f4f4;
+  color: #a0aec0; /* Muted grey */
+  cursor: default;
+  border-color: #cbd5e0;
+  transform: none !important;
+  opacity: 0.7;
+}
+
+.mdc-assignee-pill.assigned {
+  background: #0b6b6e11;
+  color: #0b3c3d;
+  font-weight: 800;
+}
+
+/* ─── Action buttons ───────────────────────────── */
+.mdc-card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.mdc-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Resolve Button - Teal Theme */
+.mdc-btn--resolve {
+  background: #0b6b6e;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(11, 107, 110, 0.2);
+}
+
+.mdc-btn--resolve:hover:not(:disabled) {
+  background: #084d4f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 107, 110, 0.3);
+}
+
+/* Remove Button - Muted but clear */
+.mdc-btn--remove {
+  background: #f7fafc;
+  color: #e53e3e;
+  border: 1px solid #fed7d7;
+}
+
+.mdc-btn--remove:hover:not(:disabled) {
+  background: #fff5f5;
+  border-color: #e53e3e;
+  transform: translateY(-2px);
+}
+
+.mdc-btn:hover:not(:disabled) {
+  background: #d1d4d2;
+  transform: translateY(-2px);
+}
+
+.mdc-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.mdc-btn--remove:hover {
+  background: #ff3b3022;
+  color: #ff3b30;
+}
+
+/* ─── Detailed Modal Extra Styles ──────────────── */
+.mdc-modal-content--large {
+  max-width: 700px;
+}
+
+.mdc-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.mdc-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mdc-detail-item--full {
+  grid-column: 1 / -1;
+}
+
+.mdc-detail-item label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mdc-detail-item span {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1e2e;
+}
+
+.mdc-details-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mdc-details-tag {
+  background: #fdf2f2;
+  color: #ff3b30;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid #ff3b3022;
+}
+
+.mdc-modal-btn--danger {
+  background: #ff3b30;
+}
+
+.mdc-modal-btn--danger:hover {
+  background: #e6352b;
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
+}
+
+/* ─── Responsive ───────────────────────────────── */
+@media (max-width: 900px) {
+  .manage-dengue-cases-body {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .mdc-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mdc-title {
+    font-size: 28px;
+    text-align: center;
+  }
+  
+  .mdc-controls {
+    flex-direction: column;
+  }
+  
+  .mdc-search, .mdc-sort-btn {
+    width: 100%;
+  }
+  
+  .mdc-card-address-text {
+    font-size: 16px;
+  }
+  
+  .mdc-card-info {
+    font-size: 18px;
+  }
+  
+  .mdc-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Modal Styles ─────────────────────────────── */
+.mdc-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(11, 60, 61, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: modalFadeIn 0.3s ease;
+}
+
+.mdc-modal-content {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  animation: modalSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mdc-modal-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0b3c3d;
+  margin: 0 0 8px 0;
+}
+
+.mdc-modal-subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.mdc-modal-input {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 16px;
+  border: 2px solid #e0e0e0;
+  font-size: 16px;
+  margin-bottom: 32px;
+  outline: none;
+  transition: all 0.2s;
+  background: #f8f9f8;
+  color: #333;
+  font-weight: 600;
+}
+
+.mdc-modal-input:focus {
+  border-color: #0b3c3d;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(11, 60, 61, 0.1);
+}
+
+.mdc-modal-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.mdc-modal-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mdc-modal-btn--cancel {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.mdc-modal-btn--cancel:hover {
+  background: #e5e5e5;
+}
+
+.mdc-modal-btn--confirm {
+  background: #0b3c3d;
+  color: #fff;
+}
+
+.mdc-modal-btn--confirm:hover {
+  background: #082d2e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 60, 61, 0.2);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .mdc-modal-content {
+    margin: 20px;
+    padding: 30px;
+  }
+  
+  .mdc-modal-actions {
+    flex-direction: column-reverse;
+  }
+}
