@@ -14,12 +14,13 @@ export const submitReportCases = async (req, res) => {
       "mohArea",
       "location",
       "symptomsStartDate",
-      "coordinates"
+      "latitude",
+      "longtitude"
     ];
 
     // Check if all the inputs are present
     for (const field of requiredFields) {
-      if (!reportData[field]) {
+      if (reportData[field] === undefined || reportData[field] === null) {
         return res.status(400).json({ error: `${field} is required` });
       }
     }

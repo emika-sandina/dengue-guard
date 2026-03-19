@@ -11,11 +11,14 @@ export const submitSiteReports = async (req, res) => {
     reportData.longtitude = parseFloat(reportData.longtitude);
     
     // Optional safety check
-    if (!reportData.latitude || !reportData.longtitude) {
+    if (
+      !Number.isFinite(reportData.latitude) ||
+      !Number.isFinite(reportData.longtitude)
+    ) {
       return res.status(400).json({
-        error: "Coordinates are required",
+        error: "Valid coordinates are required",
       });
-      }
+    }
     //Sending both the data and the image of the report back to the service.
     const data = await breedingService.insertSiteReports(
       reportData,

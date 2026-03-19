@@ -10,7 +10,8 @@ export const getDashboardSummaryByUserId = async (userId) => {
       .from("profiles")
       .select("*")
       .eq("id", userId)
-      .maybeSingle();
+      .maybeSingle()
+      .throwOnError();
 
     const profile = profileResponse.data;
 
