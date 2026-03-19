@@ -10,11 +10,11 @@ export const submitReportCases = async (req, res) => {
       "reportingFor",
       "symptoms",
       "doctorStatus",
-      "dengueDiagnosis",
       "mohArea",
       "location",
       "symptomsStartDate",
-      "coordinates"
+      "latitude",
+      "longtitude"
     ];
 
     // Check if all the inputs are present
@@ -24,12 +24,25 @@ export const submitReportCases = async (req, res) => {
       }
     }
 
+    // dengueDiagnosis is only required when doctorStatus is "Yes"
+    if (reportData.doctorStatus === "Yes" && !reportData.dengueDiagnosis) {
+      return res.status(400).json({ error: "dengueDiagnosis is required when doctor has been consulted" });
+    }
     // Call the service layer function to insert data into Supabase
     const result = await insertReportCases(reportData);
-    return res.status(200).json({ message: "Report submitted successfully", result });
+    console.log("SUCCESS: Case inserted into Supabase:", result);
+    return res
+      .status(200)
+      .json({ message: "Report submitted successfully", result });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to submit report" });
+    console.error("Error in submitReportCases:", error);
+    const responseBody = {
+      error: "Failed to submit report",
+    };
+    if (process.env.NODE_ENV !== "production") {
+      responseBody.details = error.message || String(error);
+    }
+    return res.status(500).json(responseBody);
   }
 };
 
