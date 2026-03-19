@@ -4,31 +4,34 @@ import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
 import announcementPlaceholder from "../../../assets/announcements.svg";
+import { useNavigate } from "react-router-dom";
 
 function MOHHome() {
+  const navigate = useNavigate();
   const menu = [
     {
       icon: siteReportIcon,
       name: "Site Reports",
-      description:
-        "View Reports on Breeding Sites",
+      description: "View Reports on Breeding Sites",
+      path: "/moh/site-reports"
     },
     {
       icon: symptomIcon,
       name: "Symptom Reports",
-      description:
-        "View Reports on Dengue Symptoms",
+      description: "View Reports on Dengue Symptoms",
+      path: "/moh/case-reports"
     },
     {
       icon: announcementPlaceholder,
       name: "Communication",
       description: "Send Alerts and Messages",
+      path: "/moh/send-announcements"
     },
     {
       icon: heatmapIcon,
       name: "Risk Areas",
-      description:
-        "View Heatmap",
+      description: "View Heatmap",
+      path: "/moh/risk-map"
     },
   ];
 
@@ -46,7 +49,12 @@ function MOHHome() {
 
         <div className="card-grid">
           {menu.map((menuOption, index) => (
-            <div className="card">
+            <div 
+              className="card" 
+              key={index}
+              onClick={() => menuOption.path && navigate(menuOption.path)}
+              style={{ cursor: menuOption.path ? 'pointer' : 'default' }}
+            >
               <div className="menu-icon">
                 <img src={menuOption.icon} alt="" />
               </div>
