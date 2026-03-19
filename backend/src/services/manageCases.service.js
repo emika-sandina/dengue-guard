@@ -1,6 +1,6 @@
 import { supabase } from '../supabase.js';
 
-// Step 1: Fetch dengue cases from the database, optionally filtered by MOH area
+// Fetch dengue cases from the database, optionally filtered by MOH area
 export const getAllDengueCases = async (mohArea = null) => {
   let query = supabase
     .from("dengue_cases")
@@ -22,7 +22,7 @@ export const getAllDengueCases = async (mohArea = null) => {
   return data || [];
 };
 
-// Step 4: Update status of a dengue case (e.g. Verify or Resolve)
+// Update status of a dengue case (e.g. Verify or Resolve)
 export const updateCaseStatus = async (id, status) => {
   const { data, error } = await supabase
     .from("dengue_cases")
@@ -35,7 +35,7 @@ export const updateCaseStatus = async (id, status) => {
   return data;
 };
 
-// Step 7: Assign PHI to a dengue case
+// Assign PHI to a dengue case
 export const assignPHIToCase = async (id, assignee) => {
   const { data, error } = await supabase
     .from("dengue_cases")
@@ -48,7 +48,7 @@ export const assignPHIToCase = async (id, assignee) => {
   return data;
 };
 
-// Step 10: Remove/Delete a dengue case
+// Remove/Delete a dengue case
 export const removeCase = async (id) => {
   const { data, error } = await supabase
     .from("dengue_cases")

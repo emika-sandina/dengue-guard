@@ -26,7 +26,7 @@ export const getDengueCases = async (req, res) => {
   }
 };
 
-// Step 5: Controller to update dengue case status (e.g. Verify or Resolve)
+// Controller to update dengue case status (e.g. Verify or Resolve)
 export const updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
@@ -46,7 +46,7 @@ export const updateStatus = async (req, res) => {
   }
 };
 
-// Step 8: Controller to assign PHI to a dengue case
+// Controller to assign PHI to a dengue case
 export const assignPHI = async (req, res) => {
   try {
     const { id } = req.params;
@@ -66,7 +66,7 @@ export const assignPHI = async (req, res) => {
   }
 };
 
-// Step 10: Controller to delete/remove a dengue case
+// Controller to delete/remove a dengue case
 export const deleteCase = async (req, res) => {
   try {
     const { id } = req.params;
