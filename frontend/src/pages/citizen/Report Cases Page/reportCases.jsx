@@ -77,12 +77,33 @@ function ReportCases() {
       latitude: coordinates.lat,
       longitude: coordinates.lng,
     };
+      //Validation
+  if (
+    !reportingFor ||
+    symptoms.length === 0 ||
+    !doctorStatus ||
+    (doctorStatus === "Yes" && !dengueDiagnosis) ||
+    !mohArea ||
+    !location ||
+    !symptomsStartDate
+  ) {
+    setPopUpMessage("Please fill in all required fields before submitting.");
+    setPopUpType("error");
+    setShowPopUp(true);
+    return;
+  }
+
+
 
     try {
       //send a post request to backend api
+      const token = localStorage.getItem('dgToken');
       const response = await fetch("http://localhost:5000/api/report-case", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
         body: JSON.stringify(data),
       });
 
