@@ -25,6 +25,7 @@ export const displaySites = async (req, res) => {
         // Return the filtered list to the frontend
         res.status(200).json({
             message: "Breeding site is displayed",
+            moh_area: user.mohArea,
             filteredSites
         });
     }

@@ -69,6 +69,8 @@ const ManageReport = () => {
         // converts raw data to JSON object
         const data = await response.json();
 
+        setMohName(data.moh_area || "Unknown");
+
         const formattedSites = (data.filteredSites || []).map((site) => ({
           ...site, // to only make changes to time and date
           time: new Date(site.created_at).toLocaleTimeString([], {
@@ -367,7 +369,7 @@ const ManageReport = () => {
       <NavBar role="MOH" />
       <main className="main-content">
         <h1>Reported Breeding Sites
-          <span className="mdc-division-badge"> — {sites.moh_area} Division</span>
+          <span className="mdc-division-badge"> — {mohName} Division</span>
         </h1>
         
         {/* Search & Sort row */}
