@@ -1,9 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap");
 
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .navbar {
   position: fixed;
-  top: 0;
-  left: 1%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 9999 !important;
   top: 20px;
   border-radius: 50px;
@@ -51,6 +57,44 @@
   gap: 2px;
 }
 
+.navbar-menu-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(15, 29, 45, 0.06);
+  cursor: pointer;
+  padding: 0;
+}
+
+.navbar-menu-button span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 99px;
+  background: #0f1d2d;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.navbar-menu-button.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-menu-button.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-menu-button.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 .navbar-links a {
   position: relative;
   display: inline-block;
@@ -96,21 +140,44 @@
 
 @media (max-width: 768px) {
   .navbar {
-    flex-direction: column;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100% - 20px);
+    margin: 0;
     height: auto;
-    padding: 14px 20px 10px;
-    gap: 10px;
-    align-items: flex-start;
+    padding: 12px 14px;
+    align-items: center;
+    gap: 0;
+  }
+
+  .navbar-left {
+    flex: 1;
+  }
+
+  .navbar-menu-button {
+    display: inline-flex;
   }
 
   .navbar-links {
+    display: none;
     width: 100%;
-    flex-wrap: wrap;
-    gap: 4px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(15, 29, 45, 0.08);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .navbar-links.open {
+    display: flex;
   }
 
   .navbar-links a {
-    font-size: 0.82rem;
-    padding: 6px 12px;
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    border-radius: 12px;
   }
 }

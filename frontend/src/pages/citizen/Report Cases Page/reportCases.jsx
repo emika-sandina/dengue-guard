@@ -10,6 +10,7 @@ function ReportCases() {
   const [doctorStatus, setdoctorStatus] = useState("");
   const [dengueDiagnosis, setdengueDiagnosis] = useState("");
   const [location, setLocation] = useState("");
+  const [coordinates, setCoordinates] = useState({ lat: null, lng: null }); // lat/lng
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
@@ -37,6 +38,7 @@ function ReportCases() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        setCoordinates({lat:latitude,lng:longitude})//store the latitude and longtitude
         //Converts coordinates into readable address
         reverseGeocode(latitude, longitude);
       },
@@ -75,8 +77,11 @@ function ReportCases() {
       mohArea,
       location,
       symptomsStartDate,
+      latitude: coordinates.lat,
+      longtitude: coordinates.lng,
     };
-      //Validation
+
+          //Validation
   if (
     !reportingFor ||
     symptoms.length === 0 ||
@@ -91,8 +96,6 @@ function ReportCases() {
     setShowPopUp(true);
     return;
   }
-
-
 
     try {
       //send a post request to backend api
@@ -125,10 +128,12 @@ function ReportCases() {
         setPopUpMessage("Failed to submit the report.");
         setPopUpType("error");
         setShowPopUp(true);
+        
         return;
       }
 
       //success case
+      
       setPopUpMessage("Report submitted successfully");
       setPopUpType("success");
       setShowPopUp(true);
@@ -145,11 +150,11 @@ function ReportCases() {
 
   return (
     <>
-      <NavBar></NavBar>
-      <div className="report-container">
-        <br />
-        <br />
-        <br />
+    <NavBar></NavBar>
+    <div className="report-container">
+    <br/>
+    <br/>
+    <br/>
 
         <h1>Reporting Dengue Cases</h1>
         <form onSubmit={handleSubmit} className="report-form">

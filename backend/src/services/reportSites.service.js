@@ -48,6 +48,8 @@ export const insertSiteReports = async (reportData, file) => {
         urgency: reportData.urgency,
         moh_area: reportData.mohArea,
         photo_url: photoUrl,
+        latitude: reportData.latitude,
+        longtitude: reportData.longtitude,
       },
     ])
     .select();
@@ -58,4 +60,21 @@ export const insertSiteReports = async (reportData, file) => {
   }
 
   return data;
+};
+
+export const fetchBreedingSitesLocations = async () => {
+  const { data, error } = await supabase
+    .from("breeding_sites")
+    .select(" location, latitude, longtitude")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+
+  return (data ?? []).map((row) => ({
+    ...row,
+    coordinates:
+      row.latitude != null && row.longtitude != null
+        ? { lat: row.latitude, lng: row.longtitude }
+        : null,
+  }));
+
 };
