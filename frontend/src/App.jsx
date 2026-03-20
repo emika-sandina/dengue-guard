@@ -42,7 +42,7 @@ function App() {
         } />
 
         <Route path="/citizen/announcements" element={
-          <ProtectedRoute role="citizen">
+          <ProtectedRoute allowedRole="citizen">
             <Announcements />
           </ProtectedRoute>
         } />
