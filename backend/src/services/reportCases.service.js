@@ -10,19 +10,23 @@ export const insertReportCases = async (data) => {
   const payload = {
     reporting_for: data.reportingFor,
     symptoms_start_date: data.symptomsStartDate, 
-    symptoms: data.symptoms,
+    symptoms: Array.isArray(data.symptoms) ? data.symptoms : [data.symptoms],
     location: data.location,
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
-    moh_area: data.mohArea,
+    moh_area: typeof data.mohArea === 'object' && data.mohArea !== null ? data.mohArea.value : data.mohArea,
   };
 
-  //Inser the data to table
+  // Insert the data to table
   const { data: insertedData, error } = await supabase
     .from("dengue_cases")
-    .insert([payload]);
+    .insert([payload])
+    .select(); // CRITICAL: Added select() to return the inserted row
 
-  if (error) throw error;
+  if (error) {
+    console.error("Supabase Insert Error:", error);
+    throw error;
+  }
 
   return insertedData;
 };

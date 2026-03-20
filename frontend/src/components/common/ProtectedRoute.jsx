@@ -1,6 +1,27 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabaseClient';
+
+// Basic JWT expiration check using the `exp` claim.
+// Returns true if the token is expired or malformed.
+const isTokenExpired = (token) => {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return true;
+    }
+    const payloadJson = atob(parts[1]);
+    const payload = JSON.parse(payloadJson);
+    if (!payload || typeof payload.exp !== 'number') {
+      // If there is no exp claim, treat the token as non-expiring.
+      return false;
+    }
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    return payload.exp < nowInSeconds;
+  } catch (e) {
+    // Any error while decoding should treat the token as invalid/expired.
+    return true;
+  }
+};
 
 const ProtectedRoute = ({ children, allowedRole }) => {
   const [loading, setLoading] = useState(true);
@@ -8,34 +29,25 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const checkUser = () => {
       try {
-        // Get the current session from Supabase
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
-        if (sessionError || !session) {
+        const token = localStorage.getItem('dgToken');
+        const userStr = localStorage.getItem('dgUser');
+
+        // If there is no token/user info or the token is expired/invalid,
+        // clear any stored auth state and treat as unauthenticated.
+        if (!token || !userStr || isTokenExpired(token)) {
+          localStorage.removeItem('dgToken');
+          localStorage.removeItem('dgUser');
           setAuthenticated(false);
+          setUserRole(null);
           setLoading(false);
           return;
         }
 
+        const user = JSON.parse(userStr);
         setAuthenticated(true);
-
-        // If a specific role is required, fetch it from the database
-        if (allowedRole) {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', session.user.id)
-            .single();
-
-          if (profileError || !profile) {
-            console.error("Profile fetch error:", profileError);
-            setUserRole(null);
-          } else {
-            setUserRole(profile.role);
-          }
-        }
+        setUserRole(user.role);
       } catch (err) {
         console.error("Auth security check failed:", err);
       } finally {
@@ -46,7 +58,7 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     checkUser();
   }, [allowedRole]);
 
-  // While checking the database, show a loading screen or spinner
+  // While checking the session, show a loading screen or spinner
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20%' }}>
