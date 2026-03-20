@@ -22,7 +22,7 @@ COPY . .
 # Accept build arguments
 ARG VITE_SUPABASE_URL
 ARG VITE_SUPABASE_ANON_KEY
-ARG VITE_API_URL
+ARG VITE_API_BASE_URL
 
 # Inject them as env variables during build
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
