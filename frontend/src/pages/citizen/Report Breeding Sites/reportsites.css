@@ -226,7 +226,7 @@ textarea {
 
   .report-card {
     flex-direction: column; /* Stack the left and right panels vertically */
-    padding: 20px;
+    padding: 25px;
     gap: 20px;
   }
 
@@ -279,7 +279,7 @@ textarea {
 /* --- Small Phones (480px and below) --- */
 @media (max-width: 480px) {
   .report-card {
-    padding: 20px 15px 15px 15px;
+    padding: 25px;
     border-radius: 12px;
   }
 
