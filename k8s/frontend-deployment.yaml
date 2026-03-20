@@ -13,17 +13,17 @@ spec:
         app: dengueguard-frontend
     spec:
       containers:
-        - name: dengue-backend
+        - name: dengue-frontend
           image: thimansa/dengueguard-frontend:latest
-          
+          ports:
+            - containerPort: 80
+
           volumeMounts:
-          - name: frontend-config-volume
-            mountPath: /usr/share/nginx/html/env.js
-            subPath: env.js
+            - name: frontend-config-volume
+              mountPath: /usr/share/nginx/html/env.js
+              subPath: env.js
 
       volumes:
         - name: frontend-config-volume
           configMap:
             name: frontend-config
-          ports:
-            - containerPort: 80
