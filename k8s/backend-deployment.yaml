@@ -15,17 +15,8 @@ spec:
       containers:
         - name: dengue-backend
           image: thimansa/dengueguard-backend:IMAGE_TAG
-          env:
-          - name: SUPABASE_URL
-            valueFrom:
-              configMapKeyRef:
-                name: supabase-config
-                key: SUPABASE_URL
-
-          - name: SUPABASE_ANON_KEY
-            valueFrom:
-              secretKeyRef:
-                name: supabase-secret
-                key: SUPABASE_ANON_KEY
+          envFrom:
+            - secretRef:
+                name: backend-secret
           ports:
             - containerPort: 5000
