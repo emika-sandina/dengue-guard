@@ -24,6 +24,7 @@ const ManageReport = () => {
   const [sites, setSites] = useState([]); // inistialies an empty array (useState([])) to ensure that program doesn't crash till useEffect fills it with data from the API
 
   const [showSiteDetailsModal, setSiteDetailsModal] = useState(false);
+  const [mohName, setMohName] = useState('');
   const [selectedSite, setSeletectedSite] = useState(null);
   const [expand, setExpand] = useState(false);
   const [showPopup, setShowPopUp] = useState(false);
@@ -365,8 +366,10 @@ const ManageReport = () => {
     <div className="moh-layout">
       <NavBar role="MOH" />
       <main className="main-content">
-        <h1>Reported Breeding Sites</h1>
-
+        <h1>Reported Breeding Sites
+          <span className="mdc-division-badge"> — {sites.moh_area} Division</span>
+        </h1>
+        
         {/* Search & Sort row */}
         {/* search the type of issue */}
         <div className="mrs-searchSort">
