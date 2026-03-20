@@ -19,7 +19,7 @@ const Announcements = () => {
             {loading ? <p>Loading alerts...</p> : (
                 <div className="alerts-list">
                     {announcements.map(alert => (
-                        <div key={alert.id} className={`alert-card ${alert.type.toLowerCase()}`}>
+                        <div key={alert.id} className={`alert-card ${alert.type?.toLowerCase() || ''}`}>
                             <div className="alert-header">
                                 <h3>{alert.title}</h3>
                                 <span className="area-tag">{alert.target_area}</span>
