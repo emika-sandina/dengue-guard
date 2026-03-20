@@ -1,0 +1,27 @@
+.alert-card {
+    border-left: 5px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.alert-card.critical {
+    border-left-color: #ff4d4d;
+}
+
+.alert-card.warning {
+    border-left-color: #ffa500;
+}
+
+.alert-card.info {
+    border-left-color: #3498db;
+}
+
+.area-tag {
+    font-size: 0.8rem;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
