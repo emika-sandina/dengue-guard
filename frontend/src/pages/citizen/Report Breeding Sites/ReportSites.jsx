@@ -25,6 +25,8 @@ function ReportSites() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
+  const [coordinates, setCoordinates] = useState({ lat: null, lng: null }); // lat/lng
+
 
   //handling file uploads
   const handlePhotoUpload = (e) => {
@@ -43,6 +45,7 @@ function ReportSites() {
       //if the user allows access to his/her current location this block of code runs
       (position) => {
         const { latitude, longitude } = position.coords;
+        setCoordinates({lat:latitude,lng:longitude})//store the latitude and longtitude
         reverseGeocode(latitude, longitude);
       },
       //this code block runs if the user denies permission
@@ -72,9 +75,23 @@ function ReportSites() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
     // Basic validation
-    if (!location || !issueType || !mohArea || issueType === issueTypes[0]) {
+    if (
+      !location ||
+      !description ||
+      !issueType ||
+      issueType === issueTypes[0] ||
+      !mohArea
+    ) {
       setPopUpMessage("Please fill in all required fields before submitting.");
+      setPopUpType("error");
+      setShowPopUp(true);
+      return;
+    }
+    
+    if (!coordinates.lat || !coordinates.lng) {
+      setPopUpMessage("Please click 'Get Current Location' first.");
       setPopUpType("error");
       setShowPopUp(true);
       return;
@@ -89,6 +106,9 @@ function ReportSites() {
     formData.append("issueType", issueType);
     formData.append("urgency", urgency);
     formData.append("mohArea", mohArea);
+    // Append coordinates
+    formData.append("latitude", coordinates.lat);
+    formData.append("longtitude", coordinates.lng);
 
     // Append image file (if selected)
     if (photo) {
@@ -181,8 +201,10 @@ function ReportSites() {
               onChange={(e) => setMohArea(e.target.value)}
               required
             >
-              {mohAreas.map((mohArea, index) => (
-                <option>{mohArea}</option>
+                {mohAreas.map((area, index) => (
+                <option key={index} value={area}>
+                  {area}
+                </option>
               ))}
             </select>
 
