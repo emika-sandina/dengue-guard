@@ -15,7 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-            # SonarCloud scan
+      - name: Debug API Base URL
+        run: |
+          echo "API URL=${{ secrets.VITE_API_BASE_URL }}"
+
+        # SonarCloud scan
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@v2
         with:

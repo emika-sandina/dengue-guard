@@ -4,8 +4,10 @@ import { supabase } from '../../lib/supabaseClient';
 import shieldLogo from '../../assets/shieldsvg.svg';
 import './auth.css';
 import Dropdown from '../citizen/Report Cases Page/Dropdown.jsx';
+console.log("VITE_API_BASE_URL =", import.meta.env.VITE_API_BASE_URL);
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ;
+
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
