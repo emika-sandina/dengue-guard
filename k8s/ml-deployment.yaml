@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengue-ml
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengue-ml
+  template:
+    metadata:
+      labels:
+        app: dengue-ml
+    spec:
+      containers:
+        - name: dengue-ml
+          image: thimansa/dengueguard-ml:latest
+          ports:
+            - containerPort: 5000
