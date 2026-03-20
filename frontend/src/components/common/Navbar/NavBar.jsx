@@ -16,7 +16,7 @@ function NavBar({ role = "Citizen" }) {
               <NavLink to="/citizen/report-sites">Report Site</NavLink>
               <NavLink to="/citizen/report-cases">Report Symptoms</NavLink>
               <NavLink to="/citizen/risk-map">Risk Heat Map</NavLink>
-              <NavLink to="/citizen/alerts">Alerts</NavLink>
+              <NavLink to="/citizen/announcements">Alerts</NavLink>
               <NavLink to="/citizen/profile">Profile</NavLink>
             </>
           ) : (
