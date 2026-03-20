@@ -59,9 +59,14 @@ jobs:
       - name: Build Backend Image
         run: docker build -t thimansa/dengueguard-backend:${{ env.IMAGE_TAG }} ./backend 
 
-      # Build Frontend Image 
-      - name: Build Frontend Image 
-        run: docker build -t thimansa/dengueguard-frontend:${{ env.IMAGE_TAG }} ./frontend
+      # Build & Push Frontend Image
+      - name: Build Frontend Image
+        run: |
+          docker build \
+            --build-arg VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
+            --build-arg VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }} \
+            -t thimansa/dengueguard-frontend:${{ env.IMAGE_TAG }} \
+            ./frontend
 
       # Build ML Image
       - name: Build ML Image
@@ -92,12 +97,7 @@ jobs:
       
       # Push Frontend Image 
       - name: Push Frontend Image 
-        run: |
-          docker build \
-            --build-arg VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
-            --build-arg VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }} \
-            --build-arg VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
-            -t thimansa/dengueguard-frontend:${{ github.sha }} .
+        run: docker push thimansa/dengueguard-frontend:${{ env.IMAGE_TAG }}  \
 
       # Push ML Image
       - name: Push ML Image
