@@ -173,8 +173,10 @@ function ReportSites() {
               rows={5}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              maxLength={200}
               required
             ></textarea>
+            <small style={{color: description.length > 180 ? "#e03c3c" : "#aaa"}}>{description.length}/200</small>
 
             <label>Upload Photo</label>
             <input type="file" accept="image/*" onChange={handlePhotoUpload} />
