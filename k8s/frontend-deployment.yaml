@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: dengue-frontend
-          image: thimansa/dengueguard-frontend:latest
+          image: thimansa/dengueguard-frontend:IMAGE_TAG
           ports:
             - containerPort: 80
 

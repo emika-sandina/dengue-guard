@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: dengue-backend
-          image: thimansa/dengueguard-backend:latest
+          image: thimansa/dengueguard-backend:IMAGE_TAG
           env:
           - name: SUPABASE_URL
             valueFrom:
