@@ -3,6 +3,9 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.heat";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL 
+
 const HeatMap = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -40,7 +43,7 @@ const HeatMap = () => {
     const fetchPatients = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/report-case/data"
+          `${API_BASE_URL}/api/report-case/data`
         );
         const data = await res.json();
 
@@ -67,7 +70,8 @@ const HeatMap = () => {
     const fetchBreedingSites = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/report-sites/data"
+          `${API_BASE_URL}/api/report-sites/data`
+        
         );
         const data = await res.json();
 
