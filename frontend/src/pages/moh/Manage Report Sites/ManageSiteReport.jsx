@@ -3,6 +3,10 @@ import "./manageReportSites.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5000";
+
 
 const SORT_OPTIONS = [
   { value: "datetime", label: "Date & Time (Default)" },
@@ -53,7 +57,7 @@ const ManageReport = () => {
         }
 
         // fetch data from the Express API
-        const response = await fetch("http://localhost:5000/api/site-reports", {
+        const response = await fetch(`${API_BASE_URL}/api/site-reports`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,7 +115,7 @@ const ManageReport = () => {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/site-reports/${siteId}`,
+        `${API_BASE_URL}/api/site-reports/${siteId}`,
         {
           method: "DELETE",
           headers: {
@@ -155,7 +159,7 @@ const ManageReport = () => {
 
       // HTTP protocol PATCH to modify to an exisiting resource
       const response = await fetch(
-        `http://localhost:5000/api/site-reports/${siteId}`,
+        `${API_BASE_URL}/api/site-reports/${siteId}`,
         {
           method: "PATCH",
           headers: {
@@ -203,7 +207,7 @@ const ManageReport = () => {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/site-reports/${siteId}`,
+        `${API_BASE_URL}/api/site-reports/${siteId}`,
         {
           method: "PATCH",
           headers: {
@@ -307,7 +311,7 @@ const ManageReport = () => {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/site-reports/${caseId}`,
+        `${API_BASE_URL}/api/report-cases/site-reports/${caseId}`,
         {
           method: "PATCH",
           headers: {
