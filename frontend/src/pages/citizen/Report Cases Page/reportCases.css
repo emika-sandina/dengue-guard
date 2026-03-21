@@ -7,7 +7,7 @@ body {
 /* Main container */
 .report-container {
   max-width: 1300px;
-  margin: 0 auto;
+  margin: 70px auto;
   padding: 15px;
 }
 
@@ -167,6 +167,7 @@ button[type="submit"]:hover {
 
   .report-container {
     padding: 10px;
+    margin: auto;
   }
 
   form {
@@ -218,6 +219,10 @@ button[type="submit"]:hover {
   .report-form {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+
+  .report-container {
+    margin: auto;
   }
 
   .report-container h1 {

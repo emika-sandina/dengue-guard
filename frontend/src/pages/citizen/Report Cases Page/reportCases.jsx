@@ -153,10 +153,7 @@ function ReportCases() {
     <NavBar></NavBar>
     <div className="report-container">
     <br/>
-    <br/>
-    <br/>
-
-        <h1>Reporting Dengue Cases</h1>
+        <h1>Report Dengue Cases</h1>
         <form onSubmit={handleSubmit} className="report-form">
           <div className="form-left">
             <div className="form-group">
