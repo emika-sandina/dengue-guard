@@ -1,19 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: dengue-ml
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: dengue-ml
   template:
-    metadata:
-      labels:
-        app: dengue-ml
     spec:
       containers:
         - name: dengue-ml
           image: thimansa/dengueguard-ml:IMAGE_TAG
-          ports:
-            - containerPort: 5000
+      restartPolicy: Never      
