@@ -1,22 +1,21 @@
 .sitereport-layout {
   min-height: 100vh;
   background: #f5f7fa;
-  margin-top: 100px;
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-.main-content {
+.rs-main-content {
   width: 100%;
   max-width: 1300px;
-  margin: 0 auto;
-  padding: 15px;
 }
 
 .page-title {
   font-size: 24px;
   font-weight: 700;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -60,7 +59,7 @@ input:focus,
 textarea:focus,
 select:focus {
   border: 1px solid #007bff;
-  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 0 6px rgba(0,123,255,0.3);
 }
 
 input:hover,
@@ -125,7 +124,7 @@ textarea {
 
 .submit-btn:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
 .location-link {
@@ -203,7 +202,7 @@ textarea {
 }
 /* --- Desktop and Tablet Adjustments (Standard screens) --- */
 @media (max-width: 1024px) {
-  .main-content {
+  .rs-main-content {
     padding: 120px 40px 40px 40px; /* Reduce large desktop padding */
   }
 
@@ -214,19 +213,19 @@ textarea {
 
 /* --- Mobile View (768px and below) --- */
 @media (max-width: 768px) {
-  .main-content {
-    padding: 20px 20px 20px 20px; /* Slimmer padding for mobile */
+  .rs-main-content {
+     padding: 120px 20px 20px 20px;/* Slimmer padding for mobile */
   }
 
   .page-title {
     text-align: center;
     font-size: 20px;
-    margin-top: 50px;
+    margin-bottom: 20px;
   }
 
   .report-card {
     flex-direction: column; /* Stack the left and right panels vertically */
-    padding: 25px;
+    padding: 20px;
     gap: 20px;
   }
 
@@ -238,12 +237,12 @@ textarea {
   input,
   textarea,
   select {
-    padding: 15px;
-    font-size: 16px;
+    padding: 15px; 
+    font-size: 16px; 
   }
 
   .urgency-buttons {
-    flex-direction: row;
+    flex-direction: row; 
     flex-wrap: wrap;
   }
 
@@ -257,7 +256,7 @@ textarea {
     margin: 20px 0;
   }
 
-  .popup-box {
+    .popup-box {
     width: 90%;
     padding: 20px;
   }
@@ -279,7 +278,7 @@ textarea {
 /* --- Small Phones (480px and below) --- */
 @media (max-width: 480px) {
   .report-card {
-    padding: 25px;
+    padding: 90px 15px 15px 15px;
     border-radius: 12px;
   }
 
@@ -287,7 +286,7 @@ textarea {
     font-size: 16px;
   }
 
-  .popup-box {
+    .popup-box {
     width: 95%;
     padding: 18px;
   }

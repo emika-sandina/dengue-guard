@@ -1,7 +1,7 @@
 import NavBar from "../../../components/common/Navbar/NavBar";
 import "./reportsites.css";
 import { useState } from "react";
-import Dropdown from "../../../components/common/Dropdown/Dropdown";
+import { mohAreas } from "../../../services/mohAreas";
 
 function ReportSites() {
   //array for certain issue types
@@ -21,7 +21,7 @@ function ReportSites() {
   const [photo, setPhoto] = useState(null);
   const [issueType, setIssueType] = useState("");
   const [urgency, setUrgency] = useState("Low");
-  const [mohArea, setMohArea] = useState(null);
+  const [mohArea, setMohArea] = useState("");
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
@@ -134,7 +134,7 @@ function ReportSites() {
         setPhoto(null);
         setIssueType(issueTypes[0]);
         setUrgency("Low");
-        setMohArea(null);
+        setMohArea(mohAreas[0]);
       } else {
         setPopUpMessage(result.error || "Failed to submit the report!");
         setPopUpType("error");
@@ -149,7 +149,7 @@ function ReportSites() {
     <div className="sitereport-layout">
       <NavBar role="Citizen" />
 
-      <main className="main-content">
+      <main className="rs-main-content">
         <h2 className="page-title">Report Dengue Breeding Sites</h2>
 
         <div className="report-card">
@@ -238,8 +238,8 @@ function ReportSites() {
             <button
               onClick={() => setShowPopUp(false)}
               className="popup-close-btn"
-            >
-              OK
+              >
+                OK
             </button>
           </div>
         </div>
