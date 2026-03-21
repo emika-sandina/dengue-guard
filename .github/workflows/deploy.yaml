@@ -129,4 +129,5 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           sed -i "s|IMAGE_TAG|${{ env.IMAGE_TAG }}|g" k8s/*.yaml
+          kubectl delete job dengue-ml --ignore-not-found
           kubectl apply -f k8s/
