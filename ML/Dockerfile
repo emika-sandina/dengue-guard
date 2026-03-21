@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Default command (change based on what you want to run)
-CMD ["python", "predict.py"]
+CMD ["python", "scripts/predict.py"]
