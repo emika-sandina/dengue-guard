@@ -21,7 +21,16 @@ export const login = async (req, res) => {
     });
 
     if (signInError) {
-      return res.status(401).json({ error: signInError.message });
+      // signInError often contains useful hints (e.g., "fetch failed", "Invalid login credentials", etc.)
+      console.error("Supabase signInWithPassword error:", signInError);
+      return res.status(401).json({
+        error: signInError.message || "Login failed",
+        details: {
+          name: signInError.name,
+          status: signInError.status,
+          code: signInError.code,
+        },
+      });
     }
 
     // 2. Fetch profile for role and moh_area
