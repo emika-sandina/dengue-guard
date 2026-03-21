@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { supabase } from "../supabase.js";
+import { supabase, supabaseAuth } from "../supabase.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -15,7 +15,7 @@ export const login = async (req, res) => {
     }
 
     // 1. Sign in with Supabase
-    const { data: { user }, error: signInError } = await supabase.auth.signInWithPassword({
+    const { data: { user }, error: signInError } = await supabaseAuth.auth.signInWithPassword({
       email,
       password,
     });
