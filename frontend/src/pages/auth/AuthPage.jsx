@@ -5,6 +5,7 @@ import shieldLogo from '../../assets/shieldsvg.svg';
 import './auth.css';
 import Dropdown from '../citizen/Report Cases Page/Dropdown.jsx';
 console.log("VITE_API_BASE_URL =", import.meta.env.VITE_API_BASE_URL);
+console.log("VITE_API_BASE_URL =", import.meta.env.VITE_API_BASE_URL);
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ;
 
@@ -25,14 +26,23 @@ const AuthPage = () => {
     try {
       if (isLogin) {
         // Sign In via Professional Backend API
-        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        const loginUrl = `${API_BASE_URL}/api/auth/login`;
+        const response = await fetch(loginUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-        
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Login failed');
+
+        const contentType = response.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+          ? await response.json()
+          : { error: await response.text() };
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || `Login failed (${response.status}) at ${loginUrl}`
+          );
+        }
 
         // Save token and minimal user data for our ProtectedRoutes and Pages
         localStorage.setItem('dgToken', data.token);
