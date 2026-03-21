@@ -59,7 +59,7 @@ input:focus,
 textarea:focus,
 select:focus {
   border: 1px solid #007bff;
-  box-shadow: 0 0 6px rgba(0,123,255,0.3);
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
 }
 
 input:hover,
@@ -124,7 +124,7 @@ textarea {
 
 .submit-btn:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
 }
 
 .location-link {
@@ -214,7 +214,7 @@ textarea {
 /* --- Mobile View (768px and below) --- */
 @media (max-width: 768px) {
   .rs-main-content {
-     padding: 120px 20px 20px 20px;/* Slimmer padding for mobile */
+    padding: 120px 20px 20px 20px; /* Slimmer padding for mobile */
   }
 
   .page-title {
@@ -237,12 +237,12 @@ textarea {
   input,
   textarea,
   select {
-    padding: 15px; 
-    font-size: 16px; 
+    padding: 15px;
+    font-size: 16px;
   }
 
   .urgency-buttons {
-    flex-direction: row; 
+    flex-direction: row;
     flex-wrap: wrap;
   }
 
@@ -256,7 +256,7 @@ textarea {
     margin: 20px 0;
   }
 
-    .popup-box {
+  .popup-box {
     width: 90%;
     padding: 20px;
   }
@@ -278,7 +278,7 @@ textarea {
 /* --- Small Phones (480px and below) --- */
 @media (max-width: 480px) {
   .report-card {
-    padding: 90px 15px 15px 15px;
+    padding: 20px 15px 15px 15px;
     border-radius: 12px;
   }
 
@@ -286,7 +286,7 @@ textarea {
     font-size: 16px;
   }
 
-    .popup-box {
+  .popup-box {
     width: 95%;
     padding: 18px;
   }
