@@ -49,6 +49,7 @@ const SendAnnouncements = () => {
 
   return (
     <div className="container">
+      <NavBar role="MOH"/>
       <div className="card">
         <h2 className="title">Send Announcements To Citizens</h2>
 

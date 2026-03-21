@@ -6,15 +6,23 @@ dotenv.config();
 //function to insert data into the tabl
 export const insertReportCases = async (data) => {
 
-  //Map frontend data to column names
   const payload = {
     reporting_for: data.reportingFor,
-    symptoms_start_date: data.symptomsStartDate, 
+    symptoms_start_date: data.symptomsStartDate,
     symptoms: Array.isArray(data.symptoms) ? data.symptoms : [data.symptoms],
     location: data.location,
     doctor_status: data.doctorStatus,
     dengue_diagnosis: data.dengueDiagnosis,
-    moh_area: typeof data.mohArea === 'object' && data.mohArea !== null ? data.mohArea.value : data.mohArea,
+
+    // mohArea handling (supports both string and object)
+    moh_area:
+      typeof data.mohArea === "object" && data.mohArea !== null
+        ? data.mohArea.value
+        : data.mohArea,
+
+    // coordinates handling
+    latitude: data.coordinates?.lat ?? data.latitude ?? null,
+    longtitude: data.coordinates?.lng ?? data.longitude ?? data.longtitude ?? null,
   };
 
   // Insert the data to table
@@ -31,5 +39,19 @@ export const insertReportCases = async (data) => {
   return insertedData;
 };
 
+export const fetchReportCaseLocations = async () => {
+  const { data, error } = await supabase
+    .from("dengue_cases")
+    .select("id, reporting_for, location, latitude, longtitude, created_at")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
 
+  return (data ?? []).map((row) => ({
+    ...row,
+    coordinates:
+      row.latitude != null && row.longtitude != null
+        ? { lat: row.latitude, lng: row.longtitude }
+        : null,
+  }));
 
+};

@@ -15,10 +15,6 @@
 .citizen-layout {
   min-height: 100vh;
   background: var(--bg-gradient);
-  font-family:
-    "Inter",
-    -apple-system,
-    sans-serif;
   padding: 20px;
   color: var(--text-dark);
 }
@@ -168,6 +164,43 @@
   font-weight: 500;
 }
 
+.heatmap-sectioncm {
+  background: #fff;
+  padding: 15px;
+  border-radius: 16px;
+  border: 1px solid #eee;
+}
+
+.risk-legendcm {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.legend-dot {
+  font-size: 14px;
+}
+
+.legend-low {
+  color: blue;
+}
+
+.legend-moderate {
+  color: lime;
+}
+
+.legend-high {
+  color: red;
+}
+
+.data-footercm {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #888;
+}
+
 .statscm {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -202,6 +235,13 @@
     flex-direction: column;
     text-align: center;
   }
+
+  .risk-legendcm {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
   .citizen-layout {
     margin-top: 100px; /* Mobile - pushes text down but keeps map/background full screen */
   }

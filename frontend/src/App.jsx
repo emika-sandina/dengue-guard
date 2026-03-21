@@ -5,13 +5,14 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import AuthPage from "./pages/auth/AuthPage";
+import AuthPage from "./pages/auth/AuthPage.jsx";
 import CitizenHome from "./pages/citizen/Home Page/CitizenHome";
 import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
 import ReportCases from "./pages/citizen/Report Cases Page/reportCases";
 import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
+import ManageReport from "./pages/moh/Manage Report Sites/ManageSiteReport.jsx";
 import ManageReportedDengueCases from "./pages/moh/Manage Reported Dengue Cases/ManageReportedDengueCases";
 
 function App() {
@@ -55,6 +56,12 @@ function App() {
         <Route path="/moh/send-announcements" element={
           <ProtectedRoute allowedRole="moh">
             <SendAnnouncements />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/moh/site-reports" element={
+          <ProtectedRoute allowedRole="moh">
+            <ManageReport />
           </ProtectedRoute>
         } />
 
