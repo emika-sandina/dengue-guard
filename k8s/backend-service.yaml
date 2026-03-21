@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: dengueguard-backend-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: dengueguard-backend
   ports:
