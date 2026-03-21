@@ -22,7 +22,7 @@ jobs:
           args: >
             -Dsonar.projectKey=dengueguard
             -Dsonar.organization=senuthmi
-            -Dsonar.sources=frontend,backend,ml
+            -Dsonar.sources=frontend,backend,ML
             -Dsonar.branch.name=main
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
