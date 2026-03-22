@@ -87,3 +87,66 @@ def get_weekly_weather(area_name, max_retries=3):
 
     print(f"Failed to fetch weather for {area_name} after {max_retries} attempts.")
     return None
+
+# FETCH ALL AREAS IN PARALLEL 
+# ThreadPoolExecutor fetches 10 areas at the same time instead of one by one.
+# This reduces wait time from ~30 mins to ~3 mins for 367 areas.
+
+all_areas       = list(MOH_COORDS.keys())
+weather_results = []
+failed_areas    = []
+
+print(f"\nFetching weather for {len(all_areas)} areas. Please wait...")
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+    future_to_area = {
+        executor.submit(get_weekly_weather, area): area
+        for area in all_areas
+    }
+
+    for future in concurrent.futures.as_completed(future_to_area):
+        area   = future_to_area[future]
+        result = future.result()
+
+        if result is not None:
+            weather_results.append(result)
+        else:
+            failed_areas.append(area)
+
+print(f"\nFetched : {len(weather_results)} areas")
+print(f"Failed  : {len(failed_areas)} areas")
+if failed_areas:
+    print(f"Failed areas: {failed_areas}")
+
+
+# SCALE TO MATCH TRAINING DATA 
+# The model was trained on z-scored weather (mean=0, std=1).
+# Raw API values like temp=29°C would be out of range and break predictions.
+# We apply the exact same scaling that was used during training.
+
+weather_df = pd.DataFrame(weather_results)
+
+WEATHER_COLS = [
+    "avg_temperature_2m_mean",
+    "avg_temperature_2m_max",
+    "avg_precipitation_sum",
+    "avg_relative_humidity_2m_mean",
+    "temp_range",
+    "heat_humidity_index",
+]
+
+for col in WEATHER_COLS:
+    mean = WEATHER_STATS[col]["mean"]
+    std  = WEATHER_STATS[col]["std"]
+    weather_df[col] = (weather_df[col] - mean) / std
+
+print("\nSample of scaled weather (should look like values between -3 and 3):")
+print(weather_df[WEATHER_COLS].head(3).round(3).to_string())
+
+
+# SAVE 
+
+os.makedirs("data", exist_ok=True)
+weather_df.to_csv("data/current_weather.csv", index=False)
+
+print("\nSaved to data/current_weather.csv ✔")    
