@@ -130,16 +130,16 @@ print(f"Max     : {results_df['predicted_cases'].max()}")
 
 top20 = results_df.head(20)
 
-plt.figure(figsize=(12, 6))
-plt.barh(
-    top20["moh_area"][::-1],        # reverse so highest is at the top
-    top20["predicted_cases"][::-1],
-    color="steelblue", edgecolor="white"
-)
-plt.xlabel("Predicted Cases")
-plt.title("Top 20 MOH Areas — Predicted Dengue Cases")
-plt.tight_layout()
-plt.show()
+# plt.figure(figsize=(12, 6))
+# plt.barh(
+#     top20["moh_area"][::-1],        # reverse so highest is at the top
+#     top20["predicted_cases"][::-1],
+#     color="steelblue", edgecolor="white"
+# )
+# plt.xlabel("Predicted Cases")
+# plt.title("Top 20 MOH Areas — Predicted Dengue Cases")
+# plt.tight_layout()
+# plt.show()
 
 
 
