@@ -1,7 +1,6 @@
 /* Page background */
 body {
-  background-color: #f6f8fa;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #CCE7F5;
 }
 
 /* Main container */
@@ -16,7 +15,7 @@ body {
   font-size: 24px;
   font-weight: 700;
   margin: 20px 0;
-  color: #111;
+  color: #0b2d39;
 }
 
 /* Form card */
