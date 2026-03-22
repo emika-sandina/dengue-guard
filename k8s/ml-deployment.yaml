@@ -1,0 +1,11 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dengue-ml
+spec:
+  template:
+    spec:
+      containers:
+        - name: dengue-ml
+          image: thimansa/dengueguard-ml:IMAGE_TAG
+      restartPolicy: Never      

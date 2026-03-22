@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengueguard-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengueguard-frontend
+  template:
+    metadata:
+      labels:
+        app: dengueguard-frontend
+    spec:
+      containers:
+        - name: dengue-frontend
+          image: thimansa/dengueguard-frontend:IMAGE_TAG
+          ports:
+            - containerPort: 80
+
+          volumeMounts:
+            - name: frontend-config-volume
+              mountPath: /usr/share/nginx/html/env.js
+              subPath: env.js
+
+      volumes:
+        - name: frontend-config-volume
+          configMap:
+            name: frontend-config

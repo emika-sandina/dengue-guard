@@ -1,6 +1,6 @@
 import "./citizenhome.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
-import Chatbot from "../../../components/citizen/ChatBot/Chatbot";
+import Chatbot from "../../../components/citizen/Chatbot/Chatbot";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
@@ -11,7 +11,6 @@ import announcementPlaceholder from "../../../assets/announcements.svg";
 import { useEffect, useState } from "react";
 
 import HeatMap from "../../../components/common/HeatMap/Heatmap.jsx";
-import { supabase } from "../../../lib/supabaseClient";
 import { fetchDashboardSummary } from "../../../services/citizenApi";
 // need to update heatmap
 
@@ -24,16 +23,12 @@ function CitizenHome() {
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
-
-        if (userError) throw userError;
-
-        if (!user?.id) {
-          throw new Error("User is not logged in");
+        const userStr = localStorage.getItem("dgUser");
+        if (!userStr) {
+          throw new Error("Auth session missing");
         }
+        const user = JSON.parse(userStr);
+        if (!user?.id) throw new Error("Auth session missing");
 
         const summary = await fetchDashboardSummary(user.id);
 

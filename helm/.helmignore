@@ -1,0 +1,13 @@
+.DS_Store
+.git/
+.github/
+.idea/
+.vscode/
+node_modules/
+npm-debug.log
+yarn-error.log
+*.swp
+*.tmp
+*.log
+.env
+.env.*

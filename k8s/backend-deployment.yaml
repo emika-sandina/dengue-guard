@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dengueguard-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dengueguard-backend
+  template:
+    metadata:
+      labels:
+        app: dengueguard-backend
+    spec:
+      containers:
+        - name: dengue-backend
+          image: thimansa/dengueguard-backend:IMAGE_TAG
+          envFrom:
+            - secretRef:
+                name: backend-secret
+          ports:
+            - containerPort: 5000

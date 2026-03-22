@@ -1,0 +1,129 @@
+name: Deploy DengueGuard to GKE
+
+on:
+  push:
+      branches:
+        - main
+        - deployment
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+        # SonarCloud scan
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=dengueguard
+            -Dsonar.organization=senuthmi
+            -Dsonar.sources=frontend,backend,ML
+            -Dsonar.branch.name=main
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+
+      # OWASP Dependency Check
+      - name: OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "DengueGuard"
+          path: "."
+          format: "HTML"
+          out: "reports"
+
+      # Upload Dependency Check report
+      - name: Upload Dependency Check Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: reports
+
+      # Set Git SHA tag
+      - name: Set image tag
+        run: echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      # Docker Login
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build Backend Image 
+      - name: Build Backend Image
+        run: docker build -t thimansa/dengueguard-backend:${{ env.IMAGE_TAG }} ./backend 
+
+      # Build & Push Frontend Image
+      - name: Build Frontend Image
+        run: |
+          docker build \
+            --build-arg VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }} \
+            --build-arg VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }} \
+            --build-arg VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }} \
+            -t thimansa/dengueguard-frontend:${{ env.IMAGE_TAG }} \
+            ./frontend
+
+      # Build ML Image
+      - name: Build ML Image
+        run: docker build -t thimansa/dengueguard-ml:${{ env.IMAGE_TAG }} ./ML
+
+      # Trivy container scan (use Git SHA tagged images)
+      - name: Trivy Scan Backend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: thimansa/dengueguard-backend:${{ env.IMAGE_TAG }}
+          format: json
+          
+      - name: Trivy Scan Frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: thimansa/dengueguard-frontend:${{ env.IMAGE_TAG }}
+          format: json
+
+      - name: Trivy Scan ML
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: thimansa/dengueguard-ml:${{ env.IMAGE_TAG }}
+          format: json
+
+      # Push Backend Image 
+      - name: Push Backend Image
+        run: docker push thimansa/dengueguard-backend:${{ env.IMAGE_TAG }}
+      
+      # Push Frontend Image 
+      - name: Push Frontend Image 
+        run: docker push thimansa/dengueguard-frontend:${{ env.IMAGE_TAG }}  \
+
+      # Push ML Image
+      - name: Push ML Image
+        run: docker push thimansa/dengueguard-ml:${{ env.IMAGE_TAG }}    
+
+      # Authenticate to GCP
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install GKE Auth Plugin
+        run: gcloud components install gke-gcloud-auth-plugin --quiet
+
+      - name: Get GKE Credentials
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} \
+          --zone ${{ secrets.GKE_ZONE }} \
+          --project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Deploy to Kubernetes
+        run: |
+          sed -i "s|IMAGE_TAG|${{ env.IMAGE_TAG }}|g" k8s/*.yaml
+          kubectl delete job dengue-ml --ignore-not-found
+          kubectl apply -f k8s/

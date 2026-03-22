@@ -3,6 +3,9 @@ import './chatbot.css'
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5000";
 
 function Chatbot() {
 
@@ -34,7 +37,7 @@ function Chatbot() {
         setInput("")
 
         //Send a post request to backend
-        axios.post('http://localhost:5000/chatbot/ask',{input})
+        axios.post(`${API_BASE_URL}/chatbot/ask`, { input })
         .then((res)=>res.data)// Extract response body
         .then((finalRes)=>{
             console.log(finalRes);

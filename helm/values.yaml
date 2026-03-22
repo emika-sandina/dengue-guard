@@ -1,0 +1,44 @@
+nameOverride: ""
+fullnameOverride: ""
+
+global:
+  imagePullSecrets: []
+
+backendImageTag: latest
+frontendImageTag: latest
+
+backend:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    repository: thimansa/dengueguard-backend
+    tag: {{ .Values.backendImageTag }}
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 5000
+
+  containerPort: 5000
+
+frontend:
+  enabled: true
+  replicaCount: 1
+
+  image:
+    repository: thimansa/dengueguard-frontend
+    tag: {{ .Values.frontendImageTag }}
+    pullPolicy: IfNotPresent
+
+  service:
+    type: LoadBalancer
+    port: 80
+
+  containerPort: 80
+
+  config:
+    create: true
+    supabaseUrl: ""
+    supabaseAnonKey: ""
+    apiUrl: ""

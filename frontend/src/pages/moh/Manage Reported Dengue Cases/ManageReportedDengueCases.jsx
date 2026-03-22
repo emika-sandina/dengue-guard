@@ -4,6 +4,12 @@ import NavBar from "../../../components/common/Navbar/NavBar"; // imports the na
 import { supabase } from "../../../lib/supabaseClient"; // Supabase client to read current user session
 import "./ManageDengueCases.css"; // imports the css file for styling
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5000";
+
+
+
 //sort option, a list of sorting options for the dropdown
 const SORT_OPTIONS = [
   { value: "datetime", label: "Date & Time (Default)" },
@@ -36,6 +42,8 @@ function ManageDengueCases() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
 
+  
+
   // On mount: read the logged-in MOH officer's moh_area from Supabase,
   // then fetch only the cases that belong to that division.
   // On mount: read the logged-in MOH officer's data from localStorage (set during professional login),
@@ -64,7 +72,7 @@ function ManageDengueCases() {
   const fetchCases = async () => {
     try {
       const token = localStorage.getItem('dgToken');
-      const url = "http://localhost:5000/api/report-cases";
+      const url =`${API_BASE_URL}/api/report-cases`;
       
       console.log("Fetching cases from backend with Professional JWT...");
       const res = await fetch(url, {
@@ -112,7 +120,7 @@ function ManageDengueCases() {
   const handleResolve = async (id) => {
     try {
       const token = localStorage.getItem('dgToken');
-      await fetch(`http://localhost:5000/api/report-cases/${id}/status`, {
+      await fetch(`${API_BASE_URL}/api/report-cases/${id}/status`, {
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",
@@ -138,7 +146,7 @@ function ManageDengueCases() {
   const confirmRemoval = async () => {
     try {
       const token = localStorage.getItem('dgToken');
-      await fetch(`http://localhost:5000/api/report-cases/${removingCaseId}`, { 
+      await fetch(`${API_BASE_URL}/api/report-cases/${removingCaseId}`, { 
         method: "DELETE",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -169,7 +177,7 @@ function ManageDengueCases() {
 
     try {
       const token = localStorage.getItem('dgToken');
-      await fetch(`http://localhost:5000/api/report-cases/${assigningCaseId}/assign`, {
+      await fetch(`${API_BASE_URL}/api/report-cases/${assigningCaseId}/assign`, {
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",
