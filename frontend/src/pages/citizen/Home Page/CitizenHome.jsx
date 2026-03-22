@@ -128,14 +128,15 @@ function CitizenHome() {
 
           <section className="heatmap-sectioncm">
             <div className="risk-legendcm">
-              <span className="risk-legend-labelcm">
-                <strong>Risk Level:</strong>
-              </span>
               <span className="risk-legend-itemscm">
-                <span className="legend-dot legend-low">●</span> Low &nbsp;
-                <span className="legend-dot legend-moderate">●</span> Moderate
-                &nbsp;
-                <span className="legend-dot legend-high">●</span> High Risk
+                <span role="img" aria-label="Mosquito breeding site marker">
+                  🦟
+                </span>
+                Breeding Site &nbsp;|&nbsp;
+                <span role="img" aria-label="Dengue case marker">
+                  😷
+                </span>
+                Dengue Case
               </span>
             </div>
 

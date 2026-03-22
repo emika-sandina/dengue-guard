@@ -43,7 +43,7 @@ function NavBar({ role = "Citizen" }) {
                   Report Site
                 </NavLink>
                 <NavLink to="/citizen/report-cases" onClick={closeMenu}>
-                  Report Symptoms
+                  Report Cases
                 </NavLink>
                 <NavLink to="/citizen/risk-map" onClick={closeMenu}>
                   Risk Heat Map
@@ -71,6 +71,9 @@ function NavBar({ role = "Citizen" }) {
                 </NavLink>
                 <NavLink to="/moh/send-announcements" onClick={closeMenu}>
                   Send Announcements
+                </NavLink>
+                <NavLink to="/moh/profile" onClick={closeMenu}>
+                  Profile
                 </NavLink>
               </>
             )}
