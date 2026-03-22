@@ -11,6 +11,7 @@ import manageSitesRoutes from "./routes/manageSites.routes.js";
 import announcementRoutes from "./routes/announcements.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import mlRoutes from "./routes/ml.routes.js";
 
 const app = express();
 
@@ -34,6 +35,8 @@ app.use("/api", announcementRoutes);
 app.use("/api", dashboardRoutes);
 //register manage sites route
 app.use("/api",manageSitesRoutes);
+//register ml route
+app.use("/api/ml", mlRoutes);
 
 //export app to server.js
 export default app;
