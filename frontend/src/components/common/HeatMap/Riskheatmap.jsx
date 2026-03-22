@@ -121,28 +121,16 @@ const RiskHeatMap = () => {
   }, [timestamp]);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "600px", display: "flex", flexDirection: "column", gap: "12px" }}>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+    <div className="heatmap-container">
+      <div className="heatmap-header-controls">
         <button 
+          className="btn-refresh"
           onClick={handleRefresh} 
           disabled={isRefreshing}
-          style={{
-            padding: "10px 18px",
-            backgroundColor: isRefreshing ? "#93c5fd" : "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: isRefreshing ? "not-allowed" : "pointer",
-            fontWeight: "600",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            transition: "background-color 0.2s"
-          }}
         >
           {isRefreshing ? (
              <>
-               <span style={{ width: "16px", height: "16px", border: "2px solid #fff", borderTop: "2px solid transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }}></span>
+               <span className="spinner-small"></span>
                Predicting...
              </>
           ) : (
@@ -150,66 +138,23 @@ const RiskHeatMap = () => {
           )}
         </button>
       </div>
-      <div style={{ position: "relative", width: "100%", flex: 1 }}>
+      <div className="map-wrapper-relative">
         {loading && !error && (
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "#f1f5f9",
-            borderRadius: "16px",
-            zIndex: 10,
-            flexDirection: "column",
-            gap: "12px",
-          }}
-        >
-          <div
-            style={{
-              width: "40px",
-              height: "40px",
-              border: "4px solid #e2e8f0",
-              borderTop: "4px solid #3b82f6",
-              borderRadius: "50%",
-              animation: "spin 0.8s linear infinite",
-            }}
-          />
-          <p style={{ color: "#64748b", margin: 0, fontSize: "0.95rem" }}>
-            Loading risk data…
-          </p>
+        <div className="overlay-container loading-overlay">
+          <div className="spinner-large" />
+          <p className="loading-text">Loading risk data…</p>
         </div>
       )}
       {error && (
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "#fef2f2",
-            borderRadius: "16px",
-            zIndex: 10,
-          }}
-        >
-          <p style={{ color: "#ef4444", margin: 0 }}>{error}</p>
+        <div className="overlay-container error-overlay">
+          <p className="error-text">{error}</p>
         </div>
       )}
       <div
         ref={mapRef}
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: "16px",
-          boxShadow:
-            "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)",
-          zIndex: 0,
-        }}
+        className="leaflet-map-container"
       />
       </div>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };
