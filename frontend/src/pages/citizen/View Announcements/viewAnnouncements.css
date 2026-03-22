@@ -1,27 +1,93 @@
+/* viewAnnouncements.css */
+.citizen-layout {
+  padding-top: 100px; /* Offset for fixed NavBar */
+  min-height: 100vh;
+}
+
+.announcements-container {
+  /* Remove margin-top: 150px if it exists in your local version */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+
+.view-header {
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.view-header h1 {
+  font-size: 2.5rem;
+  color: #1e2b83; /* Consistent with Citizen Home */
+  font-weight: 700;
+}
+
+.announcements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
 .alert-card {
-    border-left: 5px solid #ccc;
-    padding: 15px;
-    margin-bottom: 15px;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.alert-card.critical {
-    border-left-color: #ff4d4d;
+.alert-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(31, 38, 135, 0.1);
 }
 
-.alert-card.warning {
-    border-left-color: #ffa500;
+.alert-badge {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  background: #e0e0e0;
 }
 
-.alert-card.info {
-    border-left-color: #3498db;
+/* Logic-based accents */
+.type-warning .alert-badge { background: #fff3e0; color: #ef6c00; }
+.type-critical .alert-badge { background: #ffebee; color: #c62828; }
+.type-info .alert-badge { background: #e0f2f1; color: #00695c; }
+
+.alert-title {
+  font-size: 1.25rem;
+  color: #0b2d39; /* Consistent with Send Announcements */
+  margin-bottom: 8px;
 }
 
-.area-tag {
-    font-size: 0.8rem;
-    background: #f0f0f0;
-    padding: 2px 8px;
-    border-radius: 10px;
+.alert-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: #546e7a;
+  margin-bottom: 15px;
+}
+
+.alert-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #333;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Truncate long descriptions */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .view-header h1 { font-size: 2rem; }
+  .announcements-grid { grid-template-columns: 1fr; }
 }
