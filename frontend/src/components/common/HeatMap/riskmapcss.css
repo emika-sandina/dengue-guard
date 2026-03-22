@@ -1,0 +1,118 @@
+.app-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Inter", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.app-header h1 {
+  font-size: 2.8rem;
+  color: #0d2d6d;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.app-header p {
+  font-size: 1.15rem;
+  color: #4a5568;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 900px) {
+  .app-main {
+    flex-direction: row;
+  }
+
+  .map-section {
+    flex: 2;
+    min-width: 0; /* Prevents flex blowout */
+  }
+
+  .info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+}
+
+.card h2 {
+  font-size: 1.3rem;
+  color: #2d3748;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+  border-bottom: 2px solid #edf2f7;
+  padding-bottom: 0.75rem;
+}
+
+.card p {
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card ul li {
+  color: #4a5568;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  font-size: 0.95rem;
+}
+
+.color-box {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.color-box.red {
+  background-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+}
+
+.color-box.lime {
+  background-color: #84cc16;
+  box-shadow: 0 0 12px rgba(132, 204, 22, 0.5);
+}
+
+.color-box.blue {
+  background-color: #3b82f6;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
+}

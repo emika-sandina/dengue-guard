@@ -24,6 +24,8 @@ const RiskHeatMap = () => {
       try {
         // Fetch both data files in parallel
         const [predictionsRes, coordsRes] = await Promise.all([
+          fetch("/data/predictions.json"),
+          fetch("/data/valid_moh_coords.json"),
         ]);
         const predictions = await predictionsRes.json();
         const coords = await coordsRes.json();
