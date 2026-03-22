@@ -16,6 +16,8 @@ import ManageReport from "./pages/moh/Manage Report Sites/ManageSiteReport.jsx";
 import ManageReportedDengueCases from "./pages/moh/Manage Reported Dengue Cases/ManageReportedDengueCases";
 import Profile from "./pages/common/Profile/Profile.jsx";
 import ViewAnnouncements from './pages/citizen/View Announcements/ViewAnnouncements';
+import HeatmapCommonPage from "./components/common/Heatmap/heatmapCommonpage.jsx";
+
 
 function App() {
   return (
@@ -50,6 +52,13 @@ function App() {
             <ViewAnnouncements />
           </ProtectedRoute>
         } />
+
+        <Route path="/citizen/risk-map" element={
+          <ProtectedRoute allowedRole="citizen">
+            <HeatmapCommonPage role="Citizen" />
+          </ProtectedRoute>
+        } />
+
 
         {/* Protected MOH Routes */}
         <Route path="/moh/home" element={
@@ -88,6 +97,12 @@ function App() {
             <Profile />
           </ProtectedRoute>
         } />
+        <Route path="/moh/risk-map" element={
+          <ProtectedRoute allowedRole="moh">
+            <HeatmapCommonPage role="MOH" />
+          </ProtectedRoute>
+        } />
+
 
         {/* Default Redirect: Send unauthenticated users to login */}
         <Route path="/" element={<Navigate to="/login" />} />

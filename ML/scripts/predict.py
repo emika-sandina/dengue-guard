@@ -10,7 +10,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
+# Set to True if   run weather_fetch.py first.
+# False = use historical weather from test.csv 
+# True  = use live weather from data/current_weather.csv
+USE_LIVE_WEATHER = True
 
 #  LOAD SAVED MODEL AND ENCODER
 
@@ -67,9 +70,32 @@ test_df = pd.read_csv("data/test.csv")
 # Grab the very last week for each area — that's our prediction input
 last_week_df = test_df.sort_values("week").groupby("moh_area").tail(1)
 
+last_week_df = last_week_df.copy()
+
+# update week_sin / week_cos for the NEXT week we are predicting
+next_week = int(test_df["week"].max()) + 1
+last_week_df["week_sin"] = np.sin(2 * np.pi * next_week / 52)
+last_week_df["week_cos"] = np.cos(2 * np.pi * next_week / 52)
+
+# re-encode area names in case the column is missing
+last_week_df["area_encoded"] = encoder.transform(last_week_df["moh_area"])
+
+if USE_LIVE_WEATHER:
+    # swap the 6 weather columns for fresh API values from weather_fetch.py
+    # lag features (cases_lag1 etc.) still come from test.csv — no live case API exists
+    WEATHER_COLS = [
+        "avg_temperature_2m_mean", "avg_temperature_2m_max",
+        "avg_precipitation_sum", "avg_relative_humidity_2m_mean",
+        "temp_range", "heat_humidity_index",
+    ]
+    live_df = pd.read_csv("data/current_weather.csv")
+    last_week_df = last_week_df.drop(columns=WEATHER_COLS)
+    last_week_df = last_week_df.merge(live_df, on="moh_area", how="left")
+    print(f"Using LIVE weather   — predicting week #{next_week}")
+else:
+    print(f"Using HISTORICAL weather — predicting week #{next_week}")
+
 X = last_week_df[FEATURES]
-
-
 
 #  GENERATE PREDICTIONS
 
@@ -104,16 +130,16 @@ print(f"Max     : {results_df['predicted_cases'].max()}")
 
 top20 = results_df.head(20)
 
-plt.figure(figsize=(12, 6))
-plt.barh(
-    top20["moh_area"][::-1],        # reverse so highest is at the top
-    top20["predicted_cases"][::-1],
-    color="steelblue", edgecolor="white"
-)
-plt.xlabel("Predicted Cases")
-plt.title("Top 20 MOH Areas — Predicted Dengue Cases")
-plt.tight_layout()
-plt.show()
+# plt.figure(figsize=(12, 6))
+# plt.barh(
+#     top20["moh_area"][::-1],        # reverse so highest is at the top
+#     top20["predicted_cases"][::-1],
+#     color="steelblue", edgecolor="white"
+# )
+# plt.xlabel("Predicted Cases")
+# plt.title("Top 20 MOH Areas — Predicted Dengue Cases")
+# plt.tight_layout()
+# plt.show()
 
 
 

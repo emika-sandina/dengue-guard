@@ -177,7 +177,7 @@ axes[1].set(title="Cases Over Time (first 200 test rows)", xlabel="Index", ylabe
 axes[1].legend()
 
 plt.tight_layout()
-plt.show()
+# plt.show()
 
 
 #  FEATURE IMPORTANCE
@@ -195,7 +195,7 @@ importance.plot(kind="barh", color="steelblue", edgecolor="white")
 plt.title("Feature Importance")
 plt.xlabel("Importance Score")
 plt.tight_layout()
-plt.show()
+# plt.show()
 
 print("\nTop 5 most important features:")
 print(importance.tail(5).to_string())
