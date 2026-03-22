@@ -1,5 +1,3 @@
-// File: frontend/src/pages/citizen/View Announcements/ViewAnnouncements.jsx
-
 import React, { useState, useEffect } from 'react';
 import './viewAnnouncements.css';
 import NavBar from "../../../components/common/Navbar/NavBar";
@@ -9,7 +7,11 @@ const ViewAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [dismissedAlerts, setDismissedAlerts] = useState(new Set());
+    const [expandedAlerts, setExpandedAlerts] = useState(new Set());
+    const [dismissedAlerts, setDismissedAlerts] = useState(() => {
+        const saved = localStorage.getItem('dismissedAlerts');
+        return saved ? new Set(JSON.parse(saved)) : new Set();
+    });
 
     useEffect(() => {
         const loadAnnouncements = async () => {
@@ -28,7 +30,23 @@ const ViewAnnouncements = () => {
     }, []);
 
     const handleDismiss = (id) => {
-        setDismissedAlerts(prev => new Set(prev).add(id));
+        setDismissedAlerts(prev => {
+            const next = new Set(prev).add(id);
+            localStorage.setItem('dismissedAlerts', JSON.stringify([...next]));
+            return next;
+        });
+    };
+
+    const toggleExpand = (id) => {
+        setExpandedAlerts(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) {
+                next.delete(id);
+            } else {
+                next.add(id);
+            }
+            return next;
+        });
     };
 
     const visibleAlerts = announcements.filter(alert => !dismissedAlerts.has(alert.id));
@@ -47,33 +65,48 @@ const ViewAnnouncements = () => {
                         <p>Loading announcements...</p>
                     </div>
                 ) : error ? (
-                     <div className="empty-state">
+                    <div className="empty-state">
                         <p>{error}</p>
                     </div>
                 ) : visibleAlerts.length > 0 ? (
                     <div className="announcements-grid">
-                        {visibleAlerts.map((alert) => (
-                            <article key={alert.id} className={`alert-card type-${alert.type?.toLowerCase() || 'info'}`}>
-                                <div className="alert-badge" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span>{alert.type || 'Update'}</span>
-                                    <button
-                                        onClick={() => handleDismiss(alert.id)}
-                                        aria-label="Dismiss alert"
-                                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', padding: '0', fontSize: '1rem', lineHeight: '1' }}
-                                    >
-                                        ✕
-                                    </button>
-                                </div>
-                                <div className="alert-content">
-                                    <h2 className="alert-title">{alert.title}</h2>
-                                    <div className="alert-meta">
-                                        <span className="location-tag">📍 {alert.target_area}</span>
-                                        <span className="date-tag">📅 {new Date(alert.created_at).toLocaleDateString()}</span>
+                        {visibleAlerts.map((alert) => {
+                            const isExpanded = expandedAlerts.has(alert.id);
+                            const text = alert.description || '';
+                            const isLongText = text.length > 150;
+                            const displayText = isExpanded ? text : (isLongText ? text.slice(0, 150) + '...' : text);
+
+                            return (
+                                <article key={alert.id} className={`alert-card type-${alert.type?.toLowerCase() || 'info'}`}>
+                                    <div className="alert-badge" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span>{alert.type || 'Update'}</span>
+                                        <button
+                                            onClick={() => handleDismiss(alert.id)}
+                                            aria-label="Dismiss alert"
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', padding: '0', fontSize: '1rem', lineHeight: '1' }}
+                                        >
+                                            ✕
+                                        </button>
                                     </div>
-                                    <p className="alert-description">{alert.description}</p>
-                                </div>
-                            </article>
-                        ))}
+                                    <div className="alert-content">
+                                        <h2 className="alert-title">{alert.title}</h2>
+                                        <div className="alert-meta">
+                                            <span className="location-tag">📍 {alert.target_area}</span>
+                                            <span className="date-tag">📅 {new Date(alert.created_at).toLocaleDateString()}</span>
+                                        </div>
+                                        <p className="alert-description-text">{displayText}</p>
+                                        {isLongText && (
+                                            <button 
+                                                className="read-more-btn"
+                                                onClick={() => toggleExpand(alert.id)}
+                                            >
+                                                {isExpanded ? 'Read Less' : 'Read More'}
+                                            </button>
+                                        )}
+                                    </div>
+                                </article>
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="empty-state">
