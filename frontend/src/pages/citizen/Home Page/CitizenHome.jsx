@@ -1,6 +1,6 @@
 import "./citizenhome.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
-import Chatbot from "../../../components/citizen/ChatBot/Chatbot";
+import Chatbot from "../../../components/citizen/Chatbot/Chatbot";
 import siteReportIcon from "../../../assets/sitereport.svg";
 import symptomIcon from "../../../assets/symptomreport.svg";
 import heatmapIcon from "../../../assets/heatmap.svg";
@@ -8,13 +8,44 @@ import educationIcon from "../../../assets/education.svg";
 import blueheroimg from "../../../assets/blueheroimg.png";
 import { useNavigate } from "react-router-dom";
 import announcementPlaceholder from "../../../assets/announcements.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import HeatMap from "./Heatmap.jsx";
+import HeatMap from "../../../components/common/HeatMap/Heatmap.jsx";
+import { fetchDashboardSummary } from "../../../services/citizenApi";
 // need to update heatmap
 
 function CitizenHome() {
   const navigate = useNavigate();
+  const [mohArea, setMohArea] = useState("Loading...");
+  const [caseCount, setCaseCount] = useState(0);
+  const [siteCount, setSiteCount] = useState(0);
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        const userStr = localStorage.getItem("dgUser");
+        if (!userStr) {
+          throw new Error("Auth session missing");
+        }
+        const user = JSON.parse(userStr);
+        if (!user?.id) throw new Error("Auth session missing");
+
+        const summary = await fetchDashboardSummary(user.id);
+
+        setMohArea(summary.mohArea || "Not set");
+        setCaseCount(summary.caseCount ?? 0);
+        setSiteCount(summary.siteCount ?? 0);
+      } catch (error) {
+        console.error("Failed to load citizen dashboard data:", error.message);
+        setMohArea("Unavailable");
+        setCaseCount(0);
+        setSiteCount(0);
+      }
+    };
+
+    loadDashboardData();
+  }, []);
+
   const menu = [
     {
       icon: siteReportIcon,
@@ -89,60 +120,41 @@ function CitizenHome() {
           <div className="risk-boxcm">
             <h1>⚠️</h1>
             <div>
-              <h3>Risk Level</h3>
-              <h2>Current MOH Location</h2>
+              <h3>Your MOH Location</h3>
+              <h2>{mohArea}</h2>
               <small>Based on reports and weather data</small>
             </div>
           </div>
 
-          <section
-            style={{
-              background: "#fff",
-              padding: "15px",
-              borderRadius: "16px",
-              border: "1px solid #eee",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "10px",
-                fontSize: "14px",
-              }}
-            >
-              <span>
-                <strong>Risk Level:</strong>
-              </span>
-              <span>
-                <span style={{ color: "blue" }}>●</span> Low &nbsp;
-                <span style={{ color: "lime" }}>●</span> Moderate &nbsp;
-                <span style={{ color: "red" }}>●</span> High Risk
+          <section className="heatmap-sectioncm">
+            <div className="risk-legendcm">
+              <span className="risk-legend-itemscm">
+                <span role="img" aria-label="Mosquito breeding site marker">
+                  🦟
+                </span>
+                Breeding Site &nbsp;|&nbsp;
+                <span role="img" aria-label="Dengue case marker">
+                  😷
+                </span>
+                Dengue Case
               </span>
             </div>
 
             <HeatMap />
           </section>
 
-          <footer
-            style={{
-              marginTop: "20px",
-              marginBottom: "20px",
-              fontSize: "12px",
-              color: "#888",
-            }}
-          >
+          <footer className="data-footercm">
             Data simulated based on Epidemiological Unit reports.
           </footer>
           <div className="statscm">
             <div className="stat-cardcm">
-              <h2>Community Report Count</h2>
-              <p>Community Reports</p>
+              <h2>{caseCount}</h2>
+              <p>Dengue Cases Reported</p>
             </div>
 
             <div className="stat-cardcm">
-              <h2>Site Count</h2>
-              <p>Sites Cleaned</p>
+              <h2>{siteCount}</h2>
+              <p>Breeding Sites Reported</p>
             </div>
           </div>
         </main>

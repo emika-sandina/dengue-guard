@@ -2,6 +2,10 @@ import "./sendAnnouncements.css";
 import NavBar from "../../../components/common/Navbar/NavBar";
 
 import React, { useState } from "react";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "http://localhost:5000";
+
 
 const SendAnnouncements = () => {
   // Store the form input values
@@ -26,7 +30,7 @@ const SendAnnouncements = () => {
     try {
       // Send the form data to the backend
       const response = await fetch(
-        "http://localhost:5000/api/send-announcement",
+        `${API_BASE_URL}/api/send-announcement`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -49,6 +53,7 @@ const SendAnnouncements = () => {
 
   return (
     <div className="container">
+      <NavBar role="MOH"/>
       <div className="card">
         <h2 className="title">Send Announcements To Citizens</h2>
 

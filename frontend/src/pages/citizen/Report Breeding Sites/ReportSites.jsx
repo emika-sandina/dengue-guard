@@ -1,7 +1,7 @@
 import NavBar from "../../../components/common/Navbar/NavBar";
 import "./reportsites.css";
 import { useState } from "react";
-import { mohAreas } from "../../../services/mohAreas";
+import Dropdown from "../../../components/common/Dropdown/Dropdown.jsx";
 
 function ReportSites() {
   //array for certain issue types
@@ -21,10 +21,11 @@ function ReportSites() {
   const [photo, setPhoto] = useState(null);
   const [issueType, setIssueType] = useState("");
   const [urgency, setUrgency] = useState("Low");
-  const [mohArea, setMohArea] = useState("");
+  const [mohArea, setMohArea] = useState(null);
   const [showPopUp, setShowPopUp] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState("");
   const [popUpType, setPopUpType] = useState("");
+  const [coordinates, setCoordinates] = useState({ lat: null, lng: null }); // lat/lng
 
   //handling file uploads
   const handlePhotoUpload = (e) => {
@@ -43,6 +44,7 @@ function ReportSites() {
       //if the user allows access to his/her current location this block of code runs
       (position) => {
         const { latitude, longitude } = position.coords;
+        setCoordinates({ lat: latitude, lng: longitude }); //store the latitude and longtitude
         reverseGeocode(latitude, longitude);
       },
       //this code block runs if the user denies permission
@@ -73,8 +75,21 @@ function ReportSites() {
     e.preventDefault();
 
     // Basic validation
-    if (!location || !issueType || !mohArea || issueType === issueTypes[0]) {
+    if (
+      !location ||
+      !description ||
+      !issueType ||
+      issueType === issueTypes[0] ||
+      !mohArea
+    ) {
       setPopUpMessage("Please fill in all required fields before submitting.");
+      setPopUpType("error");
+      setShowPopUp(true);
+      return;
+    }
+
+    if (!coordinates.lat || !coordinates.lng) {
+      setPopUpMessage("Please click 'Get Current Location' first.");
       setPopUpType("error");
       setShowPopUp(true);
       return;
@@ -89,6 +104,9 @@ function ReportSites() {
     formData.append("issueType", issueType);
     formData.append("urgency", urgency);
     formData.append("mohArea", mohArea);
+    // Append coordinates
+    formData.append("latitude", coordinates.lat);
+    formData.append("longtitude", coordinates.lng);
 
     // Append image file (if selected)
     if (photo) {
@@ -114,7 +132,7 @@ function ReportSites() {
         setPhoto(null);
         setIssueType(issueTypes[0]);
         setUrgency("Low");
-        setMohArea(mohAreas[0]);
+        setMohArea(null);
       } else {
         setPopUpMessage(result.error || "Failed to submit the report!");
         setPopUpType("error");
@@ -129,7 +147,7 @@ function ReportSites() {
     <div className="sitereport-layout">
       <NavBar role="Citizen" />
 
-      <main className="main-content">
+      <main className="rs-main-content">
         <h2 className="page-title">Report Dengue Breeding Sites</h2>
 
         <div className="report-card">
@@ -153,8 +171,14 @@ function ReportSites() {
               rows={5}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              maxLength={200}
               required
             ></textarea>
+            <small
+              style={{ color: description.length > 180 ? "#e03c3c" : "#aaa" }}
+            >
+              {description.length}/200
+            </small>
 
             <label>Upload Photo</label>
             <input type="file" accept="image/*" onChange={handlePhotoUpload} />
@@ -172,17 +196,11 @@ function ReportSites() {
                 <option key={index}>{issue}</option>
               ))}
             </select>
-
+            
+            <br/> 
             <label>Select MOH Area</label>
-            <select
-              value={mohArea}
-              onChange={(e) => setMohArea(e.target.value)}
-              required
-            >
-              {mohAreas.map((mohArea, index) => (
-                <option>{mohArea}</option>
-              ))}
-            </select>
+            <Dropdown value={mohArea} onChange={setMohArea} />
+            <br/>
 
             <label>Urgency Level</label>
             <div className="urgency-buttons">
@@ -214,8 +232,8 @@ function ReportSites() {
             <button
               onClick={() => setShowPopUp(false)}
               className="popup-close-btn"
-              >
-                OK
+            >
+              OK
             </button>
           </div>
         </div>

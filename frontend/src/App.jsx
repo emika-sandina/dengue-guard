@@ -5,15 +5,16 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import AuthPage from "./pages/Auth/AuthPage";
+import AuthPage from "./pages/auth/AuthPage.jsx";
 import CitizenHome from "./pages/citizen/Home Page/CitizenHome";
 import MOHHome from "./pages/moh/Home Page/MOHHome";
 import ReportSites from "./pages/citizen/Report Breeding Sites/ReportSites";
 import ReportCases from "./pages/citizen/Report Cases Page/reportCases";
 import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements";
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
+import ManageReport from "./pages/moh/Manage Report Sites/ManageSiteReport.jsx";
 import ManageReportedDengueCases from "./pages/moh/Manage Reported Dengue Cases/ManageReportedDengueCases";
-import Announcements from './pages/citizen/View Announcements/ViewAnnouncements';
+import ViewAnnouncements from './pages/citizen/View Announcements/ViewAnnouncements';
 
 function App() {
   return (
@@ -41,9 +42,9 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/citizen/announcements" element={
+        <Route path="/citizen/alerts" element={
           <ProtectedRoute allowedRole="citizen">
-            <Announcements />
+            <ViewAnnouncements />
           </ProtectedRoute>
         } />
 
@@ -62,6 +63,12 @@ function App() {
         <Route path="/moh/send-announcements" element={
           <ProtectedRoute allowedRole="moh">
             <SendAnnouncements />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/moh/site-reports" element={
+          <ProtectedRoute allowedRole="moh">
+            <ManageReport />
           </ProtectedRoute>
         } />
 

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dengueguard-backend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: dengueguard-backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+
+      
