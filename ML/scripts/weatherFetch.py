@@ -149,4 +149,4 @@ print(weather_df[WEATHER_COLS].head(3).round(3).to_string())
 os.makedirs("data", exist_ok=True)
 weather_df.to_csv("data/current_weather.csv", index=False)
 
-print("\nSaved to data/current_weather.csv ✔")    
+print("\nSaved to data/current_weather.csv")    

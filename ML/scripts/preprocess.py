@@ -194,7 +194,7 @@ val_df   = results[1]
 test_df  = results[2]
 
 
-# ── SAVE WEATHER SCALING STATS ────────────────────────────────────────────────
+# SAVING WEATHER SCALING STATS 
 # The weather columns in the CSV are z-scored (mean=0, std=1).
 # When we fetch live weather from the API, values like temp=29°C would be
 # completely out of range for the model.
@@ -225,7 +225,7 @@ with open("models/weather_stats.json", "w") as f:
 print("\nWeather scaling stats saved to models/weather_stats.json")
 
 
-# ── SAVE SPLITS AND ENCODER ───────────────────────────────────────────────────
+# AFTER PREPROCESSING STEP SAVE SPLITS AND ENCODER 
 
 os.makedirs("data", exist_ok=True)
 
