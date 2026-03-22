@@ -194,17 +194,45 @@ val_df   = results[1]
 test_df  = results[2]
 
 
-#  SAVE SPLITS AND ENCODER TO DISK
+# ── SAVE WEATHER SCALING STATS ────────────────────────────────────────────────
+# The weather columns in the CSV are z-scored (mean=0, std=1).
+# When we fetch live weather from the API, values like temp=29°C would be
+# completely out of range for the model.
+# Solution: save the mean and std from the TRAINING set so weather_fetch.py
+# can apply the exact same scaling to new API data before predicting.
 
-# Each split is saved as its own CSV.
-# The LabelEncoder is saved with joblib so it can be reloaded later to
-# transform new data consistently (same integer mapping as training).
+WEATHER_COLS = [
+    "avg_temperature_2m_mean",
+    "avg_temperature_2m_max",
+    "avg_precipitation_sum",
+    "avg_relative_humidity_2m_mean",
+    "temp_range",
+    "heat_humidity_index",
+]
+
+weather_stats = {
+    col: {
+        "mean": float(train_df[col].mean()),
+        "std" : float(train_df[col].std())
+    }
+    for col in WEATHER_COLS
+}
+
+os.makedirs("models", exist_ok=True)
+with open("models/weather_stats.json", "w") as f:
+    json.dump(weather_stats, f, indent=2)
+
+print("\nWeather scaling stats saved to models/weather_stats.json")
+
+
+# ── SAVE SPLITS AND ENCODER ───────────────────────────────────────────────────
+
+os.makedirs("data", exist_ok=True)
 
 train_df.to_csv(os.path.join("data", "train.csv"), index=False)
 val_df.to_csv(  os.path.join("data", "val.csv"),   index=False)
 test_df.to_csv( os.path.join("data", "test.csv"),  index=False)
 
 joblib.dump(encoder, "models/encoder.pkl")
-
-print("\nSplits saved to data/train.csv, data/val.csv, data/test.csv")
-print("Encoder saved to models/encoder.pkl")
+print("Splits saved  -> data/train.csv, data/val.csv, data/test.csv")
+print("Encoder saved -> models/encoder.pkl")
