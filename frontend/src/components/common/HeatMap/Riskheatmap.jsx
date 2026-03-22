@@ -15,6 +15,27 @@ const RiskHeatMap = () => {
   const mapInstance = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [timestamp, setTimestamp] = useState(Date.now());
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    setError(null);
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+      // Trigger backend ML predictions and Supabase upset
+      const res = await fetch(`${API_BASE_URL}/api/ml/predict`);
+      if (!res.ok) throw new Error("Failed to fetch new predictions.");
+      // force re-render and re-fetch of data on map
+      setLoading(true);
+      setTimestamp(Date.now());
+    } catch (err) {
+      console.error(err);
+      setError("Failed to refresh predictions.");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -22,9 +43,10 @@ const RiskHeatMap = () => {
 
     const initMap = async () => {
       try {
-        // Fetch both data files in parallel
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+        // Fetch both data files in parallel - fetching predictions from the backend Supabase endpoint
         const [predictionsRes, coordsRes] = await Promise.all([
-          fetch("/data/predictions.json"),
+          fetch(`${API_BASE_URL}/api/ml/predictions`),
           fetch("/data/valid_moh_coords.json"),
         ]);
         const predictions = await predictionsRes.json();
@@ -96,11 +118,40 @@ const RiskHeatMap = () => {
         mapInstance.current = null;
       }
     };
-  }, []);
+  }, [timestamp]);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "550px" }}>
-      {loading && !error && (
+    <div style={{ position: "relative", width: "100%", height: "600px", display: "flex", flexDirection: "column", gap: "12px" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <button 
+          onClick={handleRefresh} 
+          disabled={isRefreshing}
+          style={{
+            padding: "10px 18px",
+            backgroundColor: isRefreshing ? "#93c5fd" : "#3b82f6",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: isRefreshing ? "not-allowed" : "pointer",
+            fontWeight: "600",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            transition: "background-color 0.2s"
+          }}
+        >
+          {isRefreshing ? (
+             <>
+               <span style={{ width: "16px", height: "16px", border: "2px solid #fff", borderTop: "2px solid transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite" }}></span>
+               Predicting...
+             </>
+          ) : (
+            "Refresh Weather & Predict"
+          )}
+        </button>
+      </div>
+      <div style={{ position: "relative", width: "100%", flex: 1 }}>
+        {loading && !error && (
         <div
           style={{
             position: "absolute",
@@ -157,6 +208,7 @@ const RiskHeatMap = () => {
           zIndex: 0,
         }}
       />
+      </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
