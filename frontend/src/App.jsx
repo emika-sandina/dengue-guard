@@ -15,6 +15,8 @@ import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 import ManageReport from "./pages/moh/Manage Report Sites/ManageSiteReport.jsx";
 import ManageReportedDengueCases from "./pages/moh/Manage Reported Dengue Cases/ManageReportedDengueCases";
 import ViewAnnouncements from './pages/citizen/View Announcements/ViewAnnouncements';
+import HeatmapCommonPage from "./components/common/Heatmap/heatmapCommonpage.jsx";
+
 
 function App() {
   return (
@@ -48,6 +50,13 @@ function App() {
           </ProtectedRoute>
         } />
 
+        <Route path="/citizen/risk-map" element={
+          <ProtectedRoute allowedRole="citizen">
+            <HeatmapCommonPage role="Citizen" />
+          </ProtectedRoute>
+        } />
+
+
         {/* Protected MOH Routes */}
         <Route path="/moh/home" element={
           <ProtectedRoute allowedRole="moh">
@@ -71,6 +80,13 @@ function App() {
             <ManageReport />
           </ProtectedRoute>
         } />
+
+        <Route path="/moh/risk-map" element={
+          <ProtectedRoute allowedRole="moh">
+            <HeatmapCommonPage role="MOH" />
+          </ProtectedRoute>
+        } />
+
 
         {/* Default Redirect: Send unauthenticated users to login */}
         <Route path="/" element={<Navigate to="/login" />} />
