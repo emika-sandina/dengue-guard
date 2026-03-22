@@ -1,5 +1,44 @@
 import { supabase } from "../supabase.js";
 
+const normalizeMohArea = (value) => {
+  if (!value || typeof value !== "string") {
+    return "";
+  }
+
+  return value
+    .replace(/^\s*moh\s*[-:]?\s*/i, "")
+    .trim()
+    .toLowerCase();
+};
+
+const countReportsByMohArea = async (tableName, normalizedMohArea) => {
+  if (!normalizedMohArea) {
+    const totalResponse = await supabase
+      .from(tableName)
+      .select("id", { count: "exact", head: true });
+
+    if (totalResponse.error) {
+      throw new Error(
+        `Failed to fetch ${tableName} total count: ${totalResponse.error.message}`
+      );
+    }
+
+    return totalResponse.count ?? 0;
+  }
+
+  const areaResponse = await supabase.from(tableName).select("moh_area");
+
+  if (areaResponse.error) {
+    throw new Error(
+      `Failed to fetch ${tableName} MOH areas: ${areaResponse.error.message}`
+    );
+  }
+
+  return (areaResponse.data ?? []).filter(
+    (row) => normalizeMohArea(row?.moh_area) === normalizedMohArea
+  ).length;
+};
+
 export const getDashboardSummaryByUserId = async (userId) => {
   let resolvedMohArea = null;
 
@@ -33,7 +72,9 @@ export const getDashboardSummaryByUserId = async (userId) => {
       if (authResponse.error) {
          console.warn(`Auth admin fetch error: ${authResponse.error.message}`);
       } else {
-         resolvedMohArea = authResponse.data?.user?.user_metadata?.moh_area || null;
+        const metadata = authResponse.data?.user?.user_metadata || {};
+        resolvedMohArea =
+          metadata?.moh_area || metadata?.mohArea || metadata?.area || null;
       }
     } catch (err) {
       console.warn("Could not fetch user via admin API (possibly due to missing service_role key):", err.message);
@@ -43,62 +84,11 @@ export const getDashboardSummaryByUserId = async (userId) => {
   // Prepare variables to hold our final counts
   let caseCount = 0;
   let siteCount = 0;
+  const normalizedMohArea = normalizeMohArea(resolvedMohArea);
 
   // If we successfully found the user's MOH Area, count their reports.
-  if (resolvedMohArea) {
-
-    const baseAreaName = resolvedMohArea;
-
-    // Count Dengue Cases for this specific area.
-    // .ilike() is a case-insensitive search. 
-    // The '%' symbols act as wildcards, meaning it will match anything containing our baseAreaName.
-    // This catches "Homagama", "HOMAGAMA", or even "MOH Homagama" safely.
-    const caseResponse = await supabase
-      .from("dengue_cases")
-      .select("id", { count: "exact", head: true })
-      .ilike("moh_area", `%${baseAreaName}%`);
-      
-    if (caseResponse.error) {
-      throw new Error(`Failed to fetch case count: ${caseResponse.error.message}`);
-    }
-    // Save the result, or default to 0 if nothing was found
-    caseCount = caseResponse.count ?? 0;
-
-    // Count Breeding Sites for this specific area.
-    // We use the exact same flexible search (.ilike) here.
-    const siteResponse = await supabase
-      .from("breeding_sites")
-      .select("id", { count: "exact", head: true })
-      .ilike("moh_area", `%${baseAreaName}%`);
-      
-    if (siteResponse.error) {
-      throw new Error(`Failed to fetch site count: ${siteResponse.error.message}`);
-    }
-    // Save the result, or default to 0 if nothing was found
-    siteCount = siteResponse.count ?? 0;
-
-  } else {
-    // If we couldn't figure out the user's MOH Area at all, 
-    // we just fetch the total count of EVERYTHING in the database.
-    
-    const caseResponse = await supabase
-      .from("dengue_cases")
-      .select("id", { count: "exact", head: true });
-
-    if (caseResponse.error) {
-      throw new Error(`Failed to fetch case count: ${caseResponse.error.message}`);
-    }
-    caseCount = caseResponse.count ?? 0;
-
-    const siteResponse = await supabase
-      .from("breeding_sites")
-      .select("id", { count: "exact", head: true });
-
-    if (siteResponse.error) {
-      throw new Error(`Failed to fetch site count: ${siteResponse.error.message}`);
-    }
-    siteCount = siteResponse.count ?? 0;
-  }
+  caseCount = await countReportsByMohArea("dengue_cases", normalizedMohArea);
+  siteCount = await countReportsByMohArea("breeding_sites", normalizedMohArea);
 
   // Return the final summary data back to the dashboard frontend.
   return {

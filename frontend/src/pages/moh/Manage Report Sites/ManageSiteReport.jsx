@@ -4,9 +4,7 @@ import NavBar from "../../../components/common/Navbar/NavBar";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "http://localhost:5000";
-
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 const SORT_OPTIONS = [
   { value: "datetime", label: "Date & Time (Default)" },
@@ -28,7 +26,7 @@ const ManageReport = () => {
   const [sites, setSites] = useState([]); // inistialies an empty array (useState([])) to ensure that program doesn't crash till useEffect fills it with data from the API
 
   const [showSiteDetailsModal, setSiteDetailsModal] = useState(false);
-  const [mohName, setMohName] = useState('');
+  const [mohName, setMohName] = useState("");
   const [selectedSite, setSeletectedSite] = useState(null);
   const [expand, setExpand] = useState(false);
   const [showPopup, setShowPopUp] = useState(false);
@@ -36,8 +34,8 @@ const ManageReport = () => {
   const [popUpType, setPopUpType] = useState("");
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState("");
-  const [caseId, setCaseId] = useState(null);
-  const [assginPhi, setAssignPhi] = useState("");
+  const [siteIdForAssignment, setSiteIdForAssignment] = useState(null);
+  const [assignPhi, setAssignPhi] = useState("");
   const [openAssignModal, setOpenAssignModal] = useState(false);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("datetime");
@@ -271,7 +269,7 @@ const ManageReport = () => {
   };
 
   // function to assign a PHI
-  const handleAssignPhi = async (e, siteId, assigned) => {
+  const handleAssignPhi = async (e, siteId) => {
     // to block the row click
     e.stopPropagation();
 
@@ -287,15 +285,15 @@ const ManageReport = () => {
       return;
     }
 
-    setCaseId(siteId);
+    setSiteIdForAssignment(siteId);
     setAssignPhi("");
     setOpenAssignModal(true);
   };
 
   const confirmPhiAssign = async () => {
-    if (!assginPhi.trim()) {
+    if (!assignPhi.trim()) {
       setPopUpMessage("Please enter the name of the PHI officer: ");
-      setPopUpType(error);
+      setPopUpType("error");
       setShowPopUp(true);
       return;
     }
@@ -311,14 +309,14 @@ const ManageReport = () => {
       }
 
       const response = await fetch(
-        `${API_BASE_URL}/api/report-cases/site-reports/${caseId}`,
+        `${API_BASE_URL}/api/site-reports/${siteIdForAssignment}`,
         {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ phi_assign: assginPhi }),
+          body: JSON.stringify({ phi_assign: assignPhi }),
         },
       );
 
@@ -329,14 +327,16 @@ const ManageReport = () => {
       // To update the report from the UI
       setSites(
         sites.map((site) =>
-          site.id === caseId ? { ...site, phi_assign: assginPhi } : site,
+          site.id === siteIdForAssignment
+            ? { ...site, phi_assign: assignPhi }
+            : site,
         ),
       ); // ...site copies the site details data and only changes the status to PHI name
 
       setOpenAssignModal(false);
-      setCaseId(null);
+      setSiteIdForAssignment(null);
       setAssignPhi("");
-      setPopUpMessage("PHI assgined to case successfully");
+      setPopUpMessage("PHI assigned to site successfully");
       setPopUpType("success");
       setShowPopUp(true);
     } catch (error) {
@@ -372,10 +372,11 @@ const ManageReport = () => {
     <div className="moh-layout">
       <NavBar role="MOH" />
       <main className="main-content">
-        <h1>Reported Breeding Sites
+        <h1>
+          Reported Breeding Sites
           <span className="mdc-division-badge"> — {mohName} Division</span>
         </h1>
-        
+
         {/* Search & Sort row */}
         {/* search the type of issue */}
         <div className="mrs-searchSort">
@@ -426,7 +427,11 @@ const ManageReport = () => {
 
             {/*Individual cards*/}
             {filterSite.map((site, index) => (
-              <div key={site.id} className="mrs-card" onClick={() => openSiteDetails(site)}>
+              <div
+                key={site.id}
+                className="mrs-card"
+                onClick={() => openSiteDetails(site)}
+              >
                 {/*On click it will route to the details page*/}
                 {/*card header*/}
                 <div className="mrs-card-header">
@@ -434,7 +439,9 @@ const ManageReport = () => {
 
                   {/*priority level*/}
                   <div className="mrs-card-priority">
-                    <span className={`priority-level ${Priority(site.urgency)}`}>
+                    <span
+                      className={`priority-level ${Priority(site.urgency)}`}
+                    >
                       {/*To constomize different levels of urgency*/}
                       {site.urgency}
                     </span>
@@ -461,8 +468,8 @@ const ManageReport = () => {
                         onClick={(e) => handleAssignPhi(e, site.id)}
                       >
                         {site.phi_assign
-                          ? `Assgined PHI : ${site.phi_assign}`
-                          : "Assgin PHI"}
+                          ? `Assigned PHI: ${site.phi_assign}`
+                          : "Assign PHI"}
                       </button>
                     </div>
 
@@ -533,8 +540,18 @@ const ManageReport = () => {
             <h3>Delete Report</h3>
             <p>Are you sure you want to delete this report?</p>
             <div className="button">
-              <button className="btn-action btn-remove" onClick={() => deleteSite(pendingDeleteId)}>Yes, Delete</button>
-              <button className="btn-action" onClick={() => setShowConfirmPopup(false)}>Cancel</button>
+              <button
+                className="btn-action btn-remove"
+                onClick={() => deleteSite(pendingDeleteId)}
+              >
+                Yes, Delete
+              </button>
+              <button
+                className="btn-action"
+                onClick={() => setShowConfirmPopup(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -547,10 +564,25 @@ const ManageReport = () => {
             <h1>👤</h1>
             <h3>Assign PHI Officer</h3>
             <p>Please enter then name of the PHI officer for this site</p>
-            <input type="text" value={assginPhi} onChange={(e) => setAssignPhi(e.target.value)} placeholder="PHI name: " />
+            <input
+              type="text"
+              value={assignPhi}
+              onChange={(e) => setAssignPhi(e.target.value)}
+              placeholder="PHI name: "
+            />
             <div className="button">
-              <button className="btn-action btn-resolve" onClick = {confirmPhiAssign}>Confirm</button>
-              <button className="btn-action" onClick={() => setOpenAssignModal(false)}>Cancel</button>
+              <button
+                className="btn-action btn-resolve"
+                onClick={confirmPhiAssign}
+              >
+                Confirm
+              </button>
+              <button
+                className="btn-action"
+                onClick={() => setOpenAssignModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -558,21 +590,30 @@ const ManageReport = () => {
 
       {/* Modal with the site details*/}
       {showSiteDetailsModal && selectedSite && (
-      <div className="mrs-modal-overlay" onClick={() => setSiteDetailsModal(false)}>
-        <div className="mrs-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="mrs-modal-overlay"
+          onClick={() => setSiteDetailsModal(false)}
+        >
+          <div
+            className="mrs-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header modal */}
+            <div className="mrs-modal-title">
+              {/* modal title has type of problem and priority level */}
+              <p className="mrs-modal-issue">{selectedSite.issue_type}</p>
 
-          {/* Header modal */}
-          <div className="mrs-modal-title">
-            {/* modal title has type of problem and priority level */}
-            <p className="mrs-modal-issue">{selectedSite.issue_type}</p>
-
-            {/*priority level*/}
-            <div className="mrs-card-priority">
-              <span className={`priority-level ${Priority(selectedSite.urgency)}`}> {/*To constomize different levels of urgency*/}
-                {selectedSite.urgency}
-              </span>
+              {/*priority level*/}
+              <div className="mrs-card-priority">
+                <span
+                  className={`priority-level ${Priority(selectedSite.urgency)}`}
+                >
+                  {" "}
+                  {/*To constomize different levels of urgency*/}
+                  {selectedSite.urgency}
+                </span>
+              </div>
             </div>
-          </div>
 
             {/* modal body */}
             <div className="mrs-modal-body">
