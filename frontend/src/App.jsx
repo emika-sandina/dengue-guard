@@ -14,6 +14,7 @@ import SendAnnouncements from "./pages/moh/Send Announcements/SendAnnouncements"
 import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
 import ManageReport from "./pages/moh/Manage Report Sites/ManageSiteReport.jsx";
 import ManageReportedDengueCases from "./pages/moh/Manage Reported Dengue Cases/ManageReportedDengueCases";
+import Profile from "./pages/common/Profile/Profile.jsx";
 import ViewAnnouncements from './pages/citizen/View Announcements/ViewAnnouncements';
 import HeatmapCommonPage from "./components/common/Heatmap/heatmapCommonpage.jsx";
 
@@ -32,11 +33,13 @@ function App() {
           </ProtectedRoute>
         } />
 
+
         <Route path="/citizen/report-sites" element={
           <ProtectedRoute allowedRole="citizen">
             <ReportSites />
           </ProtectedRoute>
         } />
+
 
         <Route path="/citizen/report-cases" element={
           <ProtectedRoute allowedRole="citizen">
@@ -69,6 +72,7 @@ function App() {
           </ProtectedRoute>
         } />
 
+
         <Route path="/moh/send-announcements" element={
           <ProtectedRoute allowedRole="moh">
             <SendAnnouncements />
@@ -81,6 +85,18 @@ function App() {
           </ProtectedRoute>
         } />
 
+        {/* Protected Profile Routes - accessible by both roles */}
+        <Route path="/moh/profile" element={
+          <ProtectedRoute allowedRole="moh">
+            <Profile />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/citizen/profile" element={
+          <ProtectedRoute allowedRole="citizen">
+            <Profile />
+          </ProtectedRoute>
+        } />
         <Route path="/moh/risk-map" element={
           <ProtectedRoute allowedRole="moh">
             <HeatmapCommonPage role="MOH" />
