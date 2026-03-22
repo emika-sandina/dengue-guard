@@ -8,7 +8,6 @@ import blueheroimg from "../../../assets/blueheroimg.png";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import HeatMap from "../../../components/common/HeatMap/Heatmap";
-import { supabase } from "../../../lib/supabaseClient";
 import { fetchDashboardSummary } from "../../../services/mohApi";
 
 function MOHHome() {
@@ -20,18 +19,14 @@ function MOHHome() {
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
+        const storedUser = JSON.parse(localStorage.getItem("dgUser") || "null");
+        const userId = storedUser?.id;
 
-        if (userError) throw userError;
-
-        if (!user?.id) {
+        if (!userId) {
           throw new Error("User is not logged in");
         }
 
-        const summary = await fetchDashboardSummary(user.id);
+        const summary = await fetchDashboardSummary(userId);
 
         setMohArea(summary.mohArea || "Not set");
         setCaseCount(summary.caseCount ?? 0);
@@ -134,7 +129,6 @@ function MOHHome() {
                   🦟
                 </span>
                 Breeding Site &nbsp;|&nbsp;
-                
                 <span role="img" aria-label="Dengue case marker">
                   😷
                 </span>

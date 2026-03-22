@@ -1,9 +1,12 @@
 // frontend/src/services/api.js
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000";
 
 export const fetchDashboardSummary = async (userId) => {
   const response = await fetch(
-    `${API_BASE_URL}/api/dashboard-summary/${userId}`
+    `${API_BASE_URL}/api/dashboard-summary/${userId}`,
   );
 
   if (!response.ok) {
