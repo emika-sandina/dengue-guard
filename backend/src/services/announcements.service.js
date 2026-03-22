@@ -24,17 +24,14 @@ export const insertAnnouncement = async (announcementData) => {
 };
 
 export const getAllAnnouncements = async () => {
-  // Fetch all announcements from the database, newest first
   const { data, error } = await supabase
     .from("announcements")
-    .select("*")
+    .select("id, title, description, type, target_area, created_at")
     .order("created_at", { ascending: false });
 
-  // Check if there was an error during fetch
   if (error) {
-    console.log(error);
+    console.error("Fetch error:", error);
     throw new Error("Failed to fetch announcements!");
   }
-
   return data;
 };
