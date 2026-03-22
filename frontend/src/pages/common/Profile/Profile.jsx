@@ -12,6 +12,8 @@ const Profile = () => {
     const [fullName, setFullName] = useState('');
     const [mohArea, setMohArea] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [updateStatus, setUpdateStatus] = useState(null);
     const [stats, setStats] = useState(null);
     const navigate = useNavigate();
 
@@ -55,6 +57,8 @@ const Profile = () => {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        setSaving(true);
+        setUpdateStatus(null);
         try {
             const response = await fetch(`${API_BASE_URL}/api/profile`, {
                 method: 'PUT',
@@ -65,15 +69,27 @@ const Profile = () => {
                 body: JSON.stringify({ fullName, mohArea: mohArea?.value })
             });
             if (response.ok) {
-                alert("Profile updated successfully!");
+                setUpdateStatus({ type: 'success', message: 'Profile updated successfully!' });
+
+                // Update local storage so that other parts of the app show the new data
+                if (parsedUser) {
+                    const updatedUser = { ...parsedUser, full_name: fullName, mohArea: mohArea?.value };
+                    localStorage.setItem('dgUser', JSON.stringify(updatedUser));
+                }
+
                 // Re-fetch to confirm update
                 fetchProfile();
+
+                // Clear success message after 3 seconds
+                setTimeout(() => setUpdateStatus(null), 3000);
             } else {
-                alert("Update failed");
+                setUpdateStatus({ type: 'error', message: 'Failed to update profile. Please try again.' });
             }
         } catch (err) {
-            alert("Update failed");
+            setUpdateStatus({ type: 'error', message: 'An error occurred while updating profile.' });
             console.error(err);
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -126,8 +142,17 @@ const Profile = () => {
                             </div>
 
                             <div className="profile-actions">
-                                <button type="submit" className="btn-primary">Save Changes</button>
-                                <button type="button" onClick={handleLogout} className="btn-logout">Logout</button>
+                                {updateStatus && (
+                                    <div className={`status-message ${updateStatus.type}`}>
+                                        {updateStatus.message}
+                                    </div>
+                                )}
+                                <div className="btn-group">
+                                    <button type="submit" className="btn-primary" disabled={saving}>
+                                        {saving ? 'Saving...' : 'Save Changes'}
+                                    </button>
+                                    <button type="button" onClick={handleLogout} className="btn-logout">Logout</button>
+                                </div>
                             </div>
                         </form>
                     </section>
