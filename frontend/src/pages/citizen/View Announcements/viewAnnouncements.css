@@ -77,14 +77,27 @@
   margin-bottom: 15px;
 }
 
-.alert-description {
+.alert-description-text {
   font-size: 0.95rem;
   line-height: 1.6;
   color: #333;
-  display: -webkit-box;
-  -webkit-line-clamp: 4; /* Truncate long descriptions */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.read-more-btn {
+  background: none;
+  border: none;
+  color: #1e2b83;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.read-more-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
