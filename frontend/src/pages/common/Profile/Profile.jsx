@@ -186,6 +186,9 @@ const Profile = () => {
                                         <div className="empty-reports">
                                             <p>You haven't submitted any reports yet.</p>
                                             <button className="btn-secondary outline" onClick={() => navigate('/citizen/report-cases')}>Report a Case</button>
+                                            <br></br>
+                                            <br></br>
+                                            <button className="btn-secondary outline" onClick={() => navigate('/citizen/report-sites')}>Report a Breeding Site</button>
                                         </div>
                                     ) : (
                                         <div className="reports-placeholder">
