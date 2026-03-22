@@ -1,39 +1,88 @@
-import React, { useEffect, useState } from 'react';
-import { fetchAllAnnouncements } from '../../../services/announcementService';
-import './viewAnnouncements.css';
+// File: frontend/src/pages/citizen/View Announcements/ViewAnnouncements.jsx
 
-const Announcements = () => {
+import React, { useState, useEffect } from 'react';
+import './viewAnnouncements.css';
+import NavBar from "../../../components/common/Navbar/NavBar";
+import { fetchAllAnnouncements } from "../../../services/announcementService";
+
+const ViewAnnouncements = () => {
     const [announcements, setAnnouncements] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [dismissedAlerts, setDismissedAlerts] = useState(new Set());
 
     useEffect(() => {
-        fetchAllAnnouncements()
-            .then(data => setAnnouncements(data.data || (Array.isArray(data) ? data : [])))
-            .catch(err => alert(err.message))
-            .finally(() => setLoading(false));
+        const loadAnnouncements = async () => {
+            try {
+                const data = await fetchAllAnnouncements();
+                // The API returns { data: [...] }
+                setAnnouncements(data.data || []);
+            } catch (err) {
+                setError('Failed to load announcements');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadAnnouncements();
     }, []);
 
+    const handleDismiss = (id) => {
+        setDismissedAlerts(prev => new Set(prev).add(id));
+    };
+
+    const visibleAlerts = announcements.filter(alert => !dismissedAlerts.has(alert.id));
+
     return (
-        <div className="announcements-container">
-            <h1>Public Health Alerts</h1>
-            {loading ? <p>Loading alerts...</p> : (
-                <div className="alerts-list">
-                    {announcements.map(alert => (
-                        <div key={alert.id} className={`alert-card ${alert.type?.toLowerCase() || ''}`}>
-                            <div className="alert-header">
-                                <h3>{alert.title}</h3>
-                                <span className="area-tag">{alert.target_area}</span>
-                            </div>
-                            <p>{alert.description}</p>
-                            <span className="alert-date">
-                                {new Date(alert.created_at).toLocaleDateString()}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            )}
+        <div className="citizen-layout">
+            <NavBar role="Citizen" />
+            <div className="announcements-container">
+                <header className="view-header">
+                    <h1>Public Health Alerts</h1>
+                    <p className="sub-header-text">Stay informed about dengue prevention and regional updates.</p>
+                </header>
+
+                {loading ? (
+                    <div className="empty-state">
+                        <p>Loading announcements...</p>
+                    </div>
+                ) : error ? (
+                     <div className="empty-state">
+                        <p>{error}</p>
+                    </div>
+                ) : visibleAlerts.length > 0 ? (
+                    <div className="announcements-grid">
+                        {visibleAlerts.map((alert) => (
+                            <article key={alert.id} className={`alert-card type-${alert.type?.toLowerCase() || 'info'}`}>
+                                <div className="alert-badge" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <span>{alert.type || 'Update'}</span>
+                                    <button
+                                        onClick={() => handleDismiss(alert.id)}
+                                        aria-label="Dismiss alert"
+                                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', padding: '0', fontSize: '1rem', lineHeight: '1' }}
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                                <div className="alert-content">
+                                    <h2 className="alert-title">{alert.title}</h2>
+                                    <div className="alert-meta">
+                                        <span className="location-tag">📍 {alert.target_area}</span>
+                                        <span className="date-tag">📅 {new Date(alert.created_at).toLocaleDateString()}</span>
+                                    </div>
+                                    <p className="alert-description">{alert.description}</p>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="empty-state">
+                        <p>No active announcements at this time.</p>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
 
-export default Announcements;
+export default ViewAnnouncements;
