@@ -10,8 +10,34 @@ function HeatmapCommonPage() {
           Sri Lanka. Use Dengue Guard to identify safe and high-risk zones.
         </p>
       </header>
+      <main className="app-main">
+        <div className="map-section">
+        </div>
 
-
+        <aside className="info-section">
+          <div className="card">
+            <h2>Understanding the Map</h2>
+            <p>
+              The map uses color gradients to indicate the density and severity
+              of reported dengue cases:
+            </p>
+            <ul className="legend">
+              <li>
+                <span className="color-box red"></span>{" "}
+                <strong>High Risk (Red):</strong>{" "}
+              </li>
+              <li>
+                <span className="color-box lime"></span>{" "}
+                <strong>Moderate Risk (Lime):</strong>{" "}
+              </li>
+              <li>
+                <span className="color-box blue"></span>{" "}
+                <strong>Low Risk (Blue):</strong>{" "}
+              </li>
+            </ul>
+          </div>
+        </aside>
+      </main>
     </div>
   );
 }
