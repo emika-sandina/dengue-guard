@@ -11,6 +11,7 @@ import manageSitesRoutes from "./routes/manageSites.routes.js";
 import announcementRoutes from "./routes/announcements.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import profileRoutes from "./routes/profile.routes.js";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(express.json());
 app.use("/chatbot", chatbotRoutes);
 //register auth routes
 app.use("/api/auth", authRoutes);
+//register profile routes
+app.use("/api/profile", profileRoutes);
 //register report cases route (frontend expects /api/report-case)
 app.use("/api", reportCasesRoutes);
 //register manage cases route
@@ -33,7 +36,7 @@ app.use("/api", announcementRoutes);
 //register dashboard summary route
 app.use("/api", dashboardRoutes);
 //register manage sites route
-app.use("/api",manageSitesRoutes);
+app.use("/api", manageSitesRoutes);
 
 //export app to server.js
 export default app;
