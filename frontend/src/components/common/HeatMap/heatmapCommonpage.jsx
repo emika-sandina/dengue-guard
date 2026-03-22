@@ -1,4 +1,5 @@
 import React from "react";
+import RiskHeatMap from "./Riskheatmap";
 
 function HeatmapCommonPage() {
   return (
@@ -12,6 +13,7 @@ function HeatmapCommonPage() {
       </header>
       <main className="app-main">
         <div className="map-section">
+          <RiskHeatMap />
         </div>
 
         <aside className="info-section">
