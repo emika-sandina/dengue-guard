@@ -72,3 +72,19 @@
   cursor: pointer;
   font-weight: 600;
 }
+
+.form-alert {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+.form-alert.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+.form-alert.success {
+  background-color: #dcfce7;
+  color: #166534;
+}
