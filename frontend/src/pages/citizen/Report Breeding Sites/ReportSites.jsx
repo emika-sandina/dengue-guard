@@ -80,7 +80,7 @@ function ReportSites() {
       !description ||
       !issueType ||
       issueType === issueTypes[0] ||
-      !mohArea
+      !mohArea?.value
     ) {
       setPopUpMessage("Please fill in all required fields before submitting.");
       setPopUpType("error");
@@ -103,7 +103,7 @@ function ReportSites() {
     formData.append("description", description);
     formData.append("issueType", issueType);
     formData.append("urgency", urgency);
-    formData.append("mohArea", mohArea);
+    formData.append("mohArea", mohArea?.value);
     // Append coordinates
     formData.append("latitude", coordinates.lat);
     formData.append("longtitude", coordinates.lng);
@@ -196,11 +196,11 @@ function ReportSites() {
                 <option key={index}>{issue}</option>
               ))}
             </select>
-            
-            <br/> 
+
+            <br />
             <label>Select MOH Area</label>
             <Dropdown value={mohArea} onChange={setMohArea} />
-            <br/>
+            <br />
 
             <label>Urgency Level</label>
             <div className="urgency-buttons">
