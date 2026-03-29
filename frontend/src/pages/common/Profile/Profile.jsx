@@ -238,7 +238,7 @@ const Profile = () => {
                                 <p className="moh-notice">As an MOH official, any changes to your assigned area should be confirmed by the administrative board.</p>
                                 <ul className="moh-links">
                                     <li><button onClick={() => navigate('/moh/send-announcements')} className="moh-link-btn">Broadcast an Announcement</button></li>
-                                    <li><button onClick={() => navigate('/moh/home')} className="moh-link-btn">Review Pending Reports</button></li>
+                                    <li><button onClick={() => navigate('/moh/site-reports')} className="moh-link-btn">Review Pending Reports</button></li>
                                 </ul>
                             </section>
                         </div>
