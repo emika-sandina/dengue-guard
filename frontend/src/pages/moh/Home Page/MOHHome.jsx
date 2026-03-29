@@ -11,27 +11,39 @@ import HeatMap from "../../../components/common/HeatMap/Heatmap";
 import { fetchDashboardSummary } from "../../../services/mohApi";
 
 function MOHHome() {
+  //allows to navigate to other pages
   const navigate = useNavigate();
+  //State variables to store mohara, case counts and site count reports.
   const [mohArea, setMohArea] = useState("Loading...");
   const [caseCount, setCaseCount] = useState(0);
   const [siteCount, setSiteCount] = useState(0);
 
+  //use effect runs once the page is loaded
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
+        //Gets logged user from browser
+
+        //JSON.parse gets user data from browser and converts to a usable JS object
         const storedUser = JSON.parse(localStorage.getItem("dgUser") || "null");
         const userId = storedUser?.id;
 
+        //Prevent the API call if no user
         if (!userId) {
           throw new Error("User is not logged in");
         }
 
+        //Code is paused here until moh Api fetches details about the user from the backend
         const summary = await fetchDashboardSummary(userId);
 
+        //Access the data fetched through the API and update the state variables.
         setMohArea(summary.mohArea || "Not set");
         setCaseCount(summary.caseCount ?? 0);
         setSiteCount(summary.siteCount ?? 0);
-      } catch (error) {
+      } 
+      
+      //If an error occurs in the api call this is executed
+      catch (error) {
         console.error("Failed to load MOH dashboard data:", error.message);
         setMohArea("Unavailable");
         setCaseCount(0);
