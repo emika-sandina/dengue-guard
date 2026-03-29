@@ -1,3 +1,4 @@
+/* configure flexbox styling bounding entire element natively */
 .profile-layout {
   min-height: 100vh;
   background-color: #f4f7f6;
@@ -8,6 +9,7 @@
   padding-top: 100px;
 }
 
+/* wrap internal components preserving container sizing horizontally */
 .profile-main-content {
   flex: 1;
   max-width: 1200px;
@@ -35,6 +37,7 @@
   font-size: 1.1rem;
 }
 
+/* apply floating glassmorphism UI styles interpolating transparency */
 .glass-panel {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
@@ -45,14 +48,17 @@
   padding: 2rem;
 }
 
+/* map UI styling variables linking citizen tags */
 .highlight-border {
   border-top: 5px solid #38b2ac;
 }
 
+/* map UI styling variables linking official tags */
 .highlight-border-moh {
   border-top: 5px solid #805ad5;
 }
 
+/* configure natively responsive dynamic container column grids */
 .profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -126,6 +132,7 @@
   width: 100%;
 }
 
+/* map generic style limits preventing notification clipping */
 .status-message {
   padding: 0.75rem 1rem;
   border-radius: 8px;
@@ -209,6 +216,7 @@
 }
 
 /* Stats Section (Citizen) */
+/* stats layout sidebar mapping formatting correctly */
 .profile-sidebar {
   display: flex;
   flex-direction: column;
@@ -262,6 +270,7 @@
 }
 
 /* Reports Section */
+/* toggle layout variables cleanly centering custom elements */
 .reports-list {
   display: flex;
   flex-direction: column;
@@ -284,6 +293,7 @@
 }
 
 /* MOH Section */
+/* style explicit official warnings natively */
 .moh-notice {
   color: #718096;
   margin-top: -1rem;
@@ -323,6 +333,7 @@
 }
 
 /* Loading State */
+/* center global loading components via flexible bounding */
 .profile-loading {
   display: flex;
   flex-direction: column;
@@ -354,6 +365,7 @@
 }
 
 /* Mobile Responsiveness Enhancements */
+/* map breakpoint calculations adjusting element sizes optimally */
 @media (max-width: 768px) {
   .profile-layout {
     padding-top: 80px;
