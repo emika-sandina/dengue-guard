@@ -1,3 +1,4 @@
+/* define wrapper aligning child cards using CSS flexbox */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -6,6 +7,7 @@
   padding: 20px;
 }
 
+/* style login card emphasizing floating glass aesthetic metrics */
 .auth-card {
   background: white;
   padding: 2rem;
@@ -16,11 +18,13 @@
   text-align: center;
 }
 
+/* adjust vector crest width scaling */
 .auth-logo {
   width: 80px;
   margin-bottom: 1rem;
 }
 
+/* align the overall form body structure vertically */
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -31,6 +35,7 @@
   text-align: left;
 }
 
+/* shift label items above input fields cleanly */
 .auth-input-group label {
   display: block;
   margin-bottom: 0.5rem;
@@ -38,6 +43,7 @@
   color: #333;
 }
 
+/* standard text field generic parameters */
 .auth-input-group input {
   width: 100%;
   padding: 10px;
@@ -46,6 +52,7 @@
   font-size: 1rem;
 }
 
+/* brand-appropriate green coloring for submit target */
 .auth-button {
   background-color: #2e7d32; 
   color: white;
@@ -55,20 +62,25 @@
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
+  /* ease background transition for hover interactions */
   transition: background 0.3s;
 }
 
+/* add shading feedback for button engagement */
 .auth-button:hover {
   background-color: #1b5e20;
 }
 
+/* adjust spacing mapping for signup toggle paragraph */
 .auth-toggle {
   margin-top: 1rem;
   font-size: 0.9rem;
 }
 
+/* emphasize anchor clickable state logic */
 .auth-toggle span {
   color: #2e7d32;
   cursor: pointer;
   font-weight: 600;
 }
+

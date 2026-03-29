@@ -1,4 +1,5 @@
 import express from "express";
+//import the controller function
 import { getDashboardSummary } from "../controllers/dashboard.controller.js";
 
 // Create a new Express router to handle dashboard-specific requests

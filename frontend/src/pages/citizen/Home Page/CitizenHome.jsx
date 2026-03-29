@@ -15,14 +15,18 @@ import { fetchDashboardSummary } from "../../../services/citizenApi";
 // need to update heatmap
 
 function CitizenHome() {
+  //create a useNavigate() object to allow redirecting to other pages
   const navigate = useNavigate();
+  //initialize the state variables
   const [mohArea, setMohArea] = useState("Loading...");
   const [caseCount, setCaseCount] = useState(0);
   const [siteCount, setSiteCount] = useState(0);
 
+  //useeffect runs the code once the page is loaded
   useEffect(() => {
     const loadDashboardData = async () => {
       try {
+        //Request info about the logged in user from the browser
         const userStr = localStorage.getItem("dgUser");
         if (!userStr) {
           throw new Error("Auth session missing");
@@ -30,12 +34,16 @@ function CitizenHome() {
         const user = JSON.parse(userStr);
         if (!user?.id) throw new Error("Auth session missing");
 
+        //Code is paused here until citizen api fetches information from the backend
         const summary = await fetchDashboardSummary(user.id);
 
+        //update the state variables
         setMohArea(summary.mohArea || "Not set");
         setCaseCount(summary.caseCount ?? 0);
         setSiteCount(summary.siteCount ?? 0);
-      } catch (error) {
+      } 
+      //if an eror occurs in the api call 
+      catch (error) {
         console.error("Failed to load citizen dashboard data:", error.message);
         setMohArea("Unavailable");
         setCaseCount(0);
