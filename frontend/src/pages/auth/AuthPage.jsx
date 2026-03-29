@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabaseClient';
 import shieldLogo from '../../assets/shieldsvg.svg';
 import './auth.css';
 import Dropdown from '../../components/common/Dropdown/Dropdown';
-
+import Toast from '../../components/common/Toast/Toast';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const AuthPage = () => {
@@ -14,15 +14,28 @@ const AuthPage = () => {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [mohArea, setmohArea] = useState(null);
-  const [alertMsg, setAlertMsg] = useState({ type: '', text: '' });
+  const [toastMsg, setToastMsg] = useState({ message: '', type: '' });
+  const showToast = (message, type, duration = 5000) => {
+    setToastMsg({ message, type, duration });
+  };
   const navigate = useNavigate();
 
   const handleAuth = async (e) => {
     e.preventDefault();
-    setAlertMsg({ type: '', text: '' });
+
+    if (!email.trim() || !password.trim() || (!isLogin && !fullName.trim())) {
+      showToast('Please fill out all required fields.', 'error');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showToast("Please include an '@' and '.' in your email address.", "error");
+      return;
+    }
 
     if (!isLogin && password.length < 6) {
-      setAlertMsg({ type: 'error', text: 'Password must be at least 6 characters' });
+      showToast('Password must be at least 6 characters', 'error');
       return;
     }
 
@@ -64,13 +77,13 @@ const AuthPage = () => {
           }
         });
         if (error) throw error;
-        setAlertMsg({ type: 'success', text: 'Check your email for the confirmation link!' });
+        showToast('Check your email for the confirmation link!', 'success', 8000);
         setEmail('');
         setPassword('');
         setFullName('');
       }
     } catch (error) {
-      setAlertMsg({ type: 'error', text: error.message || 'Authentication failed' });
+      showToast(error.message || 'Authentication failed', 'error');
     } finally {
       setLoading(false);
     }
@@ -82,18 +95,14 @@ const AuthPage = () => {
         <img src={shieldLogo} alt="DengueGuard Logo" className="auth-logo" />
         <h2>{isLogin ? 'Login' : 'Create Account'}</h2>
 
-        {alertMsg.text && (
-          <div
-            className={`form-alert ${alertMsg.type}`}
-            role="alert"
-            aria-live="polite"
-            
-          >
-            {alertMsg.text}
-          </div>
-        )}
+        <Toast
+          message={toastMsg.message}
+          type={toastMsg.type}
+          duration={toastMsg.duration}
+          onClose={() => setToastMsg({ message: '', type: '' })}
+        />
 
-        <form onSubmit={handleAuth} className="auth-form">
+        <form onSubmit={handleAuth} className="auth-form" noValidate>
           {!isLogin && (
             <>
               <div className="auth-input-group">
