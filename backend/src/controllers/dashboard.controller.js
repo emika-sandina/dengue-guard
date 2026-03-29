@@ -1,3 +1,4 @@
+//imports the service function
 import { getDashboardSummaryByUserId } from "../services/dashboard.service.js";
 
 // This function handles the incoming HTTP request for the user's dashboard data

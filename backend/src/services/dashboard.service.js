@@ -1,44 +1,47 @@
 import { supabase } from "../supabase.js";
 
+//Cleans MOH Area text 
 const normalizeMohArea = (value) => {
   if (!value || typeof value !== "string") {
     return "";
   }
-
+  //Removes unneccesary values, blanks and converts values like MOH Colombo - Colombo
   return value
     .replace(/^\s*moh\s*[-:]?\s*/i, "")
     .trim()
     .toLowerCase();
 };
-
+//count reports in a table but for only data belongs to the given moharea
 const countReportsByMohArea = async (tableName, normalizedMohArea) => {
+  //If its unable to retreive the user's MOH area, the total report counts for all moh area will be sent
   if (!normalizedMohArea) {
     const totalResponse = await supabase
       .from(tableName)
-      .select("id", { count: "exact", head: true });
+      .select("id", { count: "exact", head: true }); //head:true means dont fetch rows
 
     if (totalResponse.error) {
       throw new Error(
         `Failed to fetch ${tableName} total count: ${totalResponse.error.message}`
       );
     }
-
+    //If null, return 0
     return totalResponse.count ?? 0;
   }
-
+  //Select the MOH Area only from the required table
   const areaResponse = await supabase.from(tableName).select("moh_area");
 
+  //If database fails, stop everything and send error to controller
   if (areaResponse.error) {
     throw new Error(
       `Failed to fetch ${tableName} MOH areas: ${areaResponse.error.message}`
     );
   }
-
+  //Loop thru each row, safely access moh area, and clean it eg-MOH-CMB to just CMB
   return (areaResponse.data ?? []).filter(
     (row) => normalizeMohArea(row?.moh_area) === normalizedMohArea
   ).length;
 };
-
+//Main function called by the controller
 export const getDashboardSummaryByUserId = async (userId) => {
   let resolvedMohArea = null;
 
