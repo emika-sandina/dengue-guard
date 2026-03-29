@@ -80,8 +80,8 @@ const ViewAnnouncements = () => {
                         <p>Loading announcements...</p>
                     </div>
                 ) : error ? (
-                    {/* conditionally display error layout strings safely */}
                     <div className="empty-state">
+                        {/* conditionally display error layout strings safely */}
                         <p>{error}</p>
                     </div>
                 ) : visibleAlerts.length > 0 ? (
@@ -134,8 +134,8 @@ const ViewAnnouncements = () => {
                         })}
                     </div>
                 ) : (
-                    {/* display final edge case output formatting handling clean data queries */}
                     <div className="empty-state">
+                        {/* display final edge case output formatting handling clean data queries */}
                         <p>No active announcements at this time.</p>
                     </div>
                 )}
