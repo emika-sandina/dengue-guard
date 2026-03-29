@@ -1,34 +1,36 @@
-/* viewAnnouncements.css */
+/* set layout padding offset for fixed NavBar elements */
 .citizen-layout {
-  padding-top: 100px; /* Offset for fixed NavBar */
+  padding-top: 100px; 
   min-height: 100vh;
 }
 
+/* center and restrict max width for main contents */
 .announcements-container {
-  /* Remove margin-top: 150px if it exists in your local version */
   max-width: 1200px;
   margin: 0 auto;
 }
 
-
-
+/* align header text mapping naturally */
 .view-header {
   margin-bottom: 40px;
   text-align: left;
 }
 
+/* assign brand theme colors and weights */
 .view-header h1 {
   font-size: 2.5rem;
-  color: #1e2b83; /* Consistent with Citizen Home */
+  color: #1e2b83;
   font-weight: 700;
 }
 
+/* configure natively responsive dynamic container column grids */
 .announcements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
+/* configure glass aesthetic borders and alpha filters */
 .alert-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
@@ -42,11 +44,13 @@
   overflow: hidden;
 }
 
+/* apply floating drop shadow interaction metric */
 .alert-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(31, 38, 135, 0.1);
 }
 
+/* align informational tags explicitly at the top left bounding box */
 .alert-badge {
   align-self: flex-start;
   padding: 4px 12px;
@@ -58,17 +62,19 @@
   background: #e0e0e0;
 }
 
-/* Logic-based accents */
+/* logic-based accents mapping CSS variables to severity flags */
 .type-warning .alert-badge { background: #fff3e0; color: #ef6c00; }
 .type-critical .alert-badge { background: #ffebee; color: #c62828; }
 .type-info .alert-badge { background: #e0f2f1; color: #00695c; }
 
+/* structure specific typography sizes */
 .alert-title {
   font-size: 1.25rem;
-  color: #0b2d39; /* Consistent with Send Announcements */
+  color: #0b2d39; 
   margin-bottom: 8px;
 }
 
+/* configure inline metadata layout flow horizontally */
 .alert-meta {
   display: flex;
   gap: 15px;
@@ -77,6 +83,7 @@
   margin-bottom: 15px;
 }
 
+/* standard paragraph formatting configuration */
 .alert-description-text {
   font-size: 0.95rem;
   line-height: 1.6;
@@ -84,6 +91,7 @@
   margin-bottom: 8px;
 }
 
+/* button normalization resetting background aesthetics */
 .read-more-btn {
   background: none;
   border: none;
@@ -95,11 +103,13 @@
   transition: opacity 0.2s;
 }
 
+/* anchor styling for explicit readability states */
 .read-more-btn:hover {
   opacity: 0.8;
   text-decoration: underline;
 }
 
+/* map breakpoint rules triggering column logic collapsing locally */
 @media (max-width: 768px) {
   .view-header h1 { font-size: 2rem; }
   .announcements-grid { grid-template-columns: 1fr; }
